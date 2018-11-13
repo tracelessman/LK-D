@@ -1,0 +1,18 @@
+# OSX
+#
+.DS_Store
+.idea
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+store/data.js
+_tmp2
+
+asars/
+*.bundle.js
+
+*.db
