@@ -31,80 +31,81 @@
         }
     </style>
     <script src="./index.bundle.js"></script>
-    <script src="../store/LocalStore.js"></script>
-    <script src="../channel/LocalWSChannel.js"></script>
+    <script>
+        let LKApplication = engine.getApplication();
+        let db = require('../store/ElecSqlite');
+        LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON);
+    </script>
 </head>
 <body style="overflow: hidden">
 <div class="titlebar" style=""><div class="tools-area"></div></div>
 <iframe id="frame" style="width:100%;height:100%;" frameborder="0"></iframe>
 </body>
-<script>
+<!--<script>-->
+    <!--window.top.Store.fetchAllKeys((data)=>{-->
+        <!--if(data&&data.length>0){-->
 
+            <!--var cur = data[0];-->
 
-    window.top.Store.fetchAllKeys((data)=>{
-        if(data&&data.length>0){
+<!--//            Store.setCurrentUid(cur.id) ;-->
+<!--//            document.getElementById("frame").src="main.html";-->
+            <!--WSChannel.login(cur.name,cur.id,cur.clientId,cur.server,(msg)=>{-->
+                <!--//Store.setCurrentUid(cur.id) ;-->
+                <!--if(!msg.err){-->
+                    <!--window.theme = document.body.className = Store.getTheme();-->
+                    <!--document.getElementById("frame").src="main.html";-->
+                <!--}else{-->
+                    <!--alert(msg.err);-->
+                    <!--document.getElementById("frame").src="login.html";-->
+                <!--}-->
 
-            var cur = data[0];
+            <!--},()=>{-->
+                <!--alert("无法登录服务器");-->
+                <!--document.getElementById("frame").src="login.html";-->
+            <!--});-->
 
-//            Store.setCurrentUid(cur.id) ;
-//            document.getElementById("frame").src="main.html";
-            WSChannel.login(cur.name,cur.id,cur.clientId,cur.server,(msg)=>{
-                //Store.setCurrentUid(cur.id) ;
-                if(!msg.err){
-                    window.theme = document.body.className = Store.getTheme();
-                    document.getElementById("frame").src="main.html";
-                }else{
-                    alert(msg.err);
-                    document.getElementById("frame").src="login.html";
-                }
+        <!--}else{-->
+            <!--document.getElementById("frame").src="register.html";-->
 
-            },()=>{
-                alert("无法登录服务器");
-                document.getElementById("frame").src="login.html";
-            });
+        <!--}-->
+    <!--});-->
 
-        }else{
-            document.getElementById("frame").src="register.html";
+    <!--var notifyNewMsg = function (id) {-->
+        <!--ipc.send("messageReceive",{total:Store.getTotalNewMSgNum()});-->
 
-        }
-    });
+        <!--const notification = {-->
+            <!--title: "新消息",-->
+            <!--body: Store.getFriend(id).name+"发来新的消息，请注意查收"-->
+        <!--}-->
+        <!--const myNotification = new window.Notification(notification.title, notification);-->
+    <!--}-->
+    <!--var notifyNewGroupMsg = function (gid) {-->
+        <!--ipc.send("messageReceive",{total:Store.getTotalNewMSgNum()});-->
+        <!--const notification = {-->
+            <!--title: "群消息",-->
+            <!--body: Store.getGroup(gid).name+"有新消息，请注意查收"-->
+        <!--}-->
+        <!--const myNotification = new window.Notification(notification.title, notification);-->
+    <!--}-->
+    <!--var notifyReadMsg = function () {-->
+        <!--ipc.send("messageRead",{total:Store.getTotalNewMSgNum()});-->
+    <!--}-->
+    <!--window.top.Store.on("receiveMessage",notifyNewMsg);-->
+    <!--window.top.Store.on("readChatRecords",notifyReadMsg);-->
+    <!--window.top.Store.on("readGroupChatRecords",notifyReadMsg);-->
+    <!--window.top.Store.on("receiveGroupMessage",notifyNewGroupMsg);-->
 
-    var notifyNewMsg = function (id) {
-        ipc.send("messageReceive",{total:Store.getTotalNewMSgNum()});
+    <!--var checkVersion = function () {-->
+        <!--window.top.ipc.send("upgrade-request",{toIndexIFNot:false});-->
+    <!--}-->
+    <!--window.top.WSChannel.on("afterLogin",checkVersion);-->
 
-        const notification = {
-            title: "新消息",
-            body: Store.getFriend(id).name+"发来新的消息，请注意查收"
-        }
-        const myNotification = new window.Notification(notification.title, notification);
-    }
-    var notifyNewGroupMsg = function (gid) {
-        ipc.send("messageReceive",{total:Store.getTotalNewMSgNum()});
-        const notification = {
-            title: "群消息",
-            body: Store.getGroup(gid).name+"有新消息，请注意查收"
-        }
-        const myNotification = new window.Notification(notification.title, notification);
-    }
-    var notifyReadMsg = function () {
-        ipc.send("messageRead",{total:Store.getTotalNewMSgNum()});
-    }
-    window.top.Store.on("receiveMessage",notifyNewMsg);
-    window.top.Store.on("readChatRecords",notifyReadMsg);
-    window.top.Store.on("readGroupChatRecords",notifyReadMsg);
-    window.top.Store.on("receiveGroupMessage",notifyNewGroupMsg);
-
-    var checkVersion = function () {
-        window.top.ipc.send("upgrade-request",{toIndexIFNot:false});
-    }
-    window.top.WSChannel.on("afterLogin",checkVersion);
-
-    window.top.Store.on("receiveMKFriends",function(name){
-        const notification = {
-            title: '好友申请',
-            body: name+"  申请加您为好友"
-        }
-        const myNotification = new window.Notification(notification.title, notification);
-    });
-</script>
+    <!--window.top.Store.on("receiveMKFriends",function(name){-->
+        <!--const notification = {-->
+            <!--title: '好友申请',-->
+            <!--body: name+"  申请加您为好友"-->
+        <!--}-->
+        <!--const myNotification = new window.Notification(notification.title, notification);-->
+    <!--});-->
+<!--</script>-->
 </html>
