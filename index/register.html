@@ -39,41 +39,51 @@
 
     var server = newServer();
 
-    server.on('connection', function connection(ws, req) {
-        ws.on('message', function incoming(message) {
+    server.on('connection', (ws, req) => {
+        ws.on('message', (message) => {
             document.getElementById("msg").innerText="授权中...";
             var msg = JSON.parse(message);
             var cid = window.top.UUID();
-            window.top.WSChannel.authorize(msg.server,msg.id,cid,(rep)=>{
-                if(rep.err){
-                    var data={};
-                    data.msg = "服务器错误，请联系管理员:"+rep.err;
-                    data.state=0;
-                    ws.send(JSON.stringify(data));
-                    document.getElementById("msg").innerText=data.msg;
-                }else{
-                    var data={};
-                    data.state=1;
-                    data.msg = "授权成功";
-                    ws.send(JSON.stringify(data));
-                    document.getElementById("msg").innerText="授权成功";
-                    window.top.Store.registerFromOther(msg,cid);
-                    setTimeout(function () {
-                        server.close();
-                        window.top.location.reload();
-                    },3000);
+            console.log({message})
+          const {deviceId, id, serverPort, serverIP} = message
+          const {engine, RSAKey} = window.top
+          const lkapp = engine.getApplication().getCurrentApp()
 
-                }
-            },()=>{
-                document.getElementById("msg").innerText="服务器访问超时，请检查网络";
-                var data={};
-                data.msg = "服务器访问超时，请检查网络";
-                data.state=0;
-                ws.send(JSON.stringify(data));
-            });
-        });
+          const bits = 1024
+          const exponent = '10001'
+          let rsa = new RSAKey()
+          rsa.generate(bits, exponent)
+          const publicKey = rsa.getPublicString()
+          const privateKey = rsa.getPrivateString()
+          const user = {
+                id,
+            serverPort,
+            serverIP,
+            deviceId,
+            publicKey
+          }
+          lkapp.asyAuthorize(user,deviceId,'').then(() => {
+            var data={};
+            data.state=1;
+            data.msg = "授权成功";
+            ws.send(JSON.stringify(data));
+            document.getElementById("msg").innerText="授权成功";
+            setTimeout(function () {
+              server.close();
+              window.top.location.reload();
+            },3000)
+
+          }).catch(err => {
+            var data={};
+            data.msg = "服务器错误，请联系管理员:"+err;
+            data.state=0;
+            ws.send(JSON.stringify(data));
+            document.getElementById("msg").innerText=data.msg;
+          })
+
+        })
         ws.on('close',function (msg) {
-        });
+        })
     });
     server.on('error',function (err) {
         console.info("ws server error:"+err);
@@ -99,7 +109,7 @@
     }
     //var code = window.top.qr.image("test",{type:"png"});
     var data = {};
-    data.code="traceless";
+    data.code="LK";
     data.action="authorize";
     data.addresses=getIPAdress();
     data.port = port;

@@ -1,4 +1,4 @@
-window.engine = require('LK-C').engine;
+window.engine = require('@lk/LK-C').engine;
 window.clipboard = require('electron').clipboard;
 window.ipc = require('electron').ipcRenderer;
 window.remote = require('electron').remote;
