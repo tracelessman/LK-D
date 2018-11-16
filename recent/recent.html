@@ -66,7 +66,8 @@
 <script>
     document.body.className = window.top.theme;
     const {engine} = window.top
-    const lkapp = engine.getCurrentApp()
+    const lkapp = engine.getApplication().getCurrentApp()
+    const user = lkapp.getCurrentUser()
     const ChatManager = engine.get('ChatManager')
     var selected = "";
     function hover(name){
@@ -101,7 +102,7 @@
         document.getElementById("frame").src="addGroup.html";
     }
     async function refreshRecentList() {
-        var all = await ChatManager.asyGetAll()
+        var all = await ChatManager.asyGetAll(user.id)
         console.log({all})
         // var groups = window.top.Store.getGroups();
         var html="";

@@ -16,6 +16,6 @@ if (!fse.existsSync(sqliteNode)) {
   fse.copySync(path.resolve(resource, sqliteNodeFileName), path.resolve(sqliteElectronFolder, sqliteNodeFileName))
   // execSync(`npm run install:sqlite3`, option)
 }
-// execSync(`npm run asars && npm run build`, option)
+execSync(`npm run asars`, option)
 
 console.log('postinstall finished')
