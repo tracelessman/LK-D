@@ -44,8 +44,8 @@
             document.getElementById("msg").innerText="授权中...";
             var msg = JSON.parse(message);
             var cid = window.top.UUID();
-            console.log({message})
-          const {deviceId, id, serverPort, serverIP} = message
+            // console.log({msg})
+          const {deviceId, id, serverPort, serverIP} = msg
           const {engine, RSAKey} = window.top
           const lkapp = engine.getApplication().getCurrentApp()
 
@@ -59,9 +59,10 @@
                 id,
             serverPort,
             serverIP,
-            deviceId,
+            deviceId: cid,
             publicKey
           }
+          // console.log({user})
           lkapp.asyAuthorize(user,deviceId,'').then(() => {
             var data={};
             data.state=1;
@@ -74,8 +75,15 @@
             },3000)
 
           }).catch(err => {
+            console.log({err})
+            const {error} = err
+
             var data={};
-            data.msg = "服务器错误，请联系管理员:"+err;
+            if (error) {
+              data.msg = error.toString();
+            } else {
+              data.msg = "服务器错误，请联系管理员:"+err;
+            }
             data.state=0;
             ws.send(JSON.stringify(data));
             document.getElementById("msg").innerText=data.msg;
