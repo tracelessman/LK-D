@@ -47,7 +47,7 @@
             let cur = users[0];
 
             LKApplication.getCurrentApp().setCurrentUser(cur);
-            window.theme = 'left'
+            window.theme = document.body.className = "left";
             document.getElementById("frame").src="main.html";
         }else{
             document.getElementById("frame").src="register.html";
