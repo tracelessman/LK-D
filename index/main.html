@@ -136,6 +136,8 @@
   </body>
 <script>
     document.body.className = window.top.theme;
+    const {engine} = window.top
+    const ChatManager = engine.get('ChatManager')
     function changeTheme() {
         window.top.Store.changeTheme();
         window.top.location.reload();
@@ -154,7 +156,7 @@
         window.top.ipc.send("remoteVersion-request");
         setTimeout(doVersionRequest,60*60*1000);
     }
-    setTimeout(doVersionRequest,60*1000);
+    // setTimeout(doVersionRequest,60*1000);
     window.addEventListener("beforeunload", function (event) {
         window.top.ipc.removeListener("remoteVersion-response",doVersionResponse);
     });
@@ -169,16 +171,16 @@
             document.getElementById("notify-msg-num").innerText = "";
         }
     }
-    window.top.Store.on("receiveMessage",notifyMsg);
-    window.top.Store.on("receiveGroupMessage",notifyMsg);
-    window.top.Store.on("readChatRecords",notifyMsg);
-    window.top.Store.on("readGroupChatRecords",notifyMsg);
+    ChatManager.on("receiveMessage",notifyMsg);
+    ChatManager.on("receiveGroupMessage",notifyMsg);
+    ChatManager.on("readChatRecords",notifyMsg);
+    ChatManager.on("readGroupChatRecords",notifyMsg);
 
     window.addEventListener("beforeunload", function (event) {
-        window.top.Store.un("receiveMessage",notifyMsg);
-        window.top.Store.un("receiveGroupMessage",notifyMsg);
-        window.top.Store.un("readChatRecords",notifyMsg);
-        window.top.Store.un("readGroupChatRecords",notifyMsg);
+       ChatManager.un("receiveMessage",notifyMsg);
+       ChatManager.un("receiveGroupMessage",notifyMsg);
+       ChatManager.un("readChatRecords",notifyMsg);
+       ChatManager.un("readGroupChatRecords",notifyMsg);
     });
     function refreshReceiveMKFriends() {
         if(window.top.Store.hasNewReceivedMKFriends())
@@ -186,11 +188,11 @@
         else
             document.getElementById("newContactTip").style.display="none";
     }
-    window.top.Store.on("receiveMKFriends",refreshReceiveMKFriends);
-    window.top.Store.on("readNewMKFriends",refreshReceiveMKFriends);
+    ChatManager.on("receiveMKFriends",refreshReceiveMKFriends);
+    ChatManager.on("readNewMKFriends",refreshReceiveMKFriends);
     window.addEventListener("beforeunload", function (event) {
-        window.top.Store.un("receiveMKFriends",refreshReceiveMKFriends);
-        window.top.Store.un("readNewMKFriends",refreshReceiveMKFriends);
+       ChatManager.un("receiveMKFriends",refreshReceiveMKFriends);
+       ChatManager.un("readNewMKFriends",refreshReceiveMKFriends);
     });
 </script>
 </html>

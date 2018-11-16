@@ -65,6 +65,8 @@
 </body>
 <script>
     document.body.className = window.top.theme;
+    const {engine} = window.top
+    const ChatManager = engine.get('ChatManager')
     var selected = "";
     function hover(name){
         if(selected!=name)
@@ -97,9 +99,10 @@
         refreshRecentList();
         document.getElementById("frame").src="addGroup.html";
     }
-    function refreshRecentList() {
-        var all = window.top.Store.getAllRecent();
-        var groups = window.top.Store.getGroups();
+    async function refreshRecentList() {
+        var all = await ChatManager.asyGetAll()
+        console.log({all})
+        // var groups = window.top.Store.getGroups();
         var html="";
         var i=0;
         if(all){
@@ -124,28 +127,28 @@
             }
 
         }
-        if(groups){
-            for(var j=0;j<groups.length;j++,i++){
-                var g = groups[j];
-                html+="<div id=\"recent";
-                html+=i;
-                html+="\" style=\"width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center\" onmouseover=\"hover('";
-                html+=i;
-                html+="')\" onmouseout=\"leave('";
-                html+=i;
-                html+="')\" onclick=\"chat('";
-                html+=i;
-                html+="',true,'";
-                html+=g.id;
-                html+="')\">";
-                html+="<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>";
-                html+=g.name;
-                if(g.newReceive){
-                    html+="<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>"+g.newMsgNum+"</div>";
-                }
-                html+="</div>";
-            }
-        }
+        // if(groups){
+        //     for(var j=0;j<groups.length;j++,i++){
+        //         var g = groups[j];
+        //         html+="<div id=\"recent";
+        //         html+=i;
+        //         html+="\" style=\"width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center\" onmouseover=\"hover('";
+        //         html+=i;
+        //         html+="')\" onmouseout=\"leave('";
+        //         html+=i;
+        //         html+="')\" onclick=\"chat('";
+        //         html+=i;
+        //         html+="',true,'";
+        //         html+=g.id;
+        //         html+="')\">";
+        //         html+="<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>";
+        //         html+=g.name;
+        //         if(g.newReceive){
+        //             html+="<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>"+g.newMsgNum+"</div>";
+        //         }
+        //         html+="</div>";
+        //     }
+        // }
         document.getElementById("recent").innerHTML=html;
         if(selected){
             select(selected);
@@ -154,18 +157,18 @@
     }
 
     refreshRecentList();
-    window.top.Store.on("receiveMessage",refreshRecentList);
-    window.top.Store.on("readChatRecords",refreshRecentList);
-    window.top.Store.on("readGroupChatRecords",refreshRecentList);
-    window.top.Store.on("addGroup",refreshRecentList);
-    window.top.Store.on("receiveGroupMessage",refreshRecentList);
+    ChatManager.on("receiveMessage",refreshRecentList);
+    ChatManager.on("readChatRecords",refreshRecentList);
+    ChatManager.on("readGroupChatRecords",refreshRecentList);
+    ChatManager.on("addGroup",refreshRecentList);
+    ChatManager.on("receiveGroupMessage",refreshRecentList);
 
     window.addEventListener("beforeunload", function (event) {
-        window.top.Store.un("receiveMessage",refreshRecentList);
-        window.top.Store.un("readChatRecords",refreshRecentList);
-        window.top.Store.un("readGroupChatRecords",refreshRecentList);
-        window.top.Store.un("addGroup",refreshRecentList);
-        window.top.Store.un("receiveGroupMessage",refreshRecentList);
+        ChatManager.un("receiveMessage",refreshRecentList);
+        ChatManager.un("readChatRecords",refreshRecentList);
+        ChatManager.un("readGroupChatRecords",refreshRecentList);
+        ChatManager.un("addGroup",refreshRecentList);
+        ChatManager.un("receiveGroupMessage",refreshRecentList);
     });
 </script>
 </html>
