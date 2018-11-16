@@ -8,7 +8,8 @@
     "publish": "node build.js && electron .",
     "asars": "asar pack node_modules/sqlite3 asars/sqlite3.asar",
     "postinstall": "node bin/postinstall",
-    "install:sqlite3": "npm i sqlite3 --runtime=electron --target=3.0.7 --dist-url=https://atom.io/download/electron"
+    "install:sqlite3": "npm i sqlite3 --runtime=electron --target=3.0.7 --dist-url=https://atom.io/download/electron",
+    "updateC": "rm -rf node_modules/@lk && npm i"
   },
   "devDependencies": {
     "@ys/eslint-config-strict": "github:spirit1453/codebase#strict_eslint",

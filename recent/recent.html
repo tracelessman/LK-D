@@ -66,6 +66,7 @@
 <script>
     document.body.className = window.top.theme;
     const {engine} = window.top
+    const lkapp = engine.getCurrentApp()
     const ChatManager = engine.get('ChatManager')
     var selected = "";
     function hover(name){
