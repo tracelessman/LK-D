@@ -52,7 +52,6 @@
 <div class="content">
     <div style="height:100%;width:200px;display: flex;flex-direction: column;align-items: center;overflow: hidden">
         <div class="title" style="" >消息
-            <!--<i class="material-icons" style="" onclick="addGroup()">group_add</i>-->
         </div>
 
         <div id="recent" style="width:200px;flex:1;display: flex;flex-direction: column;align-items: center;border-right: 1px solid #d0d0d0;">
@@ -69,6 +68,7 @@
     const lkapp = engine.getApplication().getCurrentApp()
     const user = lkapp.getCurrentUser()
     const ChatManager = engine.get('ChatManager')
+    const ContactManager = engine.get('ContactManager')
     var selected = "";
     function hover(name){
         if(selected!=name)
@@ -96,20 +96,16 @@
     function showChatBox(isGroupChat,id) {
         document.getElementById("frame").src="chat.html?"+isGroupChat+"&"+id;
     }
-    function addGroup() {
-        selected="";
-        refreshRecentList();
-        document.getElementById("frame").src="addGroup.html";
-    }
     async function refreshRecentList() {
         var all = await ChatManager.asyGetAll(user.id)
         console.log({all})
-        // var groups = window.top.Store.getGroups();
         var html="";
         var i=0;
         if(all){
             for(;i<all.length;i++){
                 var re = all[i];
+                const {id: chatId, isGroup} = re
+                const person = await ContactManager.asyGet(user.id, re.id)
                 html+="<div id=\"recent";
                 html+=i;
                 html+="\" style=\"width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center\" onmouseover=\"hover('";
@@ -118,12 +114,13 @@
                 html+=i;
                 html+="')\" onclick=\"chat('";
                 html+=i;
-                html+="',false,'";
+                html+=`',${isGroup},'`
                 html+=re.id;
                 html+="')\">";
-                html+=re.id&&window.top.Store.getFriend(re.id)?window.top.Store.getFriend(re.id).name:"error";
-                if(re.newReceive){
-                    html+="<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>"+re.newMsgNum+"</div>";
+                html+=re.id&&person?person.name:"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name;
+              const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
+                if(newMsgNum){
+                    html+=`<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
                 }
                 html+="</div>";
             }
@@ -162,14 +159,12 @@
     ChatManager.on("receiveMessage",refreshRecentList);
     ChatManager.on("readChatRecords",refreshRecentList);
     ChatManager.on("readGroupChatRecords",refreshRecentList);
-    ChatManager.on("addGroup",refreshRecentList);
     ChatManager.on("receiveGroupMessage",refreshRecentList);
 
     window.addEventListener("beforeunload", function (event) {
         ChatManager.un("receiveMessage",refreshRecentList);
         ChatManager.un("readChatRecords",refreshRecentList);
         ChatManager.un("readGroupChatRecords",refreshRecentList);
-        ChatManager.un("addGroup",refreshRecentList);
         ChatManager.un("receiveGroupMessage",refreshRecentList);
     });
 </script>

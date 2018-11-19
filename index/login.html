@@ -36,24 +36,20 @@
     <div style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="login()">
         登&nbsp;&nbsp;&nbsp;&nbsp;录
     </div>
-    <div style="width:300px;height:40px;text-align: right;line-height: 40px;margin-top: 10px;cursor: pointer;" onclick="_reset()">
-        重&nbsp;&nbsp;&nbsp;&nbsp;置>>
-    </div>
+
 </div>
 </body>
 <script>
-    if(window.top.Store.getCurrentUid()){
-        document.getElementById("name").value=window.top.Store.getCurrentName();
-        document.getElementById("ip").value=window.top.Store.getCurrentServer();
-        document.getElementById("clientId").value=window.top.Store.getCurrentUid();
+  const {engine} = window.top
+  const lkapp = engine.getApplication().getCurrentApp()
+  const user = lkapp.getCurrentUser()
+    if(user){
+        document.getElementById("name").value=user.name
+        document.getElementById("ip").value=user.serverIP
+        document.getElementById("clientId").value=user.id
 
     }
-    function _reset() {
-        window.top.WSChannel.reset();
-        window.top.Store.reset(function () {
-            window.top.document.location.reload();
-        });
-    }
+
     function login() {
         if(!document.getElementById("name").value){
             alert("请输入昵称");

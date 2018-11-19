@@ -65,7 +65,7 @@
                 title: "新消息",
                 body: "您有新的LK消息，请注意查收"
             }
-            const myNotification = new window.Notification(notification.title, notification);
+            new window.Notification(notification.title, notification);
         })
 
     }
@@ -79,16 +79,8 @@
     engine.getChatManager().on("msgRead",notifyReadMsg);
 
     var checkVersion = function () {
-        window.top.ipc.send("upgrade-request",{toIndexIFNot:false});
+        // window.top.ipc.send("upgrade-request",{toIndexIFNot:false});
     }
     LKApplication.getCurrentApp().on("currentUserChanged",checkVersion);
-
-//    window.top.Store.on("receiveMKFriends",function(name){
-//        const notification = {
-//            title: '好友申请',
-//            body: name+"  申请加您为好友"
-//        }
-//        const myNotification = new window.Notification(notification.title, notification);
-//    });
 </script>
 </html>
