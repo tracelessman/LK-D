@@ -50,11 +50,6 @@
         <div class="title">
             通讯录
         </div>
-        <div class="toolbar" >
-            <i id="newReceiveMKFriends" class="material-icons" style="font-size: 12px;float:right;margin-top: 4px;margin-right: 10px;color:red;visibility: hidden">fiber_manual_record</i>
-            <i class="material-icons" style="font-size: 20px;float: right;cursor: pointer;margin-top: 4px;margin-right: -2px;color:#000" onclick="request()">compare_arrows</i>
-            <i class="material-icons" style="font-size: 20px;float:right;cursor: pointer;margin-top: 4px;margin-right: 10px;color:#000" onclick="addFriend()">add</i>
-        </div>
         <div id="contact" style="width:200px;flex:1;display: flex;flex-direction: column;align-items: center;border-right: 1px solid #d0d0d0;">
         </div>
     </div>
@@ -86,29 +81,15 @@
         document.getElementById(id).style.backgroundColor = "#e0e0e0";
         document.getElementById("frame").src="detail.html?"+id+"&"+name+"&false";
     }
-
-    function addFriend() {
-        selected="";
-        refreshFriendList();
-        document.getElementById("frame").src="addFriend.html";
-    }
-
-    function request() {
-        selected="";
-        refreshFriendList();
-        document.getElementById("frame").src="request.html";
-    }
 </script>
 <script>
-    function refreshReceiveMKFriends() {
-        if(window.top.Store.hasNewReceivedMKFriends())
-            document.getElementById("newReceiveMKFriends").style.visibility="";
-        else
-            document.getElementById("newReceiveMKFriends").style.visibility="hidden";
-    }
-    refreshReceiveMKFriends();
-    function refreshFriendList() {
-        var all = window.top.Store.getAllFriends();
+
+    async function refreshFriendList() {
+      const {engine} = window.top
+      const lkapp = engine.getApplication().getCurrentApp()
+      const user = lkapp.getCurrentUser()
+      const ContactManager = engine.get('ContactManager')
+        var all = await ContactManager.asyGetAllMembers(user.id)
         var html="";
         if(all){
             for(var i=0;i<all.length;i++){
@@ -133,13 +114,6 @@
     }
     refreshFriendList();
 
-    window.top.Store.on("receiveMKFriends",refreshReceiveMKFriends);
-    window.top.Store.on("readNewMKFriends",refreshReceiveMKFriends);
-    window.top.Store.on("addFriend",refreshFriendList) ;
-    window.addEventListener("beforeunload", function (event) {
-        window.top.Store.un("receiveMKFriends",refreshReceiveMKFriends);
-        window.top.Store.un("readNewMKFriends",refreshReceiveMKFriends);
-        window.top.Store.un("addFriend",refreshFriendList) ;
-    });
+
 </script>
 </html>
