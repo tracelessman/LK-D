@@ -138,11 +138,11 @@
 <script>
     document.body.className = window.top.theme;
     const {engine} = window.top
-    const ChatManager = engine.get('ChatManager')
-    function changeTheme() {
-        window.top.Store.changeTheme();
-        window.top.location.reload();
-    }
+    const ChatManager = engine.getChatManager();
+//    function changeTheme() {
+//        window.top.Store.changeTheme();
+//        window.top.location.reload();
+//    }
     function doVersionResponse (event,arg) {
         var curV = parseInt(window.top.remote.getGlobal("appVersion").replace(/\./ig,""));
         var remoteV = parseInt(arg.replace(/\./ig,""));
@@ -157,43 +157,41 @@
         window.top.ipc.send("remoteVersion-request");
         setTimeout(doVersionRequest,60*60*1000);
     }
-    // setTimeout(doVersionRequest,60*1000);
+    setTimeout(doVersionRequest,60*1000);
     window.addEventListener("beforeunload", function (event) {
         window.top.ipc.removeListener("remoteVersion-response",doVersionResponse);
     });
 
     var notifyMsg = function () {
-        var num = window.top.Store.getTotalNewMSgNum();
-        if(num>0){
-            document.getElementById("notify-msg-num").innerText = num;
-            document.getElementById("notify-msg-num").style.display="";
-        }else{
-            document.getElementById("notify-msg-num").style.display="none";
-            document.getElementById("notify-msg-num").innerText = "";
-        }
+        ChatManager.getAllMsgNotReadNum().then(function (num) {
+            if(num>0){
+                document.getElementById("notify-msg-num").innerText = num;
+                document.getElementById("notify-msg-num").style.display="";
+            }else{
+                document.getElementById("notify-msg-num").style.display="none";
+                document.getElementById("notify-msg-num").innerText = "";
+            }
+        })
+
     }
-    ChatManager.on("receiveMessage",notifyMsg);
-    ChatManager.on("receiveGroupMessage",notifyMsg);
-    ChatManager.on("readChatRecords",notifyMsg);
-    ChatManager.on("readGroupChatRecords",notifyMsg);
+    ChatManager.on("msgReceived",notifyMsg);
+    ChatManager.on("msgRead",notifyMsg);
 
     window.addEventListener("beforeunload", function (event) {
-       ChatManager.un("receiveMessage",notifyMsg);
-       ChatManager.un("receiveGroupMessage",notifyMsg);
-       ChatManager.un("readChatRecords",notifyMsg);
-       ChatManager.un("readGroupChatRecords",notifyMsg);
+       ChatManager.un("msgReceived",notifyMsg);
+       ChatManager.un("msgRead",notifyMsg);
     });
-    function refreshReceiveMKFriends() {
-        if(window.top.Store.hasNewReceivedMKFriends())
-            document.getElementById("newContactTip").style.display="";
-        else
-            document.getElementById("newContactTip").style.display="none";
-    }
-    ChatManager.on("receiveMKFriends",refreshReceiveMKFriends);
-    ChatManager.on("readNewMKFriends",refreshReceiveMKFriends);
-    window.addEventListener("beforeunload", function (event) {
-       ChatManager.un("receiveMKFriends",refreshReceiveMKFriends);
-       ChatManager.un("readNewMKFriends",refreshReceiveMKFriends);
-    });
+//    function refreshReceiveMKFriends() {
+//        if(window.top.Store.hasNewReceivedMKFriends())
+//            document.getElementById("newContactTip").style.display="";
+//        else
+//            document.getElementById("newContactTip").style.display="none";
+//    }
+//    ChatManager.on("receiveMKFriends",refreshReceiveMKFriends);
+//    ChatManager.on("readNewMKFriends",refreshReceiveMKFriends);
+//    window.addEventListener("beforeunload", function (event) {
+//       ChatManager.un("receiveMKFriends",refreshReceiveMKFriends);
+//       ChatManager.un("readNewMKFriends",refreshReceiveMKFriends);
+//    });
 </script>
 </html>
