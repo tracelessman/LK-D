@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
     <style>
         * {
             margin: 0;
@@ -160,7 +159,7 @@
 
     render()
     async function render () {
-
+      init()
       let title
       if(isGroupChat) {
         const chat = await ChatManager.asyGetChat(userId, otherId)
@@ -193,6 +192,13 @@
         window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
         window.top.ipc.removeListener("openFileDialog-response",sendFile);
       });
+    }
+
+    async function init() {
+      const num = await ChatManager.asyGetNewMsgNum(otherId)
+      if (num) {
+        ChatManager.asyReadMsgs(otherId, num)
+      }
     }
     function _getMessage(rec) {
       if(rec.type==ChatManager.MESSAGE_TYPE_TEXT){
@@ -276,8 +282,10 @@
 
                 }
             }
-            const {senderUid} = records[i]
-            if (senderUid) {
+            const record = records[i]
+            const {senderUid} = record
+            // console.log({record})
+            if (senderUid !== userId) {
                 html += "<div style=\"display: flex;flex-direction: row;justify-content: flex-start;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
                 let p
               // console.log({userId, senderUid, isGroupChat})
@@ -305,7 +313,7 @@
                 html += "</div>";
             }else{
                 html+="<div style=\"display: flex;flex-direction: row;justify-content: flex-end;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
-                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].msgId+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManagerMESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
+                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].msgId+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
                 html+=getIconNameByState(records[i].state);
                 html+="</i>";
                 html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
@@ -313,8 +321,8 @@
                 html += _getMessage(records[i]);
                 html+="</div>";
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-w-r.png);margin-top: 11px'></div>";
-                if(ChatManagergetPersonalPic()){
-                    html += "<img src='"+ChatManagergetPersonalPic()+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
+                if(user.pic){
+                    html += "<img src='"+ser.pic+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
                 }else{
                     html += "<div style=\"text-align:center;margin-left:5px;margin-right:10px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:dodgerblue;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
                     html += name;
@@ -395,9 +403,9 @@
     }
 
     function onWindowFocus() {
-        if((isGroupChat&&ChatManager.getGroup(otherId).newReceive)||(!isGroupChat&&ChatManager.getRecent(otherId).newReceive)){
-            refreshRecordList();
-        }
+        // if((isGroupChat&&ChatManager.getGroup(otherId).newReceive)||(!isGroupChat&&ChatManager.getRecent(otherId).newReceive)){
+        //     refreshRecordList();
+        // }
     }
 
 

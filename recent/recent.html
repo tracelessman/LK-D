@@ -98,7 +98,7 @@
     }
     async function refreshRecentList() {
         var all = await ChatManager.asyGetAll(user.id)
-        console.log({all})
+        // console.log({all})
         var html="";
         var i=0;
         if(all){
@@ -126,28 +126,7 @@
             }
 
         }
-        // if(groups){
-        //     for(var j=0;j<groups.length;j++,i++){
-        //         var g = groups[j];
-        //         html+="<div id=\"recent";
-        //         html+=i;
-        //         html+="\" style=\"width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center\" onmouseover=\"hover('";
-        //         html+=i;
-        //         html+="')\" onmouseout=\"leave('";
-        //         html+=i;
-        //         html+="')\" onclick=\"chat('";
-        //         html+=i;
-        //         html+="',true,'";
-        //         html+=g.id;
-        //         html+="')\">";
-        //         html+="<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>";
-        //         html+=g.name;
-        //         if(g.newReceive){
-        //             html+="<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>"+g.newMsgNum+"</div>";
-        //         }
-        //         html+="</div>";
-        //     }
-        // }
+
         document.getElementById("recent").innerHTML=html;
         if(selected){
             select(selected);
