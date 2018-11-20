@@ -145,13 +145,14 @@
     const {engine} = window.top
     const lkapp = engine.getApplication().getCurrentApp()
     const user = lkapp.getCurrentUser()
+    // console.log({user})
     const {id: userId} = user
     const ChatManager = engine.get('ChatManager')
     const ContactManager = engine.get('ContactManager')
     const channel = lkapp.getLKWSChannel()
     initFaces();
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
-    console.log({ps})
+    // console.log({ps})
     var params = ps.split("&")
     var isGroupChat = params[0] == '1'
     var otherId = params[1]
@@ -325,7 +326,7 @@
                     html += "<img src='"+ser.pic+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
                 }else{
                     html += "<div style=\"text-align:center;margin-left:5px;margin-right:10px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:dodgerblue;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
-                    html += name;
+                    html += user.name;
                     html += "</div></div>";
                 }
 
