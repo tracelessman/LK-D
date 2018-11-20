@@ -143,36 +143,81 @@
 </body>
 <script>
     document.body.className = window.top.theme;
+    const {engine} = window.top
+    const lkapp = engine.getApplication().getCurrentApp()
+    const user = lkapp.getCurrentUser()
+    const {id: userId} = user
+    const ChatManager = engine.get('ChatManager')
+    const ContactManager = engine.get('ContactManager')
+    const channel = lkapp.getLKWSChannel()
     initFaces();
-    function _getMessage(rec) {
-        if(rec.type==window.top.Store.MESSAGE_TYEP_TEXT){
-            var text = rec.content;
-           return text.replace("\r\n","<div></div>");
-        }else if(rec.type==window.top.Store.MESSAGE_TYPE_IMAGE){
-            var img = JSON.parse(rec.content);
-            var w=200;
-            var h=200;
-            var n = 1;
-            if(img.width>img.height){
-                n = Math.ceil(img.width/200);
-            }else{
-                n = Math.ceil(img.height/200);
-            }
-            w = img.width/n;
-            h = img.height/n;
-
-            return "<img src='data:image/png;base64,"+img.data+"' n='"+n+"' width='"+w+"' height='"+h+"'/>";
-        }else if(rec.type==window.top.Store.MESSAGE_TYPE_FILE){
-            var file = JSON.parse(rec.content);
-            return '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
-        }
-    }
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
-    var params = ps.split("&");
-    var isGroupChat = params[0]=="true";
-    var otherId = params[1];
+    console.log({ps})
+    var params = ps.split("&")
+    var isGroupChat = params[0] == '1'
+    var otherId = params[1]
+    let name
 
-    var name = document.getElementById("title").innerText = isGroupChat?window.top.Store.getGroup(otherId).name:window.top.Store.getFriend(otherId).name;
+    render()
+    async function render () {
+
+      let title
+      if(isGroupChat) {
+        const chat = await ChatManager.asyGetChat(userId, otherId)
+        title = chat.name
+      } else {
+        const member = await ContactManager.asyGet(userId, otherId)
+        title = member.name
+      }
+      name = title
+      document.getElementById("title").innerText = title
+      document.addEventListener("mousedown",hideDetaiBox);
+      refreshRecordList();
+
+      ChatManager.on("receiveMessage",onReceiveMessage);
+      ChatManager.on("sendMessage",onSendMessage);
+      ChatManager.on("updateMessageState",onSendMessage);
+      ChatManager.on("updateGroupMessageState",onSendMessage);
+      ChatManager.on("receiveGroupMessage",onReceiveMessage);
+      ChatManager.on("sendGroupMessage",onSendMessage);
+      window.top.ipc.on("mainWindow-focus",onWindowFocus);
+      window.top.ipc.on("openFileDialog-response",sendFile);
+
+      window.addEventListener("beforeunload", function (event) {
+        ChatManager.un("receiveMessage",onReceiveMessage);
+        ChatManager.un("sendMessage",onSendMessage);
+        ChatManager.un("updateMessageState",onSendMessage);
+        ChatManager.un("updateGroupMessageState",onSendMessage);
+        ChatManager.un("receiveGroupMessage",onReceiveMessage);
+        ChatManager.un("sendGroupMessage",onSendMessage);
+        window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
+        window.top.ipc.removeListener("openFileDialog-response",sendFile);
+      });
+    }
+    function _getMessage(rec) {
+      if(rec.type==ChatManager.MESSAGE_TYPE_TEXT){
+        var text = rec.content;
+        // console.log({text})
+        return text.replace("\r\n","<div></div>");
+      }else if(rec.type==ChatManager.MESSAGE_TYPE_IMAGE){
+        var img = JSON.parse(rec.content);
+        var w=200;
+        var h=200;
+        var n = 1;
+        if(img.width>img.height){
+          n = Math.ceil(img.width/200);
+        }else{
+          n = Math.ceil(img.height/200);
+        }
+        w = img.width/n;
+        h = img.height/n;
+
+        return "<img src='data:image/png;base64,"+img.data+"' n='"+n+"' width='"+w+"' height='"+h+"'/>";
+      }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
+        var file = JSON.parse(rec.content);
+        return '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
+      }
+    }
 
     function showDetail() {
         document.location.href = "../contact/detail.html?"+otherId+"&"+name+"&"+isGroupChat;;
@@ -195,61 +240,13 @@
     }
     function onMsgStateTouch(msgId){
         if(isGroupChat){
-            var rec = window.top.Store.getGroupChatRecord(otherId,msgId,null,(rec)=>{
-                if(rec){
-                    if(rec.state==window.top.Store.MESSAGE_STATE_SERVER_NOT_RECEIVE){
-                        if(rec.type==window.top.Store.MESSAGE_TYEP_TEXT){
-                            window.top.WSChannel.resendGroupMessage(rec.msgId,otherId,window.top.Store.getGroup(otherId).name,rec.content);
-                        }else if(rec.type==window.top.Store.MESSAGE_TYPE_FILE){
-                            window.top.WSChannel.resendGroupFile(rec.msgId,otherId,window.top.Store.getGroup(otherId).name,JSON.parse(rec.content));
-                        }else{
-                            window.top.WSChannel.resendGroupImage(rec.msgId,otherId,window.top.Store.getGroup(otherId).name,JSON.parse(rec.content));
-                        }
-                    }else{
-                        document.getElementById("msgStateDetailBox").style.display = "";
-                        var members =window.top.Store.getGroup(otherId).members;
-                        window.top.Store.getRecordStateReports(otherId,msgId,(states)=>{
-                            var html="";
-                            for(var i=0;i<members.length;i++){
-                                var f = members[i];
-                                if(f.uid!=window.top.Store.getCurrentUid()){
-                                    var state = rec.state>window.top.Store.MESSAGE_STATE_SERVER_RECEIVE?window.top.Store.MESSAGE_STATE_SERVER_RECEIVE:rec.state;
-                                    for(var j=0;j<states.length;j++){
-                                        if(states[j].reporterUid == f.uid){
-                                            state = states[j].state;
-                                        }
-                                    }
-
-                                    var iconName = getIconNameByState(state);
-                                    html+="<div style='display: flex;flex-direction: row;justify-content: space-around;align-items: center'><span>";
-                                    html+=f.name;
-                                    html+="</span><i class=\"material-icons\">";
-                                    html+=iconName;
-                                    html+="</i> </div>";
-                                }
-                            }
-                            document.getElementById("msgStateDetailBox").innerHTML=html;
-                        })
-
-                    }
-                }
-
-            });
-        }else{
-            window.top.Store.getRecentChatRecord(otherId,msgId,null,(rec)=>{
-                if(rec&&rec.state==window.top.Store.MESSAGE_STATE_SERVER_NOT_RECEIVE){
-                    if(rec.type==window.top.Store.MESSAGE_TYEP_TEXT) {
-                        window.top.WSChannel.resendMessage(rec.msgId, otherId, rec.content);
-                    }
-                    else if(rec.type==window.top.Store.MESSAGE_TYPE_FILE){
-                        window.top.WSChannel.resendFile(rec.msgId,otherId,JSON.parse(rec.content));
-                    }
-                    else
-                        window.top.WSChannel.resendImage(rec.msgId,otherId,JSON.parse(rec.content));
-                }
-            });
-
-
+            var rec = ChatManager.asyGetMsg(userId, otherId, msgId)
+          if(rec){
+            if(rec.state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE){
+              channel.retrySend(otherId, msgId)
+            }else {
+            }
+          }
         }
     }
     function hideDetaiBox(e) {
@@ -257,10 +254,9 @@
             document.getElementById("msgStateDetailBox").style.display="none";
         }
     }
-    document.addEventListener("mousedown",hideDetaiBox);
-    function _computeRecordHtml(records) {
+    async function _computeRecordHtml(records) {
         var html = "";
-        var name = window.top.Store.getCurrentName();
+        var name = user.name
         var lastSpTime;
         var now = new Date();
         for(var i=0;i<records.length;i++) {
@@ -280,9 +276,18 @@
 
                 }
             }
-            if (records[i].senderUid) {
+            const {senderUid} = records[i]
+            if (senderUid) {
                 html += "<div style=\"display: flex;flex-direction: row;justify-content: flex-start;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
-                var p = isGroupChat?window.top.Store.getMember(otherId,records[i].senderUid):window.top.Store.getFriend(otherId);
+                let p
+              // console.log({userId, senderUid, isGroupChat})
+
+              if (isGroupChat) {
+
+                } else {
+                  p = await ContactManager.asyGet(userId, senderUid)
+                }
+
 
                 if(p.pic){
                     html += "<img src='"+p.pic+"' style='margin-left:10px;margin-right:5px;width:40px;height:40px;border-radius: 20px;'>";
@@ -297,15 +302,10 @@
                 html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
                 html += _getMessage(records[i]);
                 html += "</div>";
-//                if(records[i].read){
-//                    html+="<i class=\"material-icons\" style='margin-left: 5px;font-size: 14px;line-height: 40px;color: #a0a0a0'>";
-//                    html+=getIconNameByState(4);
-//                    html+="</i>";
-//                }
                 html += "</div>";
             }else{
                 html+="<div style=\"display: flex;flex-direction: row;justify-content: flex-end;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
-                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].msgId+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==window.top.Store.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
+                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].msgId+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManagerMESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
                 html+=getIconNameByState(records[i].state);
                 html+="</i>";
                 html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
@@ -313,8 +313,8 @@
                 html += _getMessage(records[i]);
                 html+="</div>";
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-w-r.png);margin-top: 11px'></div>";
-                if(window.top.Store.getPersonalPic()){
-                    html += "<img src='"+window.top.Store.getPersonalPic()+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
+                if(ChatManagergetPersonalPic()){
+                    html += "<img src='"+ChatManagergetPersonalPic()+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
                 }else{
                     html += "<div style=\"text-align:center;margin-left:5px;margin-right:10px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:dodgerblue;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
                     html += name;
@@ -327,44 +327,34 @@
         document.getElementById("records").innerHTML = html;
         document.getElementById("records").scrollTop=document.getElementById("records").scrollHeight-document.getElementById("records").offsetHeight;
     }
-    function refreshRecordList() {
-        if(isGroupChat){
-            window.top.Store.readGroupChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);
-        }else{
-            window.top.Store.readAllChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);
-        }
+    async function refreshRecordList() {
+      const num = await ChatManager.asyGetNewMsgNum(otherId)
+      if (num) {
+        await ChatManager.asyReadMsgs(this.otherSideId, num)
+      }
+      const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 100)
+      console.log({recordAry})
+      _computeRecordHtml(recordAry)
+        // if(isGroupChat){
+        //     ChatManagerreadGroupChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);
+        // }else{
+        //     ChatManagerreadAllChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);
+        // }
 
     }
 
-    refreshRecordList();
 
 
     function sendText(text) {
-        if(isGroupChat){
-            window.top.WSChannel.sendGroupMessage(otherId,window.top.Store.getGroup(otherId).name,text,()=>{
-//                window.top.Store.sendGroupMessage(otherId,text);
-//                document.getElementById("chatBox").contentWindow.document.body.innerHTML = "";
-            });
-        }else{
-            window.top.WSChannel.sendMessage(otherId,text,()=>{
-//                window.top.Store.sendMessage(otherId,text);
-//                document.getElementById("chatBox").contentWindow.document.body.innerHTML = "";
-            });
-        }
+      let relativeId
+          channel.sendText(otherId, text, relativeId, isGroupChat)
+
     }
+
     function sendImg(data,width,height) {
         var d = {data:data,width:width,height:height};
-        if(isGroupChat){
-            window.top.WSChannel.sendGroupImage(otherId,window.top.Store.getGroup(otherId).name,d,()=>{
-//                window.top.Store.sendGroupImage(otherId,data);
-//                document.getElementById("chatBox").contentWindow.document.body.innerHTML = "";
-            });
-        }else{
-            window.top.WSChannel.sendImage(otherId,d,()=>{
-//                window.top.Store.sendImage(otherId,data);
-//                document.getElementById("chatBox").contentWindow.document.body.innerHTML = "";
-            });
-        }
+        let relativeMsgId
+      channel.sendImage(otherId, data,width,height, isGroupChat)
     }
 
     function showBiggerImage() {
@@ -405,47 +395,17 @@
     }
 
     function onWindowFocus() {
-        if((isGroupChat&&window.top.Store.getGroup(otherId).newReceive)||(!isGroupChat&&window.top.Store.getRecent(otherId).newReceive)){
+        if((isGroupChat&&ChatManager.getGroup(otherId).newReceive)||(!isGroupChat&&ChatManager.getRecent(otherId).newReceive)){
             refreshRecordList();
-//            if(isGroupChat){
-//                records = window.top.Store.readGroupChatRecords(otherId);
-//            }else{
-//                records = window.top.Store.readAllChatRecords(otherId);
-//            }
         }
     }
 
-    window.top.Store.on("receiveMessage",onReceiveMessage);
-    window.top.Store.on("sendMessage",onSendMessage);
-    window.top.Store.on("updateMessageState",onSendMessage);
-    window.top.Store.on("updateGroupMessageState",onSendMessage);
-    window.top.Store.on("receiveGroupMessage",onReceiveMessage);
-    window.top.Store.on("sendGroupMessage",onSendMessage);
-    window.top.ipc.on("mainWindow-focus",onWindowFocus);
-    window.top.ipc.on("openFileDialog-response",sendFile);
-
-    window.addEventListener("beforeunload", function (event) {
-        window.top.Store.un("receiveMessage",onReceiveMessage);
-        window.top.Store.un("sendMessage",onSendMessage);
-        window.top.Store.un("updateMessageState",onSendMessage);
-        window.top.Store.un("updateGroupMessageState",onSendMessage);
-        window.top.Store.un("receiveGroupMessage",onReceiveMessage);
-        window.top.Store.un("sendGroupMessage",onSendMessage);
-        window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
-        window.top.ipc.removeListener("openFileDialog-response",sendFile);
-    });
 
     function openFileDialog() {
         window.top.ipc.send("openFileDialog");
     }
     function sendFile (event,arg) {
-        if(isGroupChat){
-            window.top.WSChannel.sendGroupFile(otherId,window.top.Store.getGroup(otherId).name,arg,()=>{
-            });
-        }else{
-            window.top.WSChannel.sendFile(otherId,arg,()=>{
-            });
-        }
+
     }
     function _showFile(rec) {
         if(rec){
@@ -463,9 +423,9 @@
     }
     function showFile(uid,msgId){
         if(isGroupChat){
-            window.top.Store.getGroupChatRecord(otherId,msgId,uid,_showFile);
+            ChatManager.getGroupChatRecord(otherId,msgId,uid,_showFile);
         }else{
-            window.top.Store.getRecentChatRecord(otherId,msgId,uid,_showFile);
+            ChatManager.getRecentChatRecord(otherId,msgId,uid,_showFile);
         }
 
     }

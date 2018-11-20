@@ -163,7 +163,7 @@
     });
 
     var notifyMsg = function () {
-        ChatManager.getAllMsgNotReadNum().then(function (num) {
+        ChatManager.asyGetAllMsgNotReadNum().then(function (num) {
             if(num>0){
                 document.getElementById("notify-msg-num").innerText = num;
                 document.getElementById("notify-msg-num").style.display="";
