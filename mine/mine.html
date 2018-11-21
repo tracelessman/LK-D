@@ -20,18 +20,16 @@
     </style>
     <script>
         function _clear() {
-            window.top.Store.clear(function () {
+            window.top.engine.getChatManager().clear().then(function () {
                 window.top.document.location.reload();
 
             });
         }
 
         function _reset() {
-            window.top.WSChannel.authorize();
-            window.top.WSChannel.reset();
-            window.top.Store.reset(function () {
+            window.top.engine.getApplication().getCurrentApp().asyUnRegister().then(function () {
                 window.top.document.location.reload();
-            });
+            })
         }
 
         function _upgrade() {
@@ -63,13 +61,18 @@
 </div>
 </body>
 <script>
-    document.getElementById("id").innerText = window.top.Store.getCurrentUid();
-    if(window.top.Store.getPersonalPic()){
-        document.getElementById("name").innerHTML = "<img src='"+window.top.Store.getPersonalPic()+"' style='width:96px;height:96px;'>";
-    }else{
-        document.getElementById("name").innerText = window.top.Store.getCurrentName();
+    let user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
+    if(user){
+        document.getElementById("id").innerText = user.id;
+        if(user.pic){
+            document.getElementById("name").innerHTML = "<img src='"+user.pic+"' style='width:96px;height:96px;'>";
+        }else{
+            document.getElementById("name").innerText = user.name;
+
+        }
 
     }
+
     document.getElementById("version").innerText = window.top.remote.getGlobal("appVersion");
 
     function doVersionResponse (event,arg) {
