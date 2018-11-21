@@ -198,6 +198,7 @@
         return text.replace("\r\n","<div></div>");
       }else if(rec.type==ChatManager.MESSAGE_TYPE_IMAGE){
         var img = JSON.parse(rec.content);
+
         var w=200;
         var h=200;
         var n = 1;
@@ -209,7 +210,7 @@
         w = img.width/n;
         h = img.height/n;
 
-        return "<img src='data:image/png;base64,"+img.data+"' n='"+n+"' width='"+w+"' height='"+h+"'/>";
+        return `<img src="${img.url}" n='"+n+"' width='"+w+"' height='"+h+"'/>`
       }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
         var file = JSON.parse(rec.content);
         return '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
