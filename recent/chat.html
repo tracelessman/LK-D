@@ -174,22 +174,12 @@
       document.addEventListener("mousedown",hideDetaiBox);
       refreshRecordList();
 
-      ChatManager.on("receiveMessage",onReceiveMessage);
-      ChatManager.on("sendMessage",onSendMessage);
-      ChatManager.on("updateMessageState",onSendMessage);
-      ChatManager.on("updateGroupMessageState",onSendMessage);
-      ChatManager.on("receiveGroupMessage",onReceiveMessage);
-      ChatManager.on("sendGroupMessage",onSendMessage);
+      ChatManager.on("msgChanged",refreshRecordList);
       window.top.ipc.on("mainWindow-focus",onWindowFocus);
       window.top.ipc.on("openFileDialog-response",sendFile);
 
       window.addEventListener("beforeunload", function (event) {
-        ChatManager.un("receiveMessage",onReceiveMessage);
-        ChatManager.un("sendMessage",onSendMessage);
-        ChatManager.un("updateMessageState",onSendMessage);
-        ChatManager.un("updateGroupMessageState",onSendMessage);
-        ChatManager.un("receiveGroupMessage",onReceiveMessage);
-        ChatManager.un("sendGroupMessage",onSendMessage);
+        ChatManager.un("msgChanged",refreshRecordList)
         window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
         window.top.ipc.removeListener("openFileDialog-response",sendFile);
       });
@@ -342,7 +332,7 @@
         await ChatManager.asyReadMsgs(this.otherSideId, num)
       }
       const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 100)
-      console.log({recordAry})
+      // console.log({recordAry})
       _computeRecordHtml(recordAry)
         // if(isGroupChat){
         //     ChatManagerreadGroupChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);

@@ -80,7 +80,7 @@
             event.target.style.backgroundColor = "#f0f0f0";
 
     }
-    function select(name,isGroupChat,id){
+    function select(name){
 
         if(selected){
             document.getElementById("recent"+selected).style.backgroundColor = "#f0f0f0";
@@ -99,11 +99,11 @@
     async function refreshRecentList() {
         var all = await ChatManager.asyGetAll(user.id)
         // console.log({all})
-        var html="";
-        var i=0;
+        let html="";
+        let i=0;
         if(all){
             for(;i<all.length;i++){
-                var re = all[i];
+                let re = all[i];
                 const {id: chatId, isGroup} = re
                 const person = await ContactManager.asyGet(user.id, re.id)
                 html+="<div id=\"recent";
@@ -119,32 +119,35 @@
                 html+="')\">";
                 html+=re.id&&person?person.name:"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name;
               const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
+              // console.log({newMsgNum})
                 if(newMsgNum){
+                  // console.log('here')
                     html+=`<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
                 }
                 html+="</div>";
             }
 
         }
+        // console.log({html})
 
         document.getElementById("recent").innerHTML=html;
         if(selected){
             select(selected);
+        } else {
+          select(0)
+          document.getElementById('recent0').click()
+
         }
 
     }
 
     refreshRecentList();
-    ChatManager.on("receiveMessage",refreshRecentList);
-    ChatManager.on("readChatRecords",refreshRecentList);
-    ChatManager.on("readGroupChatRecords",refreshRecentList);
-    ChatManager.on("receiveGroupMessage",refreshRecentList);
+    ChatManager.on("msgChanged",refreshRecentList);
+    ChatManager.on("msgRead",refreshRecentList);
 
     window.addEventListener("beforeunload", function (event) {
-        ChatManager.un("receiveMessage",refreshRecentList);
-        ChatManager.un("readChatRecords",refreshRecentList);
-        ChatManager.un("readGroupChatRecords",refreshRecentList);
-        ChatManager.un("receiveGroupMessage",refreshRecentList);
+        ChatManager.un("msgChanged",refreshRecentList);
+        ChatManager.un("msgRead",refreshRecentList);
     });
 </script>
 </html>
