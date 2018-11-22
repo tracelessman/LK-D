@@ -7,6 +7,18 @@ let dbName = engine.getApplication().getCurrentApp().getName()||"default";
 
 let db = new sqlite3.cached.Database(path.join(__dirname, dbName+".db"));
 
+let ensureDirs = function (rootPath,dir) {
+    let dirs = dir.split('/');
+    let p = rootPath;
+    for(let i=0;i<dirs.length;i++){
+        p += ("/"+dirs[i]);
+        if(!fs.existsSync(p)){
+            fs.mkdirSync(p);
+        }
+    }
+
+}
+
 db.saveFile = function (filePath,fileName,data) {
     return new Promise((resolve,reject)=>{
         var dir = path.join(__dirname,filePath);
@@ -20,17 +32,8 @@ db.saveFile = function (filePath,fileName,data) {
                 }
             })
         }
-        if(!fs.existsSync(dir)){
-            fs.mkdir(dir, { recursive: true }, (err) => {
-                if (!err) {
-                    createFile();
-                }else{
-                    reject(err)
-                }
-            });
-        }else{
-            createFile();
-        }
+        ensureDirs(__dirname,filePath);
+        createFile();
     });
 
 }
