@@ -174,19 +174,16 @@
       document.addEventListener("mousedown",hideDetaiBox);
       refreshRecordList();
 
-      ChatManager.on("msgChanged",refreshRecordList);
-      window.top.ipc.on("mainWindow-focus",onWindowFocus);
-      window.top.ipc.on("openFileDialog-response",sendFile);
 
-      window.addEventListener("beforeunload", function (event) {
-        ChatManager.un("msgChanged",refreshRecordList)
-        window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
-        window.top.ipc.removeListener("openFileDialog-response",sendFile);
-      });
     }
 
     async function init() {
+      readUnread()
+    }
+    async function readUnread () {
+
       const num = await ChatManager.asyGetNewMsgNum(otherId)
+      // console.log({num})
       if (num) {
         ChatManager.asyReadMsgs(otherId, num)
       }
@@ -282,14 +279,10 @@
                 let p
               // console.log({userId, senderUid, isGroupChat})
 
-              if (isGroupChat) {
-
-                } else {
-                  p = await ContactManager.asyGet(userId, senderUid)
-                }
+              p = await ContactManager.asyGet(userId, senderUid)
 
 
-                if(p.pic){
+              if(p.pic){
                     html += "<img src='"+p.pic+"' style='margin-left:10px;margin-right:5px;width:40px;height:40px;border-radius: 20px;'>";
                 }else{
                     html += "<div style=\"text-align:center;margin-left:10px;margin-right:5px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:palevioletred;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
@@ -328,10 +321,7 @@
         document.getElementById("records").scrollTop=document.getElementById("records").scrollHeight-document.getElementById("records").offsetHeight;
     }
     async function refreshRecordList() {
-      const num = await ChatManager.asyGetNewMsgNum(otherId)
-      if (num) {
-        await ChatManager.asyReadMsgs(this.otherSideId, num)
-      }
+
       const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 100)
       // console.log({recordAry})
       _computeRecordHtml(recordAry)
@@ -384,13 +374,11 @@
     }
 
     function onReceiveMessage(fromId) {
-        if(fromId==otherId){
-            refreshRecordList()
-        }
-    }
-    function onSendMessage(targetId){
-        if(targetId==otherId){
-            refreshRecordList()
+        // console.log({fromId, otherId})
+        if(fromId===otherId){
+          readUnread()
+
+          refreshRecordList()
         }
     }
 
@@ -432,6 +420,18 @@
     function captureDesktop() {
         window.top.ipc.send("openCaptureBrowser");
     }
+    window.top.ipc.on("mainWindow-focus",onWindowFocus);
+    window.top.ipc.on("openFileDialog-response",sendFile);
+
+    ChatManager.on("msgReceived",onReceiveMessage);
+    ChatManager.on("msgChanged",refreshRecordList);
+
+    window.addEventListener("beforeunload", function (event) {
+      window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
+      window.top.ipc.removeListener("openFileDialog-response",sendFile);
+      ChatManager.un("msgReceived",onReceiveMessage);
+      ChatManager.un("msgChanged",refreshRecordList);
+    })
 
 </script>
 </html>
