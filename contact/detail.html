@@ -40,6 +40,8 @@
 </div>
 <script>
     document.body.className = window.top.theme;
+    const {engine} = window.top
+    const ChatManager = engine.get('ChatManager')
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
     var params = ps.split("&");
 
@@ -61,7 +63,8 @@
         }
         document.getElementById("members").innerHTML=html;
     }
-    function sendMessage() {
+    async function sendMessage() {
+      await ChatManager.asyEnsureSingleChat(id)
         document.location.href = "../recent/chat.html?"+isGroup+"&"+id;//isGroupChat&id
     }
 </script>

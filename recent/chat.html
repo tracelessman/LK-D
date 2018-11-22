@@ -157,6 +157,7 @@
     var isGroupChat = params[0] == '1'
     var otherId = params[1]
     let name
+    let relativeMsgId
 
     render()
     async function render () {
@@ -322,29 +323,28 @@
     }
     async function refreshRecordList() {
 
-      const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 100)
+      const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
       // console.log({recordAry})
+      relativeMsgId = null
+      const lastMsg = window.top._.last(recordAry)
+      if (lastMsg) {
+        relativeMsgId  = lastMsg.id
+      }
+      // console.log({relativeMsgId})
       _computeRecordHtml(recordAry)
-        // if(isGroupChat){
-        //     ChatManagerreadGroupChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);
-        // }else{
-        //     ChatManagerreadAllChatRecords(otherId,!window.top.remote.getGlobal("mainWindow").isFocused(),_computeRecordHtml);
-        // }
 
     }
 
 
 
     function sendText(text) {
-      let relativeId
-          channel.sendText(otherId, text, relativeId, isGroupChat)
+          channel.sendText(otherId, text, relativeMsgId, isGroupChat)
 
     }
 
     function sendImg(data,width,height) {
         var d = {data:data,width:width,height:height};
-        let relativeMsgId
-      channel.sendImage(otherId, data,width,height, isGroupChat)
+      channel.sendImage(otherId, data,width,height, relativeMsgId,isGroupChat)
     }
 
     function showBiggerImage() {

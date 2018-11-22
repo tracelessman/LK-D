@@ -186,7 +186,9 @@ if(app.dock){
 
 ipc.on('messageReceive',function (event,arg) {
     if(app.dock){
+      if(arg.total){
         app.dock.setBadge(arg.total+"");
+      }
     }
 })
 ipc.on('messageRead',function (event,arg) {

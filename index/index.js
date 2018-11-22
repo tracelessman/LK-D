@@ -15,3 +15,4 @@ window.desktopCapturer = require('electron').desktopCapturer;
 window.electronScreen = require('electron').screen;
 window.nativeImage = require('electron').nativeImage;
 window.CryptoJS = require("crypto-js");
+window._ = require('lodash')
