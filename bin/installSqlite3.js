@@ -13,16 +13,15 @@ const _ = require('lodash')
 const resource = path.resolve(rootDir, 'resource')
 const {sqliteFileName, electronDistUrl, platform} = constant
 const semver = require('semver')
+const chalk = require('chalk')
 
 const electronVersion = getElectronVersion()
 debug({electronVersion})
 const cmd = `npm i sqlite3 --runtime=electron --target=${electronVersion} --dist-url=${electronDistUrl}`
 debug({cmd})
-execSync(cmd)
+childProcess.execSync(cmd)
 
-console.log(
-  `sqlite3 installed successfully`
-)
+console.log(chalk.green(  `sqlite3 installed successfully`))
 
 moveToResource()
 
@@ -36,7 +35,7 @@ function moveToResource() {
   fse.ensureDirSync(sqilteNodeFolder)
   const src = path.resolve(sqilteNodeFolder, sqliteFileName)
   fse.copySync(src, dest)
-  console.log(`move builded file to ${dest}, it should be committed`)
+  console.log(chalk.blue(`move builded file to ${dest}, it should be committed`))
 }
 
 function getSqliteNodeFolderName ({electronVersion}) {
