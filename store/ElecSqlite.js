@@ -63,4 +63,17 @@ db.removeAllAttachment = function () {
     deleteFolder(path.join(__dirname,userId));
 }
 
+db.readFile = function (filePath) {
+    return new Promise((resolve,reject)=>{
+        fs.readFile(filePath,'base64',function (err,data) {
+            if(err){
+                reject(err)
+            }else{
+                resolve(data)
+            }
+        });
+    })
+
+}
+
 module.exports = db;
