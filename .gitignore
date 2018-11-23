@@ -17,3 +17,5 @@ asars/
 
 *.db
 external
+
+store/**/images

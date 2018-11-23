@@ -7,6 +7,7 @@ const sqliteNodeFileName = 'node_sqlite3.node'
 const sqliteElectronFolder = path.resolve(rootDir, 'node_modules/sqlite3/lib/binding/electron-v3.0-darwin-x64')
 const sqliteNode = path.resolve(sqliteElectronFolder, sqliteNodeFileName)
 const fse = require('fs-extra')
+const _ = require('lodash')
 
 const option =  {
   cwd: rootDir
