@@ -7,36 +7,36 @@ const ipc = require('electron').ipcMain
 
 const path = require('path')
 const url = require('url')
-const fs = require('fs');
-const nativeImage = require('electron').nativeImage;
+const fs = require('fs')
+const nativeImage = require('electron').nativeImage
 const net = electron.net
 const dialog = electron.dialog
-const originalFs = require('original-fs');
-const globalShortcut = electron.globalShortcut;
-const pageDir = "";
+const originalFs = require('original-fs')
+const globalShortcut = electron.globalShortcut
+const pageDir = ""
 const packageJSON = require('./package.json')
 
 function isDev(){
-    const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
-    const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
-    return isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
+    const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1
+    const isEnvSet = 'ELECTRON_IS_DEV' in process.env
+    return isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath))
 }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
+let mainWindow
 function createWindow () {
 
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 1024, height: 768});
+    mainWindow = new BrowserWindow({width: 1024, height: 768})
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, pageDir+'/index/loading.html'),
         protocol: 'file:',
         slashes: true
     }))
-    global.mainWindow = mainWindow;
-    global.appVersion = packageJSON.version;
-    mainWindow.webContents.openDevTools();
+    global.mainWindow = mainWindow
+    global.appVersion = packageJSON.version
+    mainWindow.webContents.openDevTools()
 
     // and load the index.html of the app.
     checkUpdate(function (hasNew) {
@@ -70,7 +70,7 @@ function createWindow () {
     })
 
     mainWindow.on("focus",function () {
-        mainWindow.webContents.send("mainWindow-focus");
+        mainWindow.webContents.send("mainWindow-focus")
     })
 }
 
@@ -82,7 +82,7 @@ app.on('ready', () => {
     // 注册一个 'CommandOrControl+X' 的全局快捷键
     const ret = globalShortcut.register('Control+Alt+A', () => {
         if(!captureBrowser)
-            openCaptureBrowser();
+            openCaptureBrowser()
     })
 })
 
@@ -113,19 +113,19 @@ ipc.on("openFileDialog",function (event,arg) {
         fs.readFile(result[0],function (err,buf) {
             if(buf){
                var data = buf.toJSON().data;
-               var tmp = result[0].split(/[\\|\/]/ig);
+               var tmp = result[0].split(/[\\|\/]/ig)
 
-                event.sender.send('openFileDialog-response', {data:data,name:tmp[tmp.length-1]});
+                event.sender.send('openFileDialog-response', {data:data,name:tmp[tmp.length-1]})
             }
         })
     }
 });
 
-let imageBrowser;
+let imageBrowser
 ipc.on('openImageBrowser', function (event, arg) {
-    global.imageHtml = arg.html;
+    global.imageHtml = arg.html
     if(!imageBrowser){
-        imageBrowser = new BrowserWindow();
+        imageBrowser = new BrowserWindow()
 
         imageBrowser.on('closed', function () {
             // Dereference the window object, usually you would store windows
@@ -139,13 +139,13 @@ ipc.on('openImageBrowser', function (event, arg) {
         protocol: 'file:',
         slashes: true
     }))
-    imageBrowser.setSize(arg.width+100,arg.height+100);
-    imageBrowser.center();
+    imageBrowser.setSize(arg.width+100,arg.height+100)
+    imageBrowser.center()
     imageBrowser.setAlwaysOnTop(false)
-    imageBrowser.show();
+    imageBrowser.show()
 })
 
-let captureBrowser;
+let captureBrowser
 function openCaptureBrowser() {
     if(!captureBrowser){
         captureBrowser = new BrowserWindow({frame:false,modal:true,transparent:true,show:false,width:0,height:0,alwaysOnTop: true,});
@@ -161,23 +161,23 @@ function openCaptureBrowser() {
     // captureBrowser.setFullScreen(true);
 }
 ipc.on('openCaptureBrowser', function (event, arg) {
-    openCaptureBrowser();
+    openCaptureBrowser()
 })
 
 ipc.on('showCaptureBrowser', function (event, arg) {
-    captureBrowser.setFullScreen(true);
-    captureBrowser.show();
+    captureBrowser.setFullScreen(true)
+    captureBrowser.show()
 
 });
 ipc.on('closeCaptureBrowser', function (event, arg) {
     if(captureBrowser){
-        captureBrowser.minimize();
-        captureBrowser.close();
-        captureBrowser=null;
+        captureBrowser.minimize()
+        captureBrowser.close()
+        captureBrowser=null
         if(arg)
-        mainWindow.webContents.send('capture-complete');
+        mainWindow.webContents.send('capture-complete')
     }
-});
+})
 
 if(app.dock){
     var image = nativeImage.createFromPath(path.join(__dirname, "/images/traceless.png"));
