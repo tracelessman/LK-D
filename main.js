@@ -298,12 +298,13 @@ const labels = {
   save: '保存',
   copyLink: '复制链接'
 }
+//todo: not working in webpack
 if (process.env.NODE_ENV === 'development') {
   labels.inspect = 'Inspect'
+  contextMenu({
+    labels
+  })
 }
-contextMenu({
-  labels
-})
 
 function getUpgradeMessages () {
   let html = ''
