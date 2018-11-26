@@ -222,54 +222,54 @@ function compareVersion(v1,v2){
 }
 function checkUpdate(callback){
 
-    let request = net.request("https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json");
+    let request = net.request("https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json")
     request.on('response', (response) => {
-        let text="";
+        let text=""
         if(response.statusCode==200){
             response.on('data', (chunk) => {
-                text+=chunk;
+                text+=chunk
             })
             response.on('end', () => {
-                let des = JSON.parse(text);
-                latestVersion = des.version;
+                let des = JSON.parse(text)
+                latestVersion = des.version
                 if(compareVersion(latestVersion,packageJSON.version)==1){
-                    hasNewVersion=true;
-                    callback(true);
-                    let changeList = des.changeList;
-                    files = ["package.json"];
+                    hasNewVersion=true
+                    callback(true)
+                    let changeList = des.changeList
+                    files = ["package.json"]
                     for(var i=0;i<changeList.length;i++){
-                        var change = changeList[i];
+                        var change = changeList[i]
                         // var vChange = parseInt(change.version.replace(/\./ig,""));
                         if(compareVersion(change.version,packageJSON.version)==1){
-                            var _cfs = change.files;
+                            var _cfs = change.files
                             _cfs.forEach(function (f) {
                                 if(files.indexOf(f)==-1){
-                                    files.push(f);
+                                    files.push(f)
                                 }
                             })
                         }
                     }
                 }else{
-                    callback(false);
+                    callback(false)
                 }
 
             })
         }else{
-            callback(false);
-            console.info("check update response.statusCode:"+response.statusCode);
+            callback(false)
+            console.info("check update response.statusCode:"+response.statusCode)
         }
     })
     request.on("error",function (err) {
-        callback(false);
-        console.info(err.toString());
-    });
-    request.end();
+        callback(false)
+        console.info(err.toString())
+    })
+    request.end()
 
 }
 
 ipc.on("remoteVersion-request",function (event,arg) {
     checkUpdate(function (hasNew) {
-        event.sender.send('remoteVersion-response', latestVersion||packageJSON.version);
+        event.sender.send('remoteVersion-response', latestVersion||packageJSON.version)
     })
 })
 
@@ -292,10 +292,10 @@ ipc.on("upgrade-request",function (event,arg) {
 
     })
 })
-let upgradeMessages = new Map();
+let upgradeMessages = new Map()
 
 ipc.on('start-download', function (event, arg) {
-    download(files);
+    download(files)
 })
 
 ipc.on('restart', function (event, arg) {
@@ -312,21 +312,21 @@ function getUpgradeMessages() {
 }
 function download(files) {
     var baseURI = "https://raw.githubusercontent.com/tracelessman/LK-D/publish/";
-    var index = baseURI.length;
+    var index = baseURI.length
 
-    var count = 0;
-    var count2=0;
+    var count = 0
+    var count2=0
     function changeMsg(f,m) {
-        upgradeMessages.set(f,m);
-        global.upgradeMessage = getUpgradeMessages();
-        mainWindow.webContents.executeJavaScript("update()");
+        upgradeMessages.set(f,m)
+        global.upgradeMessage = getUpgradeMessages()
+        mainWindow.webContents.executeJavaScript("update()")
     }
-    var tmpDir = path.join(__dirname, "_tmp");
+    var tmpDir = path.join(__dirname, "_tmp")
 
     function deleteFolder(p) {
-        var files = [];
+        var files = []
         if( fs.existsSync(p) ) {
-            files = fs.readdirSync(p);
+            files = fs.readdirSync(p)
             files.forEach(function(file){
                 var curPath = path.join(p, file);
                 if(fs.statSync(curPath).isDirectory()&&!curPath.endsWith(".asar")) {
