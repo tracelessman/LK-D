@@ -311,7 +311,7 @@ function getUpgradeMessages() {
     return html;
 }
 function download(files) {
-    var baseURI = "https://raw.githubusercontent.com/tracelessman/LK-D/publish/";
+    var baseURI = "https://raw.githubusercontent.com/tracelessman/LK-D/publish/"
     var index = baseURI.length
 
     var count = 0
@@ -328,38 +328,38 @@ function download(files) {
         if( fs.existsSync(p) ) {
             files = fs.readdirSync(p)
             files.forEach(function(file){
-                var curPath = path.join(p, file);
+                var curPath = path.join(p, file)
                 if(fs.statSync(curPath).isDirectory()&&!curPath.endsWith(".asar")) {
-                    deleteFolder(curPath);
+                    deleteFolder(curPath)
                 } else {
-                    fs.unlinkSync(curPath);
+                    fs.unlinkSync(curPath)
                 }
-            });
+            })
             try{
-                fs.rmdirSync(p);
+                fs.rmdirSync(p)
             }catch(e){
-                var _files = fs.readdirSync(p);
+                var _files = fs.readdirSync(p)
                 _files.forEach(function(file){
-                    dialog.showMessageBox({message:file});
-                });
+                    dialog.showMessageBox({message:file})
+                })
             }
         }
     }
-    deleteFolder(tmpDir);
+    deleteFolder(tmpDir)
     function copyFiles(srcDir,targetDir){
-        var files = fs.readdirSync(srcDir);
+        var files = fs.readdirSync(srcDir)
         files.forEach(function (file) {
-            var curPath = path.join(srcDir, file);
-            var targetPath = path.join(targetDir, file);
+            var curPath = path.join(srcDir, file)
+            var targetPath = path.join(targetDir, file)
 
             if(fs.statSync(curPath).isDirectory()) { // recurse
                 if(curPath.endsWith(".asar")){
-                    originalFs.writeFileSync(targetPath,originalFs.readFileSync(curPath));
+                    originalFs.writeFileSync(targetPath,originalFs.readFileSync(curPath))
                 }else{
                     if(!fs.existsSync(targetPath)){
-                        fs.mkdirSync(targetPath);
+                        fs.mkdirSync(targetPath)
                     }
-                    copyFiles(curPath,targetPath);
+                    copyFiles(curPath,targetPath)
                 }
 
             } else {
@@ -369,21 +369,21 @@ function download(files) {
                 // srcS.pipe(targetS);
                 // srcS.destroy();
                 // targetS.destroy();
-                fs.renameSync(curPath,targetPath);
+                fs.renameSync(curPath,targetPath)
             }
         })
     }
 
     mainWindow.webContents.session.on('will-download', (event, item, webContents) => {
         //设置文件存放位置
-        var f = item.getURL().substring(index);
-        item.setSavePath(path.join(tmpDir, f));
+        var f = item.getURL().substring(index)
+        item.setSavePath(path.join(tmpDir, f))
         item.on('updated', (event, state) => {
             if (state === 'interrupted') {
-                changeMsg(f,"interrupted");
+                changeMsg(f,"interrupted")
             } else if (state === 'progressing') {
                 if (item.isPaused()) {
-                    changeMsg(f,"paused");
+                    changeMsg(f,"paused")
                 } else {
                     changeMsg(f,Math.round((item.getReceivedBytes()/item.getTotalBytes())*100)+"%");
                 }
