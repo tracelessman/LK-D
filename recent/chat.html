@@ -213,7 +213,17 @@
         var file = JSON.parse(rec.content);
         return '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
       } else if(rec.type==ChatManager.MESSAGE_TYPE_AUDIO){
-        return '<div style="display: flex; justify-content: center; align-items: center"><i class="material-icons" style="color: #b0b0b0;font-size: 30px;cursor: pointer;">mic</i><span>'+'请在移动端收听语音'+'</span></div>';
+        const {content} = rec
+        const {url} = JSON.parse(content)
+        console.log({url})
+        // return '<div style="display: flex; justify-content: center; align-items: center"><i class="material-icons" style="color: #b0b0b0;font-size: 30px;cursor: pointer;">mic</i><span>'+'请在移动端收听语音'+'</span></div>';
+        return `  <audio
+   type="audio/m4a"
+        controls
+        src="${url}">
+            Your browser does not support the
+            <code>audio</code> element.
+    </audio>`
       }
     }
 
