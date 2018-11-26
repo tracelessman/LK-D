@@ -108,18 +108,18 @@ app.on('activate', function () {
 })
 
 ipc.on("openFileDialog",function (event,arg) {
-    var result = dialog.showOpenDialog({properties: ['openFile']});
+    var result = dialog.showOpenDialog({properties: ['openFile']})
     if(result&&result.length>0){
         fs.readFile(result[0],function (err,buf) {
             if(buf){
-               var data = buf.toJSON().data;
+               var data = buf.toJSON().data
                var tmp = result[0].split(/[\\|\/]/ig)
 
                 event.sender.send('openFileDialog-response', {data:data,name:tmp[tmp.length-1]})
             }
         })
     }
-});
+})
 
 let imageBrowser
 ipc.on('openImageBrowser', function (event, arg) {
@@ -158,7 +158,7 @@ function openCaptureBrowser() {
         protocol: 'file:',
         slashes: true
     }))
-    // captureBrowser.setFullScreen(true);
+    // captureBrowser.setFullScreen(true)
 }
 ipc.on('openCaptureBrowser', function (event, arg) {
     openCaptureBrowser()
