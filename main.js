@@ -8,6 +8,7 @@ const ipc = require('electron').ipcMain
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
+const contextMenu = require('electron-context-menu')
 const nativeImage = require('electron').nativeImage
 const net = electron.net
 const dialog = electron.dialog
@@ -300,7 +301,7 @@ const labels = {
 if (process.env.NODE_ENV === 'development') {
   labels.inspect = 'Inspect'
 }
-require('electron-context-menu')({
+contextMenu({
   labels
 })
 
