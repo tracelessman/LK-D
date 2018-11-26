@@ -148,7 +148,7 @@ ipc.on('openImageBrowser', function (event, arg) {
 let captureBrowser
 function openCaptureBrowser() {
     if(!captureBrowser){
-        captureBrowser = new BrowserWindow({frame:false,modal:true,transparent:true,show:false,width:0,height:0,alwaysOnTop: true,});
+        captureBrowser = new BrowserWindow({frame:false,modal:true,transparent:true,show:false,width:0,height:0,alwaysOnTop: true,})
         captureBrowser.on('closed', function () {
             captureBrowser = null
         })
@@ -363,12 +363,12 @@ function download(files) {
                 }
 
             } else {
-                //fs.copyFileSync(curPath,targetPath);
-                // var srcS = fs.createReadStream(curPath);
-                // var targetS = fs.createWriteStream(targetPath);
-                // srcS.pipe(targetS);
-                // srcS.destroy();
-                // targetS.destroy();
+                //fs.copyFileSync(curPath,targetPath)
+                // var srcS = fs.createReadStream(curPath)
+                // var targetS = fs.createWriteStream(targetPath)
+                // srcS.pipe(targetS)
+                // srcS.destroy()
+                // targetS.destroy()
                 fs.renameSync(curPath,targetPath)
             }
         })
@@ -399,7 +399,7 @@ function download(files) {
             }
             if(count == files.length){
                 if(count2==count){
-                    var targetDir = __dirname;
+                    var targetDir = __dirname
                     if(isDev()){
                         targetDir = path.join(__dirname,"_tmp2")
 
