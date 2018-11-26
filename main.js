@@ -36,7 +36,10 @@ function createWindow () {
     }))
     global.mainWindow = mainWindow
     global.appVersion = packageJSON.version
+
+  globalShortcut.register('Control+Alt+J', () => {
     mainWindow.webContents.openDevTools()
+  })
 
     // and load the index.html of the app.
     checkUpdate(function (hasNew) {
