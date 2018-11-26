@@ -8,7 +8,6 @@ const ipc = require('electron').ipcMain
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
-const contextMenu = require('electron-context-menu')
 const nativeImage = require('electron').nativeImage
 const net = electron.net
 const dialog = electron.dialog
@@ -298,13 +297,15 @@ const labels = {
   save: '保存',
   copyLink: '复制链接'
 }
-//todo: not working in webpack
-if (process.env.NODE_ENV === 'development') {
-  labels.inspect = 'Inspect'
-  contextMenu({
-    labels
-  })
-}
+// todo: not working in webpack
+// if (process.env.NODE_ENV === 'development') {
+//   const contextMenu = require('electron-context-menu')
+//
+//   labels.inspect = 'Inspect'
+//   contextMenu({
+//     labels
+//   })
+// }
 
 function getUpgradeMessages () {
   let html = ''
