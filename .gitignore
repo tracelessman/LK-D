@@ -19,5 +19,7 @@ asars/
 external
 
 store/**/images
+store/**/audio
+store/**/file
 
 _tmp
