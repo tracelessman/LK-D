@@ -289,6 +289,19 @@ ipc.on('restart', function (event, arg) {
   app.relaunch()
   app.exit(0)
 })
+const labels = {
+  cut: '剪切',
+  copy: '复制',
+  paste: '粘贴',
+  save: '保存',
+  copyLink: '复制链接'
+}
+if (process.env.NODE_ENV === 'development') {
+  labels.inspect = 'Inspect'
+}
+require('electron-context-menu')({
+  labels
+})
 
 function getUpgradeMessages () {
   let html = ''
