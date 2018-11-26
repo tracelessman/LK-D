@@ -168,7 +168,7 @@ ipc.on('showCaptureBrowser', function (event, arg) {
     captureBrowser.setFullScreen(true)
     captureBrowser.show()
 
-});
+})
 ipc.on('closeCaptureBrowser', function (event, arg) {
     if(captureBrowser){
         captureBrowser.minimize()
@@ -180,7 +180,7 @@ ipc.on('closeCaptureBrowser', function (event, arg) {
 })
 
 if(app.dock){
-    var image = nativeImage.createFromPath(path.join(__dirname, "/images/traceless.png"));
+    var image = nativeImage.createFromPath(path.join(__dirname, "/images/traceless.png"))
     app.dock.setIcon(image)
 }
 
@@ -239,7 +239,7 @@ function checkUpdate(callback){
                     files = ["package.json"]
                     for(var i=0;i<changeList.length;i++){
                         var change = changeList[i]
-                        // var vChange = parseInt(change.version.replace(/\./ig,""));
+                        // var vChange = parseInt(change.version.replace(/\./ig,""))
                         if(compareVersion(change.version,packageJSON.version)==1){
                             var _cfs = change.files
                             _cfs.forEach(function (f) {
@@ -299,16 +299,16 @@ ipc.on('start-download', function (event, arg) {
 })
 
 ipc.on('restart', function (event, arg) {
-    app.relaunch();
-    app.exit(0);
+    app.relaunch()
+    app.exit(0)
 })
 
 function getUpgradeMessages() {
-    var html = "";
+    var html = ""
     upgradeMessages.forEach(function (v,k) {
-        html += k+"---------------------"+v+"<br>";
+        html += k+"---------------------"+v+"<br>"
     })
-    return html;
+    return html
 }
 function download(files) {
     var baseURI = "https://raw.githubusercontent.com/tracelessman/LK-D/publish/"
