@@ -181,44 +181,44 @@ ipc.on('closeCaptureBrowser', function (event, arg) {
 
 if(app.dock){
     var image = nativeImage.createFromPath(path.join(__dirname, "/images/traceless.png"));
-    app.dock.setIcon(image);
+    app.dock.setIcon(image)
 }
 
 
 ipc.on('messageReceive',function (event,arg) {
     if(app.dock){
       if(arg.total){
-        app.dock.setBadge(arg.total+"");
+        app.dock.setBadge(arg.total+"")
       }
     }
 })
 ipc.on('messageRead',function (event,arg) {
     if(app.dock){
         if(arg.total){
-            app.dock.setBadge(arg.total+"");
+            app.dock.setBadge(arg.total+"")
         }else{
-            app.dock.setBadge("");
+            app.dock.setBadge("")
         }
     }
 })
-let hasNewVersion = false;
-let latestVersion;
-let files = [];
+let hasNewVersion = false
+let latestVersion
+let files = []
 function compareVersion(v1,v2){
-    var v1s = v1.split(".");
-    var v2s = v2.split(".");
+    var v1s = v1.split(".")
+    var v2s = v2.split(".")
     for(var i=0;i<3;i++){
-        var n1 = parseInt(v1s[i]);
-        var n2 = parseInt(v2s[i]);
+        var n1 = parseInt(v1s[i])
+        var n2 = parseInt(v2s[i])
         if(n1>n2){
-            return 1;
+            return 1
         }else if(n1==n2){
 
         }else{
-            return -1;
+            return -1
         }
     }
-    return 0;
+    return 0
 }
 function checkUpdate(callback){
 
