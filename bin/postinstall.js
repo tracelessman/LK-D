@@ -4,20 +4,26 @@ const path = require('path')
 const rootDir = path.resolve(__dirname, '../')
 const resource = path.resolve(rootDir, 'resource')
 const sqliteNodeFileName = 'node_sqlite3.node'
-const sqliteElectronFolder = path.resolve(rootDir, 'node_modules/sqlite3/lib/binding/electron-v3.0-darwin-x64')
+const sqliteElectronFolder = path.resolve(rootDir, `node_modules/sqlite3/lib/binding/electron-v3.0-${process.platform}-x64`)
 const sqliteNode = path.resolve(sqliteElectronFolder, sqliteNodeFileName)
 const fse = require('fs-extra')
 const _ = require('lodash')
+const constant = require(path.resolve(rootDir, 'constant'))
+const folderName = _.findKey(constant.platform, v => {
+  return v = process.platform
+})
 
 const option =  {
   cwd: rootDir
 }
-//todo: 根据平台复制node文件
-// if (!fse.existsSync(sqliteNode)) {
-//   fse.ensureDirSync(sqliteElectronFolder)
-//   fse.copySync(path.resolve(resource, sqliteNodeFileName), path.resolve(sqliteElectronFolder, sqliteNodeFileName))
-//   // execSync(`npm run install:sqlite3`, option)
-// }
+const resourceNodePath = path.resolve(resource, folderName, sqliteNodeFileName)
+if (!fse.existsSync(sqliteNode)) {
+  if (!fse.existsSync(resourceNodePath)) {
+    execSync(`npm run install:sqlite3`, option)
+  }
+  fse.ensureDirSync(sqliteElectronFolder)
+  fse.copySync(resourceNodePath, path.resolve(sqliteElectronFolder, sqliteNodeFileName))
+}
 execSync(`npm run asars`, option)
 
 console.log('postinstall finished')

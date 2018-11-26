@@ -13,6 +13,7 @@ const webpack = require('webpack')
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 
 let mainConfig = {
+  mode: 'production',
   entry: {
     main: path.join(__dirname, './main.js')
   },

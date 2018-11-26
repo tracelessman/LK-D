@@ -4,7 +4,6 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 const ipc = require('electron').ipcMain
-
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
@@ -290,22 +289,6 @@ ipc.on('restart', function (event, arg) {
   app.relaunch()
   app.exit(0)
 })
-const labels = {
-  cut: '剪切',
-  copy: '复制',
-  paste: '粘贴',
-  save: '保存',
-  copyLink: '复制链接'
-}
-// todo: not working in webpack
-// if (process.env.NODE_ENV === 'development') {
-//   const contextMenu = require('electron-context-menu')
-//
-//   labels.inspect = 'Inspect'
-//   contextMenu({
-//     labels
-//   })
-// }
 
 function getUpgradeMessages () {
   let html = ''
