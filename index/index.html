@@ -79,7 +79,7 @@
     engine.getChatManager().on("msgRead",notifyReadMsg);
 
     var checkVersion = function () {
-        // window.top.ipc.send("upgrade-request",{toIndexIFNot:false});
+        window.top.ipc.send("upgrade-request",{toIndexIFNot:false});
     }
     LKApplication.getCurrentApp().on("currentUserChanged",checkVersion);
 </script>
