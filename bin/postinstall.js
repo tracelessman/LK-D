@@ -12,11 +12,12 @@ const _ = require('lodash')
 const option =  {
   cwd: rootDir
 }
-if (!fse.existsSync(sqliteNode)) {
-  fse.ensureDirSync(sqliteElectronFolder)
-  fse.copySync(path.resolve(resource, sqliteNodeFileName), path.resolve(sqliteElectronFolder, sqliteNodeFileName))
-  // execSync(`npm run install:sqlite3`, option)
-}
+//todo: 根据平台复制node文件
+// if (!fse.existsSync(sqliteNode)) {
+//   fse.ensureDirSync(sqliteElectronFolder)
+//   fse.copySync(path.resolve(resource, sqliteNodeFileName), path.resolve(sqliteElectronFolder, sqliteNodeFileName))
+//   // execSync(`npm run install:sqlite3`, option)
+// }
 execSync(`npm run asars`, option)
 
 console.log('postinstall finished')

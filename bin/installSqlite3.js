@@ -21,11 +21,11 @@ const cmd = `npm i sqlite3 --runtime=electron --target=${electronVersion} --dist
 debug({cmd})
 childProcess.execSync(cmd)
 
-console.log(chalk.green(  `sqlite3 installed successfully`))
+console.log(chalk.green(`sqlite3 installed successfully`))
 
 moveToResource()
 
-function moveToResource() {
+function moveToResource () {
   const folderName = _.findKey(platform, v => {
     return v === process.platform
   })
@@ -46,12 +46,12 @@ function getSqliteNodeFolderName ({electronVersion}) {
   return `electron-v${major}.${minor}-${process.platform}-${infrastructure}`
 }
 
-function getInfrastructure() {
+function getInfrastructure () {
   // todo: decide 32 or 64
   return 'x64'
 }
 
-function getElectronVersion() {
+function getElectronVersion () {
   let result
   if (fse.existsSync(electronFolder)) {
     const str = childProcess.execSync(
@@ -68,4 +68,3 @@ function getElectronVersion() {
   }
   return result
 }
-
