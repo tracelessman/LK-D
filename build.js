@@ -13,8 +13,6 @@ build()
 function build () {
   del.sync(['./*.bundle.js', 'index/*.bundle.js'])
 
-  const tasks = ['main', 'renderer']
-
   let results = ''
 
   pack(mainConfig).then(result => {
@@ -28,7 +26,7 @@ function build () {
   pack(rendererConfig).then(result => {
     results += result + '\n\n'
   }).catch(err => {
-    console.log(`\n  ${errorLog}failed to build renderer process`)
+    console.log(`\n  ${err}failed to build renderer process`)
     console.error(`\n${err}\n`)
     process.exit(1)
   })
