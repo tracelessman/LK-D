@@ -417,11 +417,11 @@ function download(files) {
     })
 
     files.forEach(function (f) {
-        changeMsg(f,"downloading");
-        mainWindow.webContents.downloadURL(baseURI+f);
+        changeMsg(f,"downloading")
+        mainWindow.webContents.downloadURL(baseURI+f)
     })
     if(files.length==0){
-        mainWindow.webContents.executeJavaScript("complete()");
+        mainWindow.webContents.executeJavaScript("complete()")
     }
 }
 
