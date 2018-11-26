@@ -253,7 +253,7 @@
             document.getElementById("msgStateDetailBox").style.display="none";
         }
     }
-    async function _computeRecordHtml(records) {
+    async function _computeRecordHtml({records, shouldScroll = true}) {
         var html = "";
         var name = user.name
         var lastSpTime;
@@ -322,9 +322,11 @@
             }
         }
         document.getElementById("records").innerHTML = html;
-        document.getElementById("records").scrollTop=document.getElementById("records").scrollHeight-document.getElementById("records").offsetHeight;
+        if (shouldScroll) {
+          document.getElementById("records").scrollTop=document.getElementById("records").scrollHeight-document.getElementById("records").offsetHeight;
+        }
     }
-    async function refreshRecordList() {
+    async function refreshRecordList({shouldScroll = true} = {}) {
 
       const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
       // console.log({recordAry})
@@ -334,7 +336,11 @@
         relativeMsgId  = lastMsg.id
       }
       // console.log({relativeMsgId})
-      _computeRecordHtml(recordAry)
+      const option = {
+        records: recordAry,
+        shouldScroll
+      }
+      _computeRecordHtml(option)
 
     }
 
@@ -383,14 +389,14 @@
         }
     }
 
-    function readAndRefresh() {
+    function readAndRefresh({shouldScroll = true} = {}) {
       readUnread()
 
-      refreshRecordList()
+      refreshRecordList({shouldScroll})
     }
 
     function onWindowFocus() {
-      readAndRefresh()
+      readAndRefresh({shouldScroll: false})
     }
 
 
