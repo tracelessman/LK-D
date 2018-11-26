@@ -99,19 +99,21 @@
         if(all){
             for(var i=0;i<all.length;i++){
                 var f = all[i];
-                html+="<div id='";
-                html+=f.id;
-                html+="' style=\"width:100%;height:50px;line-height: 50px;cursor: pointer;padding-left: 10px\" onmouseover=\"hover('";
-                html+=f.id;
-                html+="')\" onmouseout=\"leave('";
-                html+=f.id;
-                html+="')\" onclick=\"select('";
-                html+=f.id;
-                html+="','";
-                html+=f.name;
-                html+="')\">";
-                html+=f.name;
-                html+="</div>";
+                if (f.id !== user.id) {
+                  html+="<div id='";
+                  html+=f.id;
+                  html+="' style=\"width:100%;height:50px;line-height: 50px;cursor: pointer;padding-left: 10px\" onmouseover=\"hover('";
+                  html+=f.id;
+                  html+="')\" onmouseout=\"leave('";
+                  html+=f.id;
+                  html+="')\" onclick=\"select('";
+                  html+=f.id;
+                  html+="','";
+                  html+=f.name;
+                  html+="')\">";
+                  html+=f.name;
+                  html+="</div>";
+                }
             }
             document.getElementById("contact").innerHTML=html;
             //select("0");

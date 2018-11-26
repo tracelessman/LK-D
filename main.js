@@ -14,6 +14,7 @@ const dialog = electron.dialog
 const originalFs = require('original-fs')
 const globalShortcut = electron.globalShortcut
 const pageDir = ''
+const packageJSON = require('./package.json')
 
 function isDev () {
   const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1
@@ -33,7 +34,7 @@ function createWindow () {
     slashes: true
   }))
   global.mainWindow = mainWindow
-  global.appVersion = app.getVersion()
+  global.appVersion = packageJSON.version
   mainWindow.webContents.openDevTools()
 
   // and load the index.html of the app.
