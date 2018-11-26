@@ -1,9 +1,9 @@
 {
   "name": "traceless",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./main.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development electron ./main.js",
+    "start": "electron ./main.js",
     "build": "node build.js",
     "publish": "node build.js && electron .",
     "asars": "asar pack node_modules/sqlite3 asars/sqlite3.asar",
@@ -20,7 +20,6 @@
     "cross-env": "^5.2.0",
     "del": "^3.0.0",
     "electron": "3.0.7",
-    "electron-context-menu": "^0.10.1",
     "webpack": "^4.0.1"
   },
   "dependencies": {
