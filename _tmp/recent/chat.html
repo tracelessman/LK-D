@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: sans-serif;
+            background-color:#f0f0f0;
+            font-size: 10pt;
+        }
+        #records img{
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        .title{
+            width:100%;padding-left: 20px;
+        }
+        .bottom .title{
+            height:30px;background-color: #636363;line-height: 30px;color:white;
+        }
+        .left .title{
+            background-color: #e0e0e0;;
+            border-bottom: 1px solid #d0d0d0;
+            height:45px;line-height: 45px;
+            font-size: 12pt;
+            font-weight: 400;
+        }
+        .title i{
+            font-size: 22px;float: right;cursor: pointer;margin-top: 4px;margin-right: 10px;
+        }
+        .bottom .title i{
+            color:#f0f0f0;
+        }
+        .left .title i{
+            margin-top: 14px;margin-right: 10px;
+        }
+        .face{
+            width:310px;height:312px;line-height: 30px;position: absolute;bottom: 190px;left: 5px;
+            font-size: 20px;
+        }
+        .face-content{
+            width:310px;height:300px;background-color: #ffffff;
+            border-radius:5px;border:  1px dotted #d0d0d0;
+            padding-left: 6px;overflow: hidden;
+        }
+
+        .face span{
+            cursor: pointer;margin-right: 10px
+        }
+    </style>
+
+    <link href="../css/index.css" rel="stylesheet"></link>
+    <script src="./faces.js"></script>
+    <script>
+        function copy() {
+            if ((event.metaKey || event.ctrlKey) && event.keyCode == 67) {//copy
+                event.preventDefault();
+                document.execCommand("copy");
+            }
+        }
+        function showFaceBox() {
+            document.getElementById("face").style["display"] = document.getElementById("face").style["display"]?"":"none";
+        }
+        function selectFace() {
+            if(event.target.tagName=="SPAN"){
+                document.getElementById("chatBox").contentWindow.document.body.focus();
+                document.getElementById("chatBox").contentWindow.document.execCommand("insertText",false,event.target.innerText);
+            }
+            showFaceBox();
+        }
+        function initFaces(){
+            var html="";
+            for(var i=0;i<100;i++){
+                var start = false;
+                if(i%10==0){
+                    html+="<div>";
+                    start=true;
+                }
+                var char = faces[i].char;
+                html+="<span>"+char+"</span>";
+                if(start==false&&i%10==0){
+                    html+="</div>";
+                }
+            }
+            document.getElementById("face-content").innerHTML=html;
+        }
+
+
+    </script>
+</head>
+<body onkeydown="copy()">
+<div style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: flex-end;align-items: center">
+    <div class="title" >
+        <span id="title" ></span>
+        <i class="material-icons" style="" onclick="showDetail()">more_horiz</i>
+    </div>
+    <div style="width: 100%;flex:1;display:flex;flex-direction: row;justify-content: flex-end;align-items: center;">
+        <div style="flex:1;display: flex;height:100%;flex-direction: column;justify-content: flex-end;align-items: center">
+            <div style="width: 100%;flex:1;overflow: hidden;overflow-y: auto;padding-top:10px;" id="records"  ondblclick="showBiggerImage()">
+
+            </div>
+            <div id="face" class="face" style="display: none" onclick="selectFace()">
+                <div id="face-content" class="face-content">
+
+                </div>
+                <div style="width:100%;height:12px;position: absolute;bottom:2px;left:5px">
+                    <div style="background-image: url(../images/bottom-arrow.png);width:27px;height:12px"></div>
+                </div>
+            </div>
+            <div style="width:100%;height:24px;border-top: 1px solid #d0d0d0;padding-left: 10px;line-height: 24px">
+                <i class="material-icons" style="color: #a0a0a0;font-size: 24px;cursor: pointer;margin-right: 5px;" onclick="showFaceBox()">
+                    tag_faces
+                </i>
+                <i class="material-icons" style="color: #a0a0a0;font-size: 24px;cursor: pointer;margin-right: 5px;" onclick="openFileDialog()">
+                    folder
+                </i>
+                <i class="material-icons" style="color: #a0a0a0;font-size: 22px;cursor: pointer;transform:rotate(270deg);" onclick="captureDesktop()" title="Ctrl+Alt+A">
+                    content_cut
+                </i>
+            </div>
+
+            <div style="width: 100%;height:150px;display: flex">
+
+                <iframe id="chatBox" style="flex:1" src="chatBox.html" frameborder="0"></iframe>
+            </div>
+        </div>
+        <div id="msgStateDetailBox" style="display:flex;height:100%;width:150px;border-left: 1px solid #d0d0d0;display: none;padding: 10px;">
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script>
+    document.body.className = window.top.theme;
+    const {engine} = window.top
+    const lkapp = engine.getApplication().getCurrentApp()
+    const user = lkapp.getCurrentUser()
+    // console.log({user})
+    const {id: userId} = user
+    const ChatManager = engine.get('ChatManager')
+    const ContactManager = engine.get('ContactManager')
+    const channel = lkapp.getLKWSChannel()
+    initFaces();
+    var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
+    // console.log({ps})
+    var params = ps.split("&")
+    var isGroupChat = params[0] == '1'
+    var otherId = params[1]
+    let name
+    let relativeMsgId
+
+    render()
+    async function render () {
+      init()
+      let title
+      if(isGroupChat) {
+        const chat = await ChatManager.asyGetChat(userId, otherId)
+        title = chat.name
+      } else {
+        const member = await ContactManager.asyGet(userId, otherId)
+        title = member.name
+      }
+      name = title
+      document.getElementById("title").innerText = title
+      document.addEventListener("mousedown",hideDetaiBox);
+      refreshRecordList();
+
+
+    }
+
+    async function init() {
+      readUnread()
+    }
+    async function readUnread () {
+
+      const num = await ChatManager.asyGetNewMsgNum(otherId)
+      // console.log({num})
+      if (num) {
+        ChatManager.asyReadMsgs(otherId, num)
+      }
+    }
+    function _getMessage(rec) {
+      if(rec.type==ChatManager.MESSAGE_TYPE_TEXT){
+        var text = rec.content;
+        // console.log({text})
+        return text.replace("\r\n","<div></div>");
+      }else if(rec.type==ChatManager.MESSAGE_TYPE_IMAGE){
+        var img = JSON.parse(rec.content);
+
+        var w=200;
+        var h=200;
+        var n = 1;
+        if(img.width>img.height){
+          n = Math.ceil(img.width/200);
+        }else{
+          n = Math.ceil(img.height/200);
+        }
+        w = img.width/n;
+        h = img.height/n;
+
+        return `<img src="${img.url}" n='"+n+"' width='"+w+"' height='"+h+"'/>`
+      }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
+        var file = JSON.parse(rec.content);
+        return '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
+      }
+    }
+
+    function showDetail() {
+        document.location.href = "../contact/detail.html?"+otherId+"&"+name+"&"+isGroupChat;;
+    }
+    function getIconNameByState(state) {
+        if(state===0){
+            return "arrow_upward";
+        }else if(state===1){
+            return "refresh";
+        }else if(state===2){
+            return "done";
+        }else if(state===3){
+            return "check_circle";
+        }else if(state===4){
+            return "drafts";
+        }else if(state===5){
+            return "whatshot";
+        }
+        return "help_outline";
+    }
+    function onMsgStateTouch(msgId){
+        if(isGroupChat){
+            var rec = ChatManager.asyGetMsg(userId, otherId, msgId)
+          if(rec){
+            if(rec.state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE){
+              channel.retrySend(otherId, msgId)
+            }else {
+            }
+          }
+        }
+    }
+    function hideDetaiBox(e) {
+        if(e.target.id!="msgState"){
+            document.getElementById("msgStateDetailBox").style.display="none";
+        }
+    }
+    async function _computeRecordHtml(records) {
+        var html = "";
+        var name = user.name
+        var lastSpTime;
+        var now = new Date();
+        for(var i=0;i<records.length;i++) {
+            if(lastSpTime&&records[i].time-lastSpTime>10*60*1000||!lastSpTime){
+                lastSpTime = records[i].time;
+                if(lastSpTime){
+                    var timeStr="";
+                    var date = new Date();
+                    date.setTime(lastSpTime);
+                    if(now.getFullYear()==date.getFullYear()&&now.getMonth()==date.getMonth()&&now.getDate()==date.getDate()){
+                        timeStr+="今天 ";
+                    }else if(now.getFullYear()==date.getFullYear()){
+                        timeStr+=(date.getMonth()+1)+"月"+date.getDate()+"日 ";
+                    }
+                    timeStr+=date.getHours()+":"+(date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes());
+                    html += "<div style=\"marginTop:10;fontSize:11;text-align:center;width:100%;color: #a0a0a0\">"+timeStr+"</div>";
+
+                }
+            }
+            const record = records[i]
+            const {senderUid} = record
+            // console.log({record})
+            if (senderUid !== userId) {
+                html += "<div style=\"display: flex;flex-direction: row;justify-content: flex-start;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
+                let p
+              // console.log({userId, senderUid, isGroupChat})
+
+              p = await ContactManager.asyGet(userId, senderUid)
+
+
+              if(p.pic){
+                    html += "<img src='"+p.pic+"' style='margin-left:10px;margin-right:5px;width:40px;height:40px;border-radius: 20px;'>";
+                }else{
+                    html += "<div style=\"text-align:center;margin-left:10px;margin-right:5px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:palevioletred;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
+                    html += p.name;
+                    html += "</div></div>";
+
+                }
+
+                html += "<div style='width:11px;height:18px;background-image: url(../images/chat-y-l.png);margin-top: 11px'></div>";
+                html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
+                html += _getMessage(records[i]);
+                html += "</div>";
+                html += "</div>";
+            }else{
+                html+="<div style=\"display: flex;flex-direction: row;justify-content: flex-end;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
+                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].msgId+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
+                html+=getIconNameByState(records[i].state);
+                html+="</i>";
+                html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
+
+                html += _getMessage(records[i]);
+                html+="</div>";
+                html += "<div style='width:11px;height:18px;background-image: url(../images/chat-w-r.png);margin-top: 11px'></div>";
+                if(user.pic){
+                    html += "<img src='"+ser.pic+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
+                }else{
+                    html += "<div style=\"text-align:center;margin-left:5px;margin-right:10px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:dodgerblue;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
+                    html += user.name;
+                    html += "</div></div>";
+                }
+
+                html+="</div>";
+            }
+        }
+        document.getElementById("records").innerHTML = html;
+        document.getElementById("records").scrollTop=document.getElementById("records").scrollHeight-document.getElementById("records").offsetHeight;
+    }
+    async function refreshRecordList() {
+
+      const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
+      // console.log({recordAry})
+      relativeMsgId = null
+      const lastMsg = window.top._.last(recordAry)
+      if (lastMsg) {
+        relativeMsgId  = lastMsg.id
+      }
+      // console.log({relativeMsgId})
+      _computeRecordHtml(recordAry)
+
+    }
+
+
+
+    function sendText(text) {
+          channel.sendText(otherId, text, relativeMsgId, isGroupChat)
+
+    }
+
+    function sendImg(data,width,height) {
+        var d = {data:data,width:width,height:height};
+      channel.sendImage(otherId, data,width,height, relativeMsgId,isGroupChat)
+    }
+
+    function showBiggerImage() {
+        var widthReg = /width=[\"\'](\d+(\.\d+)?)[\"\']/ig;
+        var heightReg = /height=[\"\'](\d+(\.\d+)?)[\"\']/ig;
+        if(event.target.tagName=="IMG"){
+            //alert(event.target.parentNode.innerHTML);
+            var w = event.target.naturalWidth;
+            var h = event.target.naturalHeight;
+            var imgHtml = event.target.outerHTML;
+            var n;
+            if(event.target.getAttribute("n")){
+                n = parseInt(event.target.getAttribute("n"));
+            }
+
+            var r = imgHtml.match(widthReg);
+            if(r){
+                w = parseFloat(RegExp.$1)*n;
+            }
+            var r = imgHtml.match(heightReg);
+            if(r){
+                h = parseFloat(RegExp.$1)*n;
+            }
+           // window.open("showImage.html","_blank","height=100, width=400, toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+            window.top.ipc.send("openImageBrowser",{width:parseInt(w),height:parseInt(h),html:event.target.outerHTML.replace(widthReg,"width=\""+w+"\"").replace(heightReg,"height=\""+h+"\"")});
+        }
+    }
+
+    function onReceiveMessage(fromId) {
+        // console.log({fromId, otherId})
+        if(fromId===otherId){
+          readUnread()
+
+          refreshRecordList()
+        }
+    }
+
+    function onWindowFocus() {
+        // if((isGroupChat&&ChatManager.getGroup(otherId).newReceive)||(!isGroupChat&&ChatManager.getRecent(otherId).newReceive)){
+        //     refreshRecordList();
+        // }
+    }
+
+
+    function openFileDialog() {
+        window.top.ipc.send("openFileDialog");
+    }
+    function sendFile (event,arg) {
+
+    }
+    function _showFile(rec) {
+        if(rec){
+            var file = JSON.parse(rec.content);
+            var filePath = window.top.path.join(window.top.os.tmpdir(),file.name);
+            window.top.fs.writeFile(filePath,window.top.Buffer.from(file.data),function (err) {
+                if(!err){
+                    var result = window.top.shell.openItem(filePath);
+                    if(!result){
+                        window.top.shell.showItemInFolder(filePath);
+                    }
+                }
+            });
+        }
+    }
+    function showFile(uid,msgId){
+        if(isGroupChat){
+            ChatManager.getGroupChatRecord(otherId,msgId,uid,_showFile);
+        }else{
+            ChatManager.getRecentChatRecord(otherId,msgId,uid,_showFile);
+        }
+
+    }
+    function captureDesktop() {
+        window.top.ipc.send("openCaptureBrowser");
+    }
+    window.top.ipc.on("mainWindow-focus",onWindowFocus);
+    window.top.ipc.on("openFileDialog-response",sendFile);
+
+    ChatManager.on("msgReceived",onReceiveMessage);
+    ChatManager.on("msgChanged",refreshRecordList);
+
+    window.addEventListener("beforeunload", function (event) {
+      window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
+      window.top.ipc.removeListener("openFileDialog-response",sendFile);
+      ChatManager.un("msgReceived",onReceiveMessage);
+      ChatManager.un("msgChanged",refreshRecordList);
+    })
+
+</script>
+</html>

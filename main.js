@@ -197,6 +197,7 @@ let hasNewVersion = false
 let latestVersion
 let files = []
 function compareVersion (v1, v2) {
+  // console.log({v1, v2})
   let v1s = v1.split('.')
   let v2s = v2.split('.')
   for (let i = 0; i < 3; i++) {
@@ -223,7 +224,7 @@ function checkUpdate (callback) {
       response.on('end', () => {
         let des = JSON.parse(text)
         latestVersion = des.version
-        if (compareVersion(latestVersion, app.getVersion()) == 1) {
+        if (compareVersion(latestVersion, packageJSON.version) == 1) {
           hasNewVersion = true
           callback(true)
           let changeList = des.changeList
@@ -231,7 +232,7 @@ function checkUpdate (callback) {
           for (let i = 0; i < changeList.length; i++) {
             let change = changeList[i]
             // var vChange = parseInt(change.version.replace(/\./ig,""));
-            if (compareVersion(change.version, app.getVersion()) == 1) {
+            if (compareVersion(change.version, packageJSON.version) == 1) {
               let _cfs = change.files
               _cfs.forEach(function (f) {
                 if (files.indexOf(f) == -1) {
@@ -258,7 +259,7 @@ function checkUpdate (callback) {
 
 ipc.on('remoteVersion-request', function (event, arg) {
   checkUpdate(function (hasNew) {
-    event.sender.send('remoteVersion-response', latestVersion || app.getVersion())
+    event.sender.send('remoteVersion-response', latestVersion || packageJSON.version)
   })
 })
 
