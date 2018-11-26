@@ -385,32 +385,32 @@ function download(files) {
                 if (item.isPaused()) {
                     changeMsg(f,"paused")
                 } else {
-                    changeMsg(f,Math.round((item.getReceivedBytes()/item.getTotalBytes())*100)+"%");
+                    changeMsg(f,Math.round((item.getReceivedBytes()/item.getTotalBytes())*100)+"%")
                 }
             }
         })
         item.once('done', (event, state) => {
-            count++;
+            count++
             if (state === 'completed') {
-                count2++;
-                changeMsg(f,"100%");
+                count2++
+                changeMsg(f,"100%")
             } else {
-                changeMsg(f,`Download failed: ${state}`);
+                changeMsg(f,`Download failed: ${state}`)
             }
             if(count == files.length){
                 if(count2==count){
                     var targetDir = __dirname;
                     if(isDev()){
-                        targetDir = path.join(__dirname,"_tmp2");
+                        targetDir = path.join(__dirname,"_tmp2")
 
                         if(!fs.existsSync(targetDir)){
                             fs.mkdirSync(targetDir)
                         }
                     }
-                     copyFiles(tmpDir, targetDir);
-                     deleteFolder(tmpDir);
+                     copyFiles(tmpDir, targetDir)
+                     deleteFolder(tmpDir)
                 }
-                mainWindow.webContents.executeJavaScript("complete()");
+                mainWindow.webContents.executeJavaScript("complete()")
 
             }
         })
