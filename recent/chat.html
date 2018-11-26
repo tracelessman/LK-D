@@ -379,16 +379,18 @@
     function onReceiveMessage(fromId) {
         // console.log({fromId, otherId})
         if(fromId===otherId){
-          readUnread()
-
-          refreshRecordList()
+          readAndRefresh()
         }
     }
 
+    function readAndRefresh() {
+      readUnread()
+
+      refreshRecordList()
+    }
+
     function onWindowFocus() {
-        // if((isGroupChat&&ChatManager.getGroup(otherId).newReceive)||(!isGroupChat&&ChatManager.getRecent(otherId).newReceive)){
-        //     refreshRecordList();
-        // }
+      readAndRefresh()
     }
 
 
