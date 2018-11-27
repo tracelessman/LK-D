@@ -1,13 +1,8 @@
 {
-  "version":"0.0.3",
+  "version":"0.0.2",
   "changeList":[
     {
       "version":"0.0.2",
-      "files":["mine/mine.html"],
-      "detail":["test"]
-    },
-    {
-      "version":"0.0.3",
       "files":["mine/mine.html"],
       "detail":["test"]
     }
