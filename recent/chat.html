@@ -246,13 +246,32 @@
         }
         return "help_outline";
     }
-    function onMsgStateTouch(msgId){
+    async function onMsgStateTouch(msgId){
         if(isGroupChat){
-            var rec = ChatManager.asyGetMsg(userId, otherId, msgId)
+          // console.log({userId, otherId, msgId})
+            var rec = await ChatManager.asyGetMsg(userId, otherId, msgId)
+
+          // console.log({rec})
           if(rec){
             if(rec.state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE){
               channel.retrySend(otherId, msgId)
-            }else {
+            }else if(rec.state === ChatManager.MESSAGE_STATE_TARGET_READ){
+              if (document.getElementById("msgStateDetailBox").style.display === 'none') {
+                const {senderUid} = rec
+                const person = await ContactManager.asyGet(userId, senderUid)
+                var html="";
+                var iconName = getIconNameByState(rec.state);
+                html+="<div style='display: flex;flex-direction: row;justify-content: space-around;align-items: center'><span>";
+                html+=person.name;
+                html+="</span><i class=\"material-icons\">";
+                html+=iconName;
+                html+="</i> </div>";
+
+                document.getElementById("msgStateDetailBox").style.display= 'block';
+                document.getElementById("msgStateDetailBox").innerHTML= html;
+              } else {
+                document.getElementById("msgStateDetailBox").style.display= 'none';
+              }
             }
           }
         }
@@ -311,7 +330,7 @@
                 html += "</div>";
             }else{
                 html+="<div style=\"display: flex;flex-direction: row;justify-content: flex-end;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
-                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].msgId+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
+                html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].id+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
                 html+=getIconNameByState(records[i].state);
                 html+="</i>";
                 html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";

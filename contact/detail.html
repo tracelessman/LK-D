@@ -48,9 +48,13 @@
     var id = document.getElementById("id").innerHTML = params[0];
     var name = document.getElementById("title").innerHTML=document.getElementById("name").innerHTML = decodeURI(params[1]);
     var isGroup = params[2]=="true";
-    if(isGroup){
+
+    start()
+
+    async function start() {
+      if(isGroup){
         var html="";
-        var all = window.top.Store.getMembersBaseInfo(id);
+        var all = await ChatManager.asyGetGroupMembers(id)
         for(var i=0;i<all.length;i++){
             var m = all[i];
             html += "<div style=\"width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">";
@@ -62,7 +66,9 @@
             html+="</div>";
         }
         document.getElementById("members").innerHTML=html;
+      }
     }
+
     async function sendMessage() {
       await ChatManager.asyEnsureSingleChat(id)
         document.location.href = "../recent/chat.html?"+isGroup+"&"+id;//isGroupChat&id
