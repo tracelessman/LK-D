@@ -384,6 +384,11 @@ function download(files) {
         item.on('updated', (event, state) => {
             if (state === 'interrupted') {
                 changeMsg(f,"interrupted")
+                if (item.canResume()) {
+                  item.resume()
+                } else {
+                  changeMsg(f,"interrupted and can't resume")
+                }
             } else if (state === 'progressing') {
                 if (item.isPaused()) {
                     changeMsg(f,"paused")
