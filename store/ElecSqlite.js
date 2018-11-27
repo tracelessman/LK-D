@@ -2,16 +2,10 @@
 const path = require("path");
 const fs = require('fs');
 const sqlite3 = require("../asars/sqlite3.asar");
-const {app} = require('electron').remote
-const userDataDir = app.getPath('userData')
-// console.log(userDataDir)
-const basePath = process.env.NODE_ENV === 'development'? __dirname: userDataDir
-fse.ensureDirSync(basePath)
-console.log({basePath})
 
 let dbName = engine.getApplication().getCurrentApp().getName()||"default";
 
-let db = new sqlite3.cached.Database(path.resolve(basePath, dbName+".db"));
+let db = new sqlite3.cached.Database(path.join(__dirname, dbName+".db"));
 
 let ensureDirs = function (rootPath,dir) {
     let dirs = dir.split('/');
