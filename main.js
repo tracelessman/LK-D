@@ -37,7 +37,7 @@ function createWindow () {
     global.mainWindow = mainWindow
     global.appVersion = packageJSON.version
 
-  globalShortcut.register('Control+Alt+J', () => {
+  globalShortcut.register('Control+Alt+I', () => {
     mainWindow.webContents.openDevTools()
   })
 
