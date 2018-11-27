@@ -1,9 +1,14 @@
 {
-  "version":"0.0.2",
+  "version":"0.0.3",
   "changeList":[
     {
       "version":"0.0.2",
       "files":["mine/mine.html"],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.3",
+      "files":["recent/chat.html", "contact/detail.html"],
       "detail":["test"]
     }
   ]
