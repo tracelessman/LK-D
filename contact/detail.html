@@ -44,10 +44,11 @@
     const ChatManager = engine.get('ChatManager')
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
     var params = ps.split("&");
-
+    // console.log({params})
     var id = document.getElementById("id").innerHTML = params[0];
     var name = document.getElementById("title").innerHTML=document.getElementById("name").innerHTML = decodeURI(params[1]);
     var isGroup = params[2]=="true";
+    // console.log({isGroup})
 
     start()
 
@@ -55,6 +56,7 @@
       if(isGroup){
         var html="";
         var all = await ChatManager.asyGetGroupMembers(id)
+        // console.log({all})
         for(var i=0;i<all.length;i++){
             var m = all[i];
             html += "<div style=\"width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">";

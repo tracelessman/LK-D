@@ -154,11 +154,12 @@
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
     // console.log({ps})
     var params = ps.split("&")
-    var isGroupChat = params[0] == '1'
+    // console.log({params})
+
+    var isGroupChat = params[0] == '1' || params[0] === 'true'
     var otherId = params[1]
     let name
     let relativeMsgId
-
     render()
     async function render () {
       init()
@@ -247,34 +248,42 @@
         return "help_outline";
     }
     async function onMsgStateTouch(msgId){
-        if(isGroupChat){
-          // console.log({userId, otherId, msgId})
-            var rec = await ChatManager.asyGetMsg(userId, otherId, msgId)
 
-          // console.log({rec})
-          if(rec){
-            if(rec.state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE){
-              channel.retrySend(otherId, msgId)
-            }else if(rec.state === ChatManager.MESSAGE_STATE_TARGET_READ){
-              if (document.getElementById("msgStateDetailBox").style.display === 'none') {
-                const {senderUid} = rec
-                const person = await ContactManager.asyGet(userId, senderUid)
-                var html="";
-                var iconName = getIconNameByState(rec.state);
+      // console.log({userId, otherId, msgId})
+      var rec = await ChatManager.asyGetMsg(userId, otherId, msgId)
+
+      // console.log({rec})
+      if(rec){
+        if(rec.state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE){
+          channel.retrySend(otherId, msgId)
+        }else if(isGroupChat && rec.state === ChatManager.MESSAGE_STATE_TARGET_READ){
+          if (document.getElementById("msgStateDetailBox").style.display === 'none') {
+            const readStateAry = await ChatManager.asyGetGroupMsgReadReport(otherId, rec.id)
+            var html="";
+            console.log({readStateAry})
+            let set = new Set()
+            for(let readState of readStateAry){
+              const {state, name} = readState
+
+              if (!set.has(name)) {
+                set.add(name)
+                var iconName = getIconNameByState(state);
                 html+="<div style='display: flex;flex-direction: row;justify-content: space-around;align-items: center'><span>";
-                html+=person.name;
+                html+=name;
                 html+="</span><i class=\"material-icons\">";
                 html+=iconName;
                 html+="</i> </div>";
-
-                document.getElementById("msgStateDetailBox").style.display= 'block';
-                document.getElementById("msgStateDetailBox").innerHTML= html;
-              } else {
-                document.getElementById("msgStateDetailBox").style.display= 'none';
               }
             }
+
+
+            document.getElementById("msgStateDetailBox").style.display= 'block';
+            document.getElementById("msgStateDetailBox").innerHTML= html;
+          } else {
+            document.getElementById("msgStateDetailBox").style.display= 'none';
           }
         }
+      }
     }
     function hideDetaiBox(e) {
         if(e.target.id!="msgState"){

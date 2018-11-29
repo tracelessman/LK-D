@@ -183,7 +183,13 @@ ipc.on('closeCaptureBrowser', function (event, arg) {
 })
 
 if(app.dock){
-    var image = nativeImage.createFromPath(path.join(__dirname, "/images/traceless.png"))
+    let imagePath
+    if (process.env.NODE_ENV === 'development') {
+      imagePath = path.join(__dirname, "/images/test.png")
+    } else {
+      imagePath = path.join(__dirname, "/images/traceless.png")
+    }
+    var image = nativeImage.createFromPath(imagePath)
     app.dock.setIcon(image)
 }
 
