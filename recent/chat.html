@@ -261,7 +261,7 @@
           if (document.getElementById("msgStateDetailBox").style.display === 'none') {
             const readStateAry = await ChatManager.asyGetGroupMsgReadReport(otherId, rec.id)
             var html="";
-            console.log({readStateAry})
+            // console.log({readStateAry})
             let set = new Set()
             for(let readState of readStateAry){
               const {state, name} = readState
@@ -359,9 +359,15 @@
                 html+="</div>";
             }
         }
-        document.getElementById("records").innerHTML = html;
+
+      document.getElementById("records").innerHTML = html;
         if (shouldScroll) {
-          document.getElementById("records").scrollTop=document.getElementById("records").scrollHeight-document.getElementById("records").offsetHeight;
+          const recordsEle = document.getElementById("records")
+          const {scrollHeight, offsetHeight} = recordsEle
+          // console.log({scrollHeight, offsetHeight})
+          // fixme: 没有下拉到最低部
+          document.getElementById("records").scrollTop=scrollHeight-offsetHeight + 2000
+
         }
     }
     async function refreshRecordList({shouldScroll = true} = {}) {
