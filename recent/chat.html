@@ -77,16 +77,17 @@
             showFaceBox();
         }
         function initFaces(){
+            let count = 9
             var html="";
             for(var i=0;i<100;i++){
                 var start = false;
-                if(i%10==0){
+                if(i%count==0){
                     html+="<div>";
                     start=true;
                 }
                 var char = faces[i].char;
                 html+="<span>"+char+"</span>";
-                if(start==false&&i%10==0){
+                if(start==false&&i%count==0){
                     html+="</div>";
                 }
             }
