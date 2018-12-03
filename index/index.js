@@ -1,4 +1,5 @@
 window.engine = require('@lk/LK-C').engine
+window.versionCore = require('@lk/LK-C/package.json').version
 window.clipboard = require('electron').clipboard
 window.ipc = require('electron').ipcRenderer
 window.remote = require('electron').remote

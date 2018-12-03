@@ -89,8 +89,7 @@
             document.getElementById("frame").src="../"+name+"/"+name+".html";
         }
 
-        // You can also require other files to run in this process
-        //require('./index.js')
+
     </script>
 
   </head>
@@ -125,12 +124,6 @@
 
           </div>
           <div style="flex:1"></div>
-          <!--<div style="width:40px;height:50px;text-align: center;line-height: 80px;">-->
-              <!--<i id="turn-bottom-theme" class="material-icons" style="color: #d0d0d0;font-size: 28px;cursor: pointer;" onclick="changeTheme()" >chevron_right</i>-->
-              <!--<i id="turn-left-theme" class="material-icons" style="color: #d0d0d0;font-size: 28px;cursor: pointer;" onclick="changeTheme()" >-->
-                  <!--chevron_left-->
-              <!--</i>-->
-          <!--</div>-->
       </div>
   </div>
 
@@ -139,10 +132,7 @@
     document.body.className = window.top.theme;
     const {engine} = window.top
     const ChatManager = engine.getChatManager();
-//    function changeTheme() {
-//        window.top.Store.changeTheme();
-//        window.top.location.reload();
-//    }
+
     function doVersionResponse (event,arg) {
         var curV = parseInt(window.top.remote.getGlobal("appVersion").replace(/\./ig,""));
         var remoteV = parseInt(arg.replace(/\./ig,""));
@@ -181,17 +171,6 @@
        ChatManager.un("msgReceived",notifyMsg);
        ChatManager.un("msgRead",notifyMsg);
     });
-//    function refreshReceiveMKFriends() {
-//        if(window.top.Store.hasNewReceivedMKFriends())
-//            document.getElementById("newContactTip").style.display="";
-//        else
-//            document.getElementById("newContactTip").style.display="none";
-//    }
-//    ChatManager.on("receiveMKFriends",refreshReceiveMKFriends);
-//    ChatManager.on("readNewMKFriends",refreshReceiveMKFriends);
-//    window.addEventListener("beforeunload", function (event) {
-//       ChatManager.un("receiveMKFriends",refreshReceiveMKFriends);
-//       ChatManager.un("readNewMKFriends",refreshReceiveMKFriends);
-//    });
+
 </script>
 </html>

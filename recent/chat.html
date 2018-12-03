@@ -376,9 +376,13 @@
       const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
       // console.log({recordAry})
       relativeMsgId = null
-      const lastMsg = window.top._.last(recordAry)
-      if (lastMsg) {
-        relativeMsgId  = lastMsg.id
+      const msgOtherSideAry = recordAry.filter(msg => {
+        return msg.senderUid !== userId
+      })
+      const {length: msgOtherSideAryLength} = msgOtherSideAry
+
+      if (msgOtherSideAryLength) {
+       relativeMsgId = window.top._.last(msgOtherSideAry).id
       }
       // console.log({relativeMsgId})
       const option = {
