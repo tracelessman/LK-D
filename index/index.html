@@ -60,6 +60,7 @@
 
     var notifyNewMsg = function (id) {
         engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
+          // console.log({num})
             ipc.send("messageReceive",{total:num});
 
             const notification = {
