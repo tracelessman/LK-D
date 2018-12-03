@@ -297,8 +297,9 @@
         var lastSpTime;
         var now = new Date();
         for(var i=0;i<records.length;i++) {
-            if(lastSpTime&&records[i].time-lastSpTime>10*60*1000||!lastSpTime){
-                lastSpTime = records[i].time;
+          // console.log({recordi: records[i]})
+            if(lastSpTime&&records[i].sendTime-lastSpTime>10*60*1000||!lastSpTime){
+                lastSpTime = records[i].sendTime;
                 if(lastSpTime){
                     var timeStr="";
                     var date = new Date();
