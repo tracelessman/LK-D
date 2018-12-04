@@ -19,13 +19,16 @@
         }
     </style>
     <script>
-
+      var ipc = require('electron').ipcRenderer;
+      function restart() {
+        ipc.send("restart");
+      }
       function _clear() {
 
         window.top.engine.getChatManager().clear().then(function () {
           resetTable()
-
-          window.top.document.location.reload();
+          restart()
+          // window.top.document.location.reload();
 
             });
         }
