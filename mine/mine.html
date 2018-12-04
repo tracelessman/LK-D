@@ -19,17 +19,26 @@
         }
     </style>
     <script>
-        function _clear() {
-            window.top.engine.getChatManager().clear().then(function () {
-                window.top.document.location.reload();
+
+      function _clear() {
+
+        window.top.engine.getChatManager().clear().then(function () {
+          resetTable()
+
+          window.top.document.location.reload();
 
             });
         }
 
         function _reset() {
-            window.top.engine.getApplication().getCurrentApp().asyUnRegister().then(function () {
+          window.top.engine.getApplication().getCurrentApp().asyUnRegister().then(function () {
                 window.top.document.location.reload();
             })
+        }
+
+        function resetTable() {
+          window.top.TopUtil.dropExtraTable()
+
         }
 
         function _upgrade() {

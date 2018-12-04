@@ -26,7 +26,7 @@ class Common {
 }
 
   static getSqliteNodeFolderName ({electronVersion}) {
-  const major = semver.major(electronVersion)s
+  const major = semver.major(electronVersion)
   const minor = semver.minor(electronVersion)
   const infrastructure = getInfrastructure()
 

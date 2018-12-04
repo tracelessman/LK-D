@@ -1,0 +1,1 @@
+window.TopUtil = require('./TopUtil')
