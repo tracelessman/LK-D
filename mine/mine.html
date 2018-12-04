@@ -19,9 +19,8 @@
         }
     </style>
     <script>
-      var ipc = require('electron').ipcRenderer;
       function restart() {
-        ipc.send("restart");
+        window.top.ipc.send("restart");
       }
       function _clear() {
 
