@@ -194,7 +194,9 @@
     function _getMessage(rec) {
       if(rec.type==ChatManager.MESSAGE_TYPE_TEXT){
         var text = rec.content;
-        return text.replace(/\n/g,"<br>");
+        text = text.replace(/\r\n/g,"<br>")
+        text = text.replace(/\n/g,"<br>")
+        return text
       }else if(rec.type==ChatManager.MESSAGE_TYPE_IMAGE){
         var img = JSON.parse(rec.content);
 
