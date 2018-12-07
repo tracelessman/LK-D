@@ -194,8 +194,7 @@
     function _getMessage(rec) {
       if(rec.type==ChatManager.MESSAGE_TYPE_TEXT){
         var text = rec.content;
-        // console.log({text})
-        return text.replace("\r\n","<div></div>");
+        return text.replace(/\n/g,"<br>");
       }else if(rec.type==ChatManager.MESSAGE_TYPE_IMAGE){
         var img = JSON.parse(rec.content);
 
@@ -329,7 +328,7 @@
                 }
 
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-y-l.png);margin-top: 11px'></div>";
-                html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
+                html += "<div style=\"max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
                 html += _getMessage(records[i]);
                 html += "</div>";
                 html += "</div>";
