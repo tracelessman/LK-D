@@ -18,3 +18,4 @@ window.nativeImage = require('electron').nativeImage
 window.CryptoJS = require('crypto-js')
 window._ = require('lodash')
 window.fse = require('fs-extra')
+window.debug = require('debug')

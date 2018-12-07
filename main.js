@@ -15,6 +15,7 @@ const originalFs = require('original-fs')
 const globalShortcut = electron.globalShortcut
 const pageDir = ""
 const packageJSON = require('./package.json')
+const debug = require('debug')('debug')
 
 function isDev(){
     const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1

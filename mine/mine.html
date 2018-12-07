@@ -46,6 +46,15 @@
         function _upgrade() {
             window.top.ipc.send("upgrade-request");
         }
+
+        function test() {
+        console.log('test')
+          const option =
+          new window.Notification('title', {
+            body: 'content',
+            icon: '../images/traceless.png'
+          })
+        }
     </script>
 </head>
 <body style="padding:10px">
@@ -70,6 +79,9 @@
     <Button id="upgrade-btn" disabled="true" style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="_upgrade()">
         升级到最新 <span style="color:red" id="upgrade-tip"></span>
     </Button>
+    <!--<Button style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="test()">-->
+      <!--test-->
+    <!--</Button>-->
 
 </div>
 </body>

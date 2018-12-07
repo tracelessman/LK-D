@@ -199,18 +199,12 @@
       }else if(rec.type==ChatManager.MESSAGE_TYPE_IMAGE){
         var img = JSON.parse(rec.content);
 
-        var w=200;
-        var h=200;
-        var n = 1;
-        if(img.width>img.height){
-          n = Math.ceil(img.width/200);
-        }else{
-          n = Math.ceil(img.height/200);
-        }
-        w = img.width/n;
-        h = img.height/n;
+        w = img.width
+        h = img.height
 
-        return `<img src="${img.url}" n='"+n+"' width='"+w+"' height='"+h+"'/>`
+        const ele = `<img src="${img.url}" width="${w}" height="${h}"/>`
+        // console.log({ele})
+        return ele
       }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
         var file = JSON.parse(rec.content);
         return '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
@@ -409,24 +403,11 @@
         var widthReg = /width=[\"\'](\d+(\.\d+)?)[\"\']/ig;
         var heightReg = /height=[\"\'](\d+(\.\d+)?)[\"\']/ig;
         if(event.target.tagName=="IMG"){
-            //alert(event.target.parentNode.innerHTML);
-            var w = event.target.naturalWidth;
-            var h = event.target.naturalHeight;
-            var imgHtml = event.target.outerHTML;
-            var n;
-            if(event.target.getAttribute("n")){
-                n = parseInt(event.target.getAttribute("n"));
-            }
+            // console.log({target: event.target})
+            var w = event.target.getAttribute("width")
+            var h = event.target.getAttribute('height')
 
-            var r = imgHtml.match(widthReg);
-            if(r){
-                w = parseFloat(RegExp.$1)*n;
-            }
-            var r = imgHtml.match(heightReg);
-            if(r){
-                h = parseFloat(RegExp.$1)*n;
-            }
-           // window.open("showImage.html","_blank","height=100, width=400, toolbar =no, menubar=no, scrollbars=no, resizable=no, location=no, status=no");
+            // console.log({w,h})
             window.top.ipc.send("openImageBrowser",{width:parseInt(w),height:parseInt(h),html:event.target.outerHTML.replace(widthReg,"width=\""+w+"\"").replace(heightReg,"height=\""+h+"\"")});
         }
     }

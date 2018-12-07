@@ -68,6 +68,9 @@
                 title: "新消息",
                 body: "您有新的LK消息，请注意查收"
             }
+            if (process.env.NODE_ENV === 'development') {
+              notification.icon = '../images/test.png'
+            }
             new window.Notification(notification.title, notification);
         })
 

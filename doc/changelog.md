@@ -8,3 +8,6 @@
 * 清空消息记录drop多余表
 * 主题颜色与移动端一致
 
+# 0.0.15
+* master分支删除bundlejs 和upgrade.json
+

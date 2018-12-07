@@ -26,6 +26,7 @@
     "@lk/LK-C": "github:tracelessman/LK-C",
     "@ys/collection": "github:spirit1453/node_collection#publish",
     "crypto-js": "^3.1.9-1",
+    "debug": "^4.1.0",
     "lodash": "4.17.11",
     "qr-image": "^3.2.0",
     "react-native-rsa": "0.0.3",
