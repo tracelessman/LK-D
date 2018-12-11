@@ -26,5 +26,5 @@ if (!fse.existsSync(sqliteNode)) {
 }
 // fixme: always fail, Error: EBADF: bad file descriptor, uv_tty_init
 // execSync(`npm run asars`, option)
-
+// execSync(`node build`, option)
 console.log('postinstall finished')
