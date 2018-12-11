@@ -10,10 +10,10 @@ const fse = require('fs-extra')
 const _ = require('lodash')
 const constant = require(path.resolve(rootDir, 'constant'))
 const folderName = _.findKey(constant.platform, v => {
-  return v = process.platform
+  return v === process.platform
 })
 
-const option =  {
+const option = {
   cwd: rootDir
 }
 const resourceNodePath = path.resolve(resource, folderName, sqliteNodeFileName)
@@ -24,6 +24,7 @@ if (!fse.existsSync(sqliteNode)) {
   fse.ensureDirSync(sqliteElectronFolder)
   fse.copySync(resourceNodePath, path.resolve(sqliteElectronFolder, sqliteNodeFileName))
 }
-execSync(`npm run asars`, option)
+// fixme: always fail, Error: EBADF: bad file descriptor, uv_tty_init
+// execSync(`npm run asars`, option)
 
 console.log('postinstall finished')
