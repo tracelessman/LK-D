@@ -5,7 +5,6 @@
 
 const path = require('path')
 const webpack = require('webpack')
-const { dependencies } = require('./package.json')
 
 module.exports = {
   target: 'electron-renderer',

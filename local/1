@@ -1,0 +1,11 @@
+ssserver -p 445 -k "password" -m aes-256-cfb
+
+{
+  "server":"185.239.69.192",
+  "local_address": "127.0.0.1",
+  "local_port":1080,
+  "server_port":443,
+  "password":"MmFmM2E1ZW",
+  "timeout":300,
+  "method":"aes-256-cfb"
+}
