@@ -24,7 +24,6 @@ store/**/file
 
 _tmp
 _tmp2
-*.bundle.js
 
 #custom
 local
