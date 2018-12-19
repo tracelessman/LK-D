@@ -14,7 +14,7 @@ const dialog = electron.dialog
 const originalFs = require('original-fs')
 const globalShortcut = electron.globalShortcut
 const pageDir = ""
-const packageJSON = require('./package.json')
+const packageJSON = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
 const debug = require('debug')('debug')
 
 function isDev(){
