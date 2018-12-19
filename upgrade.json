@@ -1,5 +1,5 @@
 {
-  "version":"0.0.19",
+  "version":"0.0.20",
   "changeList":[
     {
       "version":"0.0.2",
@@ -90,6 +90,11 @@
     {
       "version":"0.0.19",
       "files":[  "main.bundle.js"],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.20",
+      "files":[ "index/index.html"],
       "detail":["test"]
     }
   ]
