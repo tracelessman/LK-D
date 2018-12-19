@@ -73,7 +73,7 @@
       "detail":["test"]
     },
     {
-      "version":"0.0.15",
+      "version":"0.0.16",
       "files":[  "main.bundle.js", "index/index.bundle.js", "index/index.html"],
       "detail":["test"]
     }
