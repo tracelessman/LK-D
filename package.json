@@ -1,6 +1,6 @@
 {
   "name": "LK-D",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "main": "./main.bundle.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron ./main.js",
@@ -9,8 +9,8 @@
     "asars": "node bin/asars",
     "postinstall": "node bin/postinstall",
     "install:sqlite3": "node bin/installSqlite3",
-    "updateC": "rm -rf node_modules/@lk && npm i",
-    "updateC2": "npm i github:tracelessman/LK-C && node bin/postInstall"
+    "updateC": "rm -rf node_modules/@lk && npm i && npm run build",
+    "updateC2": "npm i github:tracelessman/LK-C && node bin/postInstall && npm run build"
   },
   "devDependencies": {
     "@ys/eslint-config-strict": "github:spirit1453/codebase#strict_eslint",

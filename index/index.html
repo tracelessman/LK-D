@@ -59,10 +59,10 @@
         alert(err)
     })
 
-    var notifyNewMsg = function (chatId) {
+    var notifyNewMsg = function ({chatId, isFromSelf}) {
       // filter sync message by other devices
-      console.log({userId, chatId})
-      if (chatId === userId) {
+      // console.log({chatId, isFromSelf})
+      if (!isFromSelf) {
         engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
           // console.log({num})
           ipc.send("messageReceive",{total:num});
