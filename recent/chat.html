@@ -203,7 +203,7 @@
         w = img.width
         h = img.height
 
-        const ele = `<img src="${img.url}" width="${w}" height="${h}"/>`
+        const ele = `<img src="${img.url}" w="${w}" h="${h}"/>`
         // console.log({ele})
         return ele
       }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
@@ -401,12 +401,12 @@
     }
 
     function showBiggerImage() {
-        var widthReg = /width=[\"\'](\d+(\.\d+)?)[\"\']/ig;
-        var heightReg = /height=[\"\'](\d+(\.\d+)?)[\"\']/ig;
+        var widthReg = /w=[\"\'](\d+(\.\d+)?)[\"\']/ig;
+        var heightReg = /h=[\"\'](\d+(\.\d+)?)[\"\']/ig;
         if(event.target.tagName=="IMG"){
             // console.log({target: event.target})
-            var w = event.target.getAttribute("width")
-            var h = event.target.getAttribute('height')
+            var w = event.target.getAttribute("w")
+            var h = event.target.getAttribute('h')
 
             // console.log({w,h})
             window.top.ipc.send("openImageBrowser",{width:parseInt(w),height:parseInt(h),html:event.target.outerHTML.replace(widthReg,"width=\""+w+"\"").replace(heightReg,"height=\""+h+"\"")});

@@ -17,6 +17,7 @@ const chalk = require('chalk')
 
 const electronVersion = getElectronVersion()
 debug({electronVersion})
+// npm i sqlite3 --runtime=electron --target=3.0 --dist-url=https://atom.io/download/electron
 const cmd = `npm i sqlite3 --runtime=electron --target=${electronVersion} --dist-url=${electronDistUrl}`
 debug({cmd})
 childProcess.execSync(cmd)
