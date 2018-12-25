@@ -1,5 +1,5 @@
 {
-  "version":"0.0.23",
+  "version":"0.0.24",
   "changeList":[
     {
       "version":"0.0.2",
@@ -109,6 +109,11 @@
     },
     {
       "version":"0.0.23",
+      "files":[ "recent/chat.html"],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.24",
       "files":[ "recent/chat.html"],
       "detail":["test"]
     }
