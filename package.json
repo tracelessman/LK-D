@@ -1,6 +1,6 @@
 {
   "name": "LK-D",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "main": "./main.bundle.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron ./main.js",
