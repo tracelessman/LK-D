@@ -67,8 +67,10 @@
         <span>内核版本号：</span><span id="versionCore"></span>
     </div>
 
-    <div style="flex-direction: row;justify-content: center;align-items: center;height:40px;line-height: 40px;margin-top: 20px">
-        <span>标识：</span><span id="id">444</span>
+    <div style="flex-direction: row;justify-content: center;align-items: center;height:60px;line-height: 40px;margin-top: 20px">
+        <span>标识：</span><span id="id"></span>
+        <br>
+        <span>设备标识：</span><span id="deviceId"></span>
     </div>
     <Button style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="_clear()">
         清除聊天缓存
@@ -89,11 +91,11 @@
     let user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
     if(user){
         document.getElementById("id").innerText = user.id;
+        document.getElementById("deviceId").innerText = user.deviceId;
         if(user.pic){
             document.getElementById("name").innerHTML = "<img src='"+user.pic+"' style='width:96px;height:96px;'>";
         }else{
             document.getElementById("name").innerText = user.name;
-
         }
 
     }
