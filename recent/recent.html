@@ -63,90 +63,94 @@
 </div>
 </body>
 <script>
-    document.body.className = window.top.theme;
-    const {engine} = window.top
-    const lkapp = engine.getApplication().getCurrentApp()
-    const user = lkapp.getCurrentUser()
-    const ChatManager = engine.get('ChatManager')
-    const ContactManager = engine.get('ContactManager')
-    let selected = "";
-    let firstChatId
-    function hover(chatId){
-        if(selected!=chatId) {
-          event.target.style.backgroundColor = "#e0e0e0";
-        }
+  document.body.className = window.top.theme;
+  const {engine} = window.top
+  const lkapp = engine.getApplication().getCurrentApp()
+  const user = lkapp.getCurrentUser()
+  const ChatManager = engine.get('ChatManager')
+  const ContactManager = engine.get('ContactManager')
+  let selected = "";
+  let firstChatId
+  function hover(chatId){
+    if(selected!=chatId) {
+      event.target.style.backgroundColor = "#e0e0e0";
     }
-    function leave(chatId){
-        if(selected!=chatId) {
-          event.target.style.backgroundColor = "#f0f0f0";
-        }
+  }
+  function leave(chatId){
+    if(selected!=chatId) {
+      event.target.style.backgroundColor = "#f0f0f0";
     }
-    function select(chatId){
-        // console.log({chatId, selected})
-        if(selected){
-            document.getElementById(selected).style.backgroundColor = "#f0f0f0";
-        }
-        selected = chatId
-        document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
+  }
+  function select(chatId){
+    // console.log({chatId, selected})
+    if(selected){
+      document.getElementById(selected).style.backgroundColor = "#f0f0f0";
+    }
+    selected = chatId
+    document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
 
-    }
-    function chat(chatId,isGroupChat) {
-      // console.log({chatId, isGroupChat})
-        select(chatId)
-        showChatBox(isGroupChat,chatId);
-    }
-    function showChatBox(isGroupChat,id) {
-        document.getElementById("frame").src="chat.html?"+isGroupChat+"&"+id;
-    }
-    async function refreshRecentList() {
-        var all = await ChatManager.asyGetAll(user.id)
-        // console.log({all})
-        let html="";
-        let i=0;
-        if(all){
-          if (all.length) {
-            firstChatId  = all[0].id
+  }
+  function chat(chatId,isGroupChat) {
+    // console.log({chatId, isGroupChat})
+    select(chatId)
+    showChatBox(isGroupChat,chatId);
+  }
+  function showChatBox(isGroupChat,id) {
+    document.getElementById("frame").src="chat.html?"+isGroupChat+"&"+id;
+  }
+  async function refreshRecentList() {
+    var all = await ChatManager.asyGetAll(user.id)
+    // console.log({all})
+    let html="";
+    let i=0;
+    if(all){
+      if (all.length) {
+        firstChatId  = all[0].id
+      }
+      // console.log({all})
+      for(;i<all.length;i++){
+        let re = all[i];
+        const {id: chatId, isGroup} = re
+        const person = await ContactManager.asyGet(user.id, re.id)
+        // console.log({person})
+        //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
+        if (isGroup || person) {
+          html+=`<div id="${chatId}" `
+          html+=`style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}')" `
+          html+=`onmouseout="leave('${chatId}')" onclick="chat('${chatId}', ${isGroup})">  `
+          html+= isGroup?"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name:person.name
+          const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
+          // console.log({newMsgNum})
+          if(newMsgNum){
+            // console.log('here')
+            html+=`<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
           }
-          // console.log({all})
-            for(;i<all.length;i++){
-                let re = all[i];
-                const {id: chatId, isGroup} = re
-                const person = await ContactManager.asyGet(user.id, re.id)
-              // console.log({person})
-                html+=`<div id="${chatId}" `
-                html+=`style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}')" `
-                html+=`onmouseout="leave('${chatId}')" onclick="chat('${chatId}', ${isGroup})">  `
-                html+= person?person.name:"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name;
-              const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
-              // console.log({newMsgNum})
-                if(newMsgNum){
-                  // console.log('here')
-                    html+=`<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
-                }
-                html+="</div>";
-            }
-
+          html+="</div>";
         }
-        // console.log({html})
 
-        document.getElementById("recent").innerHTML=html;
-        if(selected){
-            select(selected);
-        } else {
-          if (firstChatId) {
-            select(firstChatId)
-            document.getElementById(firstChatId).click()
-          }
-        }
+      }
+
     }
+    // console.log({html})
 
-    refreshRecentList();
-    ChatManager.on("msgChanged",refreshRecentList);
-    ChatManager.on("msgRead",refreshRecentList);
+    document.getElementById("recent").innerHTML=html;
+    if(selected){
+      select(selected);
+    } else {
+      if (firstChatId) {
+        select(firstChatId)
+        document.getElementById(firstChatId).click()
+      }
+    }
+  }
 
-    window.addEventListener("beforeunload", function (event) {
-        ChatManager.un("msgChanged",refreshRecentList);
-        ChatManager.un("msgRead",refreshRecentList);
-    });
+  refreshRecentList();
+  ChatManager.on("msgChanged",refreshRecentList);
+  ChatManager.on("msgRead",refreshRecentList);
+
+  window.addEventListener("beforeunload", function (event) {
+    ChatManager.un("msgChanged",refreshRecentList);
+    ChatManager.un("msgRead",refreshRecentList);
+  });
 </script>
 </html>
