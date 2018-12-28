@@ -69,29 +69,31 @@
     const user = lkapp.getCurrentUser()
     const ChatManager = engine.get('ChatManager')
     const ContactManager = engine.get('ContactManager')
-    var selected = "";
-    function hover(name){
-        if(selected!=name)
-            event.target.style.backgroundColor = "#e0e0e0";
-
-    }
-    function leave(name){
-        if(selected!=name)
-            event.target.style.backgroundColor = "#f0f0f0";
-
-    }
-    function select(name){
-
-        if(selected){
-            document.getElementById("recent"+selected).style.backgroundColor = "#f0f0f0";
+    let selected = "";
+    let firstChatId
+    function hover(chatId){
+        if(selected!=chatId) {
+          event.target.style.backgroundColor = "#e0e0e0";
         }
-        selected = name;
-        document.getElementById("recent"+name).style.backgroundColor = "#e0e0e0";
+    }
+    function leave(chatId){
+        if(selected!=chatId) {
+          event.target.style.backgroundColor = "#f0f0f0";
+        }
+    }
+    function select(chatId){
+        // console.log({chatId, selected})
+        if(selected){
+            document.getElementById(selected).style.backgroundColor = "#f0f0f0";
+        }
+        selected = chatId
+        document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
 
     }
-    function chat(name,isGroupChat,id) {
-        select(name)
-        showChatBox(isGroupChat,id);
+    function chat(chatId,isGroupChat) {
+      // console.log({chatId, isGroupChat})
+        select(chatId)
+        showChatBox(isGroupChat,chatId);
     }
     function showChatBox(isGroupChat,id) {
         document.getElementById("frame").src="chat.html?"+isGroupChat+"&"+id;
@@ -102,22 +104,19 @@
         let html="";
         let i=0;
         if(all){
+          if (all.length) {
+            firstChatId  = all[0].id
+          }
+          // console.log({all})
             for(;i<all.length;i++){
                 let re = all[i];
                 const {id: chatId, isGroup} = re
                 const person = await ContactManager.asyGet(user.id, re.id)
-                html+="<div id=\"recent";
-                html+=i;
-                html+="\" style=\"width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center\" onmouseover=\"hover('";
-                html+=i;
-                html+="')\" onmouseout=\"leave('";
-                html+=i;
-                html+="')\" onclick=\"chat('";
-                html+=i;
-                html+=`',${isGroup},'`
-                html+=re.id;
-                html+="')\">";
-                html+=re.id&&person?person.name:"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name;
+              // console.log({person})
+                html+=`<div id="${chatId}" `
+                html+=`style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}')" `
+                html+=`onmouseout="leave('${chatId}')" onclick="chat('${chatId}', ${isGroup})">  `
+                html+= person?person.name:"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name;
               const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
               // console.log({newMsgNum})
                 if(newMsgNum){
@@ -134,11 +133,11 @@
         if(selected){
             select(selected);
         } else {
-          select(0)
-          document.getElementById('recent0').click()
-
+          if (firstChatId) {
+            select(firstChatId)
+            document.getElementById(firstChatId).click()
+          }
         }
-
     }
 
     refreshRecentList();
