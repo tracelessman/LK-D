@@ -361,8 +361,12 @@
           const recordsEle = document.getElementById("records")
           const {scrollHeight, offsetHeight} = recordsEle
           // console.log({scrollHeight, offsetHeight})
-          // fixme: 没有下拉到最低部
+
           document.getElementById("records").scrollTop=scrollHeight-offsetHeight + 2000
+// fixme: 没有下拉到最低部, just workaround
+          setTimeout(() => {
+            document.getElementById("records").scrollTop=scrollHeight-offsetHeight + 2000
+          }, 10)
 
         }
     }
