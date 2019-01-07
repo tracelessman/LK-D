@@ -19,14 +19,14 @@ let ensureDirs = function (rootPath,dir) {
 
 }
 
-db.saveFile = function (filePath,fileName,data) {
+db.saveFile = function (filePath,fileName,data,param) {
     return new Promise((resolve,reject)=>{
         var dir = path.join(__dirname,filePath);
         var createFile = function () {
             var url = dir+"/"+fileName;
             fs.writeFile(url,data,'base64',function (err) {
                 if (!err) {
-                    resolve(url)
+                    resolve({url,param})
                 }else{
                     reject(err)
                 }
