@@ -6,7 +6,6 @@
 process.env.BABEL_ENV = 'main'
 
 const path = require('path')
-const { dependencies } = require('./package.json')
 const webpack = require('webpack')
 
 // 生产环境模式下压缩js文件
