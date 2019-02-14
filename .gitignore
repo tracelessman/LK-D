@@ -27,3 +27,6 @@ _tmp2
 
 #custom
 local
+
+#mac
+._.*
