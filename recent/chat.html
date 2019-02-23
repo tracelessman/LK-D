@@ -418,13 +418,14 @@
     }
 
     function onReceiveMessage(fromId) {
-        // console.log({fromId, otherId})
-        if(fromId===otherId){
+      const {chatId} = fromId
+        if(chatId===otherId){
           readAndRefresh()
         }
     }
 
     function readAndRefresh({shouldScroll = true} = {}) {
+      console.log('readAndRefresh')
       //todo: 考虑window.isFocused()
       readUnread()
 
