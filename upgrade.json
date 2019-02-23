@@ -186,6 +186,11 @@
       "version":"0.0.39",
       "files":["index/index.bundle.js"],
       "detail":["test"]
+    },
+    {
+      "version":"0.0.40",
+      "files":["index/index.bundle.js", "recent/chat.html"],
+      "detail":["test"]
     }
   ]
 
