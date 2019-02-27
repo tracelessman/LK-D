@@ -1,6 +1,6 @@
 {
   "name": "LK-D",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "main": "./main.bundle.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron ./main.js",
@@ -34,5 +34,6 @@
     "sqlite3": "^4.0.4",
     "uuid": "^3.2.1",
     "ws": "^4.0.0"
-  }
+  },
+  "repository": "https://github.com/tracelessman/LK-D.git"
 }

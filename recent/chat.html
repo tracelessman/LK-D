@@ -208,10 +208,7 @@
         w = img.width
         h = img.height
 
-        new Promise(resolve => {
-            result.element = `<img onload="${resolve()}" src="${img.url}" w="${w}" h="${h}"/>`
-        })
-
+        result.element = `<img src="${img.url}" w="${w}" height="${h}" h="${h}"/>`
       }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
         var file = JSON.parse(rec.content);
         result.element = '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
@@ -277,7 +274,6 @@
               }
             }
 
-
             document.getElementById("msgStateDetailBox").style.display= 'block';
             document.getElementById("msgStateDetailBox").innerHTML= html;
           } else {
@@ -336,11 +332,8 @@
 
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-y-l.png);margin-top: 11px'></div>";
                 html += "<div style=\"max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
-                const {loadPs, element} = _getMessage(records[i])
+                const {element} = _getMessage(records[i])
                 html += element;
-                if (loadPs) {
-                  psAry.push(loadPs)
-                }
                 html += "</div>";
                 html += "</div>";
             }else{
@@ -350,11 +343,9 @@
                 html+="</i>";
                 html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
 
-              const {loadPs, element} = _getMessage(records[i])
+              const {element} = _getMessage(records[i])
               html += element;
-              if (loadPs) {
-                psAry.push(loadPs)
-              }
+
                 html+="</div>";
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-w-r.png);margin-top: 11px'></div>";
                 if(user.pic){
@@ -372,15 +363,9 @@
       document.getElementById("records").innerHTML = html;
         if (shouldScroll) {
           const recordsEle = document.getElementById("records")
-          await Promise.all(psAry)
-
-
-          setTimeout(() => {
-            const {scrollHeight} = recordsEle
-            document.getElementById("records").scrollTop = scrollHeight
-            document.getElementById("records").style.visibility = 'visible'
-          }, 10)
-
+          const {scrollHeight} = recordsEle
+          document.getElementById("records").scrollTop = scrollHeight
+          document.getElementById("records").style.visibility = 'visible'
         }
     }
     async function refreshRecordList({shouldScroll = true} = {}) {
