@@ -146,6 +146,8 @@
 </body>
 <script>
     document.body.className = window.top.theme;
+    const msgMaxHeight = 300
+    const msgMaxWidth = 300
     const {engine} = window.top
     const lkapp = engine.getApplication().getCurrentApp()
     const user = lkapp.getCurrentUser()
@@ -207,8 +209,17 @@
 
         w = img.width
         h = img.height
+        const ratio = h/w
+        let height
+        if (ratio > 1 && h > msgMaxHeight) {
+          height = msgMaxHeight
+        }
 
-        result.element = `<img src="${img.url}" w="${w}" height="${h}" h="${h}"/>`
+        if (ratio < 1 && w > msgMaxWidth) {
+          height = msgMaxWidth * ratio
+        }
+
+        result.element = `<img src="${img.url}" w="${w}" h="${h}" height="${height}"/>`
       }else if(rec.type==ChatManager.MESSAGE_TYPE_FILE){
         var file = JSON.parse(rec.content);
         result.element = '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
@@ -341,7 +352,7 @@
                 html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].id+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
                 html+=getIconNameByState(records[i].state);
                 html+="</i>";
-                html += "<div style=\"max-width:250px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
+                html += "<div style=\"max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
 
               const {element} = _getMessage(records[i])
               html += element;
