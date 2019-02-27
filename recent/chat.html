@@ -245,10 +245,8 @@
     }
     async function onMsgStateTouch(msgId){
 
-      // console.log({userId, otherId, msgId})
       var rec = await ChatManager.asyGetMsg(userId, otherId, msgId)
 
-      // console.log({rec})
       if(rec){
         if(rec.state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE){
           channel.retrySend(otherId, msgId)
@@ -256,7 +254,6 @@
           if (document.getElementById("msgStateDetailBox").style.display === 'none') {
             const readStateAry = await ChatManager.asyGetGroupMsgReadReport(otherId, rec.id)
             var html="";
-            // console.log({readStateAry})
             let set = new Set()
             for(let readState of readStateAry){
               const {state, name} = readState
@@ -425,7 +422,6 @@
     }
 
     function readAndRefresh({shouldScroll = true} = {}) {
-      console.log('readAndRefresh')
       //todo: 考虑window.isFocused()
       readUnread()
 
