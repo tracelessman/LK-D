@@ -15,10 +15,6 @@
             background-color:#f0f0f0;
             font-size: 10pt;
         }
-        #records img{
-            max-width: 200px;
-            max-height: 200px;
-        }
 
         .title{
             width:100%;padding-left: 20px;
@@ -147,8 +143,8 @@
 <script>
     let isFocused = true
     document.body.className = window.top.theme;
-    const msgMaxHeight = 300
-    const msgMaxWidth = 300
+    const msgMaxHeight = 250
+    const msgMaxWidth = 250
     const {engine} = window.top
     const lkapp = engine.getApplication().getCurrentApp()
     const user = lkapp.getCurrentUser()
@@ -179,8 +175,6 @@
       document.getElementById("title").innerText = title
       document.addEventListener("mousedown",hideDetaiBox);
       refreshRecordList();
-
-
     }
 
     async function init() {
@@ -334,7 +328,6 @@
                     html += "<div style=\"text-align:center;margin-left:10px;margin-right:5px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:palevioletred;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
                     html += p.name;
                     html += "</div></div>";
-
                 }
 
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-y-l.png);margin-top: 11px'></div>";

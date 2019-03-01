@@ -17,6 +17,19 @@ const pageDir = ""
 const packageJSON = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
 const debug = require('debug')('debug')
 
+const contextMenu = require('electron-context-menu')
+
+contextMenu({
+  labels: {
+    cut: '剪切',
+    copy: '复制',
+    paste: '粘贴',
+    save: '保存',
+    copyLink: '复制链接',
+    copyImageAddress: '复制图片地址',
+    inspect: 'Inspect'
+  }
+})
 function isDev(){
     const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1
     const isEnvSet = 'ELECTRON_IS_DEV' in process.env
