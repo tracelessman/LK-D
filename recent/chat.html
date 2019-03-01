@@ -433,15 +433,16 @@
         }
     }
 
-    function readAndRefresh({shouldScroll = true} = {}) {
-      //todo: 考虑window.isFocused()
-      readUnread()
+    function readAndRefresh({shouldScroll = true, shouldRead = false} = {}) {
+      if (shouldRead) {
+        readUnread()
+      }
 
       refreshRecordList({shouldScroll})
     }
 
     function onWindowFocus() {
-      readAndRefresh({shouldScroll: false})
+      readAndRefresh({shouldScroll: false, shouldRead: true})
     }
 
 
