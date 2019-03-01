@@ -28,7 +28,8 @@ contextMenu({
     copyLink: '复制链接',
     copyImageAddress: '复制图片地址',
     inspect: 'Inspect'
-  }
+  },
+  showInspectElement: !__dirname.includes('Resources/app/')
 })
 function isDev(){
     const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1
