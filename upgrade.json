@@ -206,6 +206,11 @@
       "version":"0.0.43",
       "files":["recent/chat.html"],
       "detail":["test"]
+    },
+    {
+      "version":"0.0.44",
+      "files":["recent/chat.html", "main.bundle.js"],
+      "detail":["test"]
     }
   ]
 

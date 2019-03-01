@@ -145,6 +145,7 @@
 
 </body>
 <script>
+    let isFocused = true
     document.body.className = window.top.theme;
     const msgMaxHeight = 300
     const msgMaxWidth = 300
@@ -189,7 +190,6 @@
     async function readUnread () {
 
       const num = await ChatManager.asyGetNewMsgNum(otherId)
-      // console.log({num})
       if (num) {
         ChatManager.asyReadMsgs(otherId, num)
       }
@@ -298,7 +298,7 @@
             document.getElementById("msgStateDetailBox").style.display="none";
         }
     }
-    async function _computeRecordHtml({records, shouldScroll = true}) {
+    async function _computeRecordHtml({records}) {
         var html = "";
         var name = user.name
         var lastSpTime;
@@ -372,14 +372,12 @@
         }
 
       document.getElementById("records").innerHTML = html;
-        if (shouldScroll) {
-          const recordsEle = document.getElementById("records")
-          const {scrollHeight} = recordsEle
-          document.getElementById("records").scrollTop = scrollHeight
-          document.getElementById("records").style.visibility = 'visible'
-        }
+      const recordsEle = document.getElementById("records")
+      const {scrollHeight} = recordsEle
+      document.getElementById("records").scrollTop = scrollHeight
+      document.getElementById("records").style.visibility = 'visible'
     }
-    async function refreshRecordList({shouldScroll = true} = {}) {
+    async function refreshRecordList() {
 
       const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
       // console.log({recordAry})
@@ -394,8 +392,7 @@
       }
       // console.log({relativeMsgId})
       const option = {
-        records: recordAry,
-        shouldScroll
+        records: recordAry
       }
       _computeRecordHtml(option)
 
@@ -417,32 +414,39 @@
         var widthReg = /w=[\"\'](\d+(\.\d+)?)[\"\']/ig;
         var heightReg = /h=[\"\'](\d+(\.\d+)?)[\"\']/ig;
         if(event.target.tagName=="IMG"){
-            // console.log({target: event.target})
             var w = event.target.getAttribute("w")
             var h = event.target.getAttribute('h')
 
-            // console.log({w,h})
             window.top.ipc.send("openImageBrowser",{width:parseInt(w),height:parseInt(h),html:event.target.outerHTML.replace(widthReg,"width=\""+w+"\"").replace(heightReg,"height=\""+h+"\"")});
         }
     }
 
     function onReceiveMessage(fromId) {
       const {chatId} = fromId
+      if (isFocused) {
         if(chatId===otherId){
           readAndRefresh()
+        } else if (chatId === userId){
+          refreshRecordList()
         }
-    }
-
-    function readAndRefresh({shouldScroll = true, shouldRead = false} = {}) {
-      if (shouldRead) {
-        readUnread()
       }
-
-      refreshRecordList({shouldScroll})
     }
 
-    function onWindowFocus() {
-      readAndRefresh({shouldScroll: false, shouldRead: true})
+    function readAndRefresh() {
+      readUnread()
+      refreshRecordList()
+    }
+
+    async function onWindowFocus() {
+      isFocused = true
+      const num = await ChatManager.asyGetNewMsgNum(otherId)
+      if (num) {
+        readAndRefresh()
+      }
+    }
+
+    function onWindowBlur() {
+      isFocused = false
     }
 
 
@@ -478,6 +482,7 @@
         window.top.ipc.send("openCaptureBrowser");
     }
     window.top.ipc.on("mainWindow-focus",onWindowFocus);
+    window.top.ipc.on("mainWindow-blur",onWindowBlur);
     window.top.ipc.on("openFileDialog-response",sendFile);
 
     ChatManager.on("msgReceived",onReceiveMessage);
@@ -485,6 +490,7 @@
 
     window.addEventListener("beforeunload", function (event) {
       window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
+      window.top.ipc.removeListener("mainWindow-blur",onWindowBlur)
       window.top.ipc.removeListener("openFileDialog-response",sendFile);
       ChatManager.un("msgReceived",onReceiveMessage);
       ChatManager.un("msgChanged",refreshRecordList);

@@ -76,6 +76,9 @@ function createWindow () {
     mainWindow.on("focus",function () {
         mainWindow.webContents.send("mainWindow-focus")
     })
+  mainWindow.on("blur",function () {
+    mainWindow.webContents.send("mainWindow-blur")
+  })
 }
 
 // This method will be called when Electron has finished
