@@ -189,7 +189,6 @@
     }
     function _getMessage(rec) {
       const result = {
-        loadPs: null,
         element: null
       }
       if(rec.type==ChatManager.MESSAGE_TYPE_TEXT){
@@ -203,7 +202,7 @@
         w = img.width
         h = img.height
         const ratio = h/w
-        let height
+        let height = h
         if (ratio > 1 && h > msgMaxHeight) {
           height = msgMaxHeight
         }
@@ -294,8 +293,6 @@
         var name = user.name
         var lastSpTime;
         var now = new Date();
-      const psAry = []
-
       for(var i=0;i<records.length;i++) {
             if(lastSpTime&&records[i].sendTime-lastSpTime>10*60*1000||!lastSpTime){
                 lastSpTime = records[i].sendTime;
