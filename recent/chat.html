@@ -152,7 +152,6 @@
     const {engine} = window.top
     const lkapp = engine.getApplication().getCurrentApp()
     const user = lkapp.getCurrentUser()
-    // console.log({user})
     const {id: userId} = user
     const ChatManager = engine.get('ChatManager')
     const ContactManager = engine.get('ContactManager')
@@ -225,8 +224,6 @@
         result.element = '<div onclick=showFile(\"'+(rec.senderUid?rec.senderUid:"")+'\",\"'+rec.msgId+'\")><i class="material-icons" style="color: #b0b0b0;font-size: 40px;cursor: pointer;">insert_drive_file</i><span>'+file.name+'</span></div>';
       } else if(rec.type==ChatManager.MESSAGE_TYPE_AUDIO){
         const {content} = rec
-        const {url} = JSON.parse(content)
-        // console.log({url})
         result.element = '<div style="display: flex; justify-content: center; align-items: center"><i class="material-icons" style="color: #b0b0b0;font-size: 30px;cursor: pointer;">mic</i><span>'+'请在移动端收听语音'+'</span></div>';
    //      return `  <audio
    // type="audio/m4a"
@@ -306,7 +303,6 @@
       const psAry = []
 
       for(var i=0;i<records.length;i++) {
-          // console.log({recordi: records[i]})
             if(lastSpTime&&records[i].sendTime-lastSpTime>10*60*1000||!lastSpTime){
                 lastSpTime = records[i].sendTime;
                 if(lastSpTime){
@@ -378,9 +374,7 @@
       document.getElementById("records").style.visibility = 'visible'
     }
     async function refreshRecordList() {
-
       const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
-      // console.log({recordAry})
       relativeMsgId = null
       const msgOtherSideAry = recordAry.filter(msg => {
         return msg.senderUid !== userId
@@ -390,7 +384,6 @@
       if (msgOtherSideAryLength) {
        relativeMsgId = window.top._.last(msgOtherSideAry).id
       }
-      // console.log({relativeMsgId})
       const option = {
         records: recordAry
       }
@@ -429,6 +422,12 @@
         } else if (chatId === userId){
           refreshRecordList()
         }
+      }
+    }
+
+    function onMsgChanged (chatId) {
+      if ([otherId, userId].includes(chatId)) {
+        refreshRecordList()
       }
     }
 
@@ -486,14 +485,14 @@
     window.top.ipc.on("openFileDialog-response",sendFile);
 
     ChatManager.on("msgReceived",onReceiveMessage);
-    ChatManager.on("msgChanged",refreshRecordList);
+    ChatManager.on("msgChanged",onMsgChanged);
 
     window.addEventListener("beforeunload", function (event) {
       window.top.ipc.removeListener("mainWindow-focus",onWindowFocus);
       window.top.ipc.removeListener("mainWindow-blur",onWindowBlur)
       window.top.ipc.removeListener("openFileDialog-response",sendFile);
       ChatManager.un("msgReceived",onReceiveMessage);
-      ChatManager.un("msgChanged",refreshRecordList);
+      ChatManager.un("msgChanged",onMsgChanged);
     })
 
 </script>
