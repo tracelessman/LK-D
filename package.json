@@ -10,7 +10,8 @@
     "postinstall": "node bin/postinstall",
     "install:sqlite3": "node bin/installSqlite3",
     "updateC": "rm -rf node_modules/@lk && npm i && npm run build",
-    "updateC2": "npm i github:tracelessman/LK-C && node bin/postInstall && npm run build"
+    "updateC2": "npm i github:tracelessman/LK-C && node bin/postInstall && npm run build",
+    "init": "npm i && npm run asars && npm start"
   },
   "devDependencies": {
     "@ys/eslint-config-strict": "github:spirit1453/codebase#strict_eslint",
