@@ -3,7 +3,7 @@
   "version": "0.0.44",
   "main": "./main.bundle.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development electron ./main.js",
+    "start": "cross-env NODE_ENV=development electron --inspect=5858 --remote-debugging-port=9222 ./main.js",
     "build": "node build.js",
     "publish": "node build.js && electron .",
     "asars": "node bin/asars",
@@ -21,6 +21,7 @@
     "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
     "del": "^3.0.0",
+    "devtron": "^1.4.0",
     "electron": "3.0.7",
     "webpack": "^4.0.1"
   },
