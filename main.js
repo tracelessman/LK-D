@@ -42,13 +42,19 @@ function isDev () {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+
+function getGoldenHeight (width) {
+  return Math.round(width * 0.618)
+}
 function createWindow () {
-  // Create the browser window.
+  const minWidth = 780
+  const minHeight = getGoldenHeight(minWidth)
+  const initialWidth = 1000
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
-    minWidth: 780,
-    minHeight: 450
+    width: initialWidth,
+    height: getGoldenHeight(initialWidth),
+    minWidth,
+    minHeight
   })
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, pageDir + '/index/loading.html'),
@@ -110,7 +116,6 @@ app.on('ready', () => {
   if (!isProduction) {
     require('devtron').install()
   }
-
 })
 
 app.on('will-quit', () => {
