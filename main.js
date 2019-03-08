@@ -114,7 +114,7 @@ app.on('ready', () => {
     if (!captureBrowser) { openCaptureBrowser() }
   })
   if (!isProduction) {
-    require('devtron').install()
+    // require('devtron').install()
   }
 })
 
