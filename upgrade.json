@@ -211,6 +211,11 @@
       "version":"0.0.44",
       "files":["recent/chat.html", "main.bundle.js", "index/index.bundle.js"],
       "detail":["test"]
+    },
+    {
+      "version":"0.0.45",
+      "files":["recent/recent.html", "contact/contact.html", "main.bundle.js"],
+      "detail":["test"]
     }
   ]
 

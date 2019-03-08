@@ -44,7 +44,12 @@ function isDev () {
 let mainWindow
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1024, height: 768})
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 768,
+    minWidth: 780,
+    minHeight: 450
+  })
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, pageDir + '/index/loading.html'),
     protocol: 'file:',
