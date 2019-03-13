@@ -77,14 +77,14 @@
             event.target.style.backgroundColor = "#f0f0f0";
 
     }
-    function select(id,name){
+    function select(id,name,pic){
 
         if(selected){
             document.getElementById(selected).style.backgroundColor = "#f0f0f0";
         }
         selected = id;
         document.getElementById(id).style.backgroundColor = "#e0e0e0";
-        document.getElementById("frame").src="detail.html?"+id+"&"+name+"&false";
+        document.getElementById("frame").src="detail.html?"+id+"&"+name+"&false"+"&"+pic;
     }
 </script>
 <script>
@@ -110,7 +110,9 @@
                   html+=f.id;
                   html+="','";
                   html+=f.name;
-                  html+="')\">";
+                    html+="','";
+                    html+=f.pic;
+                    html+="')\">";
                   html+=f.name;
                   html+="</div>";
                 }

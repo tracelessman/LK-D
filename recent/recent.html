@@ -70,12 +70,15 @@
   const ContactManager = engine.get('ContactManager')
   let selected = "";
   let firstChatId
-  function hover(chatId){
+  function hover(chatId,i){
+      document.getElementById(i).style.display = 'block'
     if(selected!=chatId) {
       event.target.style.backgroundColor = "#e0e0e0";
+
     }
   }
-  function leave(chatId){
+  function leave(chatId,i){
+      document.getElementById(i).style.display = 'none'
     if(selected!=chatId) {
       event.target.style.backgroundColor = "#f0f0f0";
     }
@@ -99,6 +102,7 @@
   }
   async function refreshRecentList() {
     var all = await ChatManager.asyGetAll(user.id)
+      console.log(all)
     // console.log({all})
     let html="";
     let i=0;
@@ -115,8 +119,8 @@
         //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
         if (isGroup || person) {
           html+=`<div id="${chatId}" `
-          html+=`style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}')" `
-          html+=`onmouseout="leave('${chatId}')" onclick="chat('${chatId}', ${isGroup})">  `
+          html+=`style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}',${i})" `
+          html+=`onmouseout="leave('${chatId}',${i})" onclick="chat('${chatId}', ${isGroup})">  `
           html+= isGroup?"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name:person.name
           const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
           // console.log({newMsgNum})
@@ -124,7 +128,7 @@
             // console.log('here')
             html+=`<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
           }
-          html+="</div>";
+          html+=`<span id='${i}' style='position: absolute;left: 180px;display: none;font-weight: bold;font-family: "Abadi MT Condensed Light"'>×<span></div>`;
         }
 
       }

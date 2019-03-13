@@ -20,7 +20,7 @@
 
     </style>
     <script>
-
+        //alert(document.body.isContentEditable)
         function pasteImg() {
             document.body.focus();
             var img = window.top.clipboard.readImage();
@@ -28,6 +28,9 @@
                 var html = `<img width=\"${img.getSize().width/2}\" height=\"${img.getSize().height/2}\" src=\"${img.toDataURL()}\">`;
                 document.execCommand("insertHTML",false,html);
             }
+        }
+         function  cont() {
+             parent.window.document.getElementById("face").style["display"]='none'
         }
         function paste() {
             if((event.metaKey||event.ctrlKey)&&event.keyCode==90){//undo
@@ -116,4 +119,4 @@
         });
     </script>
 </head>
-<body contenteditable="true" onkeydown="paste()"></body></html>
+<body contenteditable="true" onclick="cont()" onkeydown="paste()"></body></html>

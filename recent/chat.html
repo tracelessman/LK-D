@@ -44,7 +44,7 @@
         }
         .face-content{
             width:310px;height:300px;background-color: #ffffff;
-            border-radius:5px;border:  1px dotted #d0d0d0;
+            border-radius:5px;border:  1px solid #d0d0d0;
             padding-left: 6px;overflow: hidden;
         }
 
@@ -73,19 +73,19 @@
             showFaceBox();
         }
         function initFaces(){
-            let count = 9
+            //let count = 9
             var html="";
-            for(var i=0;i<100;i++){
-                var start = false;
-                if(i%count==0){
-                    html+="<div>";
-                    start=true;
-                }
+            for(var i=0;i<90;i++){
+                //var start = false;
+                // if(i%count===0){
+                //     html+="<div>";
+                //     start=true;
+                // }
                 var char = faces[i].char;
                 html+="<span>"+char+"</span>";
-                if(start==false&&i%count==0){
-                    html+="</div>";
-                }
+                // if(start===false&&i%count===0){
+                //     html+="</div>";
+                // }
             }
             document.getElementById("face-content").innerHTML=html;
         }
@@ -103,8 +103,8 @@
         <div style="flex:1;display: flex;height:100%;flex-direction: column;justify-content: flex-end;align-items: center">
             <div
                     style="width: 100%;flex:1;overflow: hidden;overflow-y: auto;padding-top:10px;visibility: hidden"
-                 id="records"
-                    ondblclick="showBiggerImage()">
+                 id="records" onclick="recod()"
+                    ondblclick="showBiggerImage() ">
 
             </div>
             <div id="face" class="face" style="display: none" onclick="selectFace()">
@@ -128,7 +128,6 @@
             </div>
 
             <div style="width: 100%;height:150px;display: flex">
-
                 <iframe id="chatBox" style="flex:1" src="chatBox.html" frameborder="0"></iframe>
             </div>
         </div>
@@ -467,6 +466,10 @@
         }
 
     }
+    function recod(){
+        document.getElementById("face").style["display"]='none'
+    }
+
     function captureDesktop() {
         window.top.ipc.send("openCaptureBrowser");
     }
