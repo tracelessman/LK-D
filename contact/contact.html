@@ -17,26 +17,43 @@
             background-color: #f0f0f0;
 
         }
-        .title{
-            width:100%;text-align: center;
+
+        .title {
+            width: 100%;
+            text-align: center;
         }
-        .bottom .title{
-            height:30px;background-color: #636363;border-right: 1px solid #535353;line-height: 30px;color:white;
+
+        .bottom .title {
+            height: 30px;
+            background-color: #636363;
+            border-right: 1px solid #535353;
+            line-height: 30px;
+            color: white;
         }
-        .left .title{
-            background-color: #e0e0e0;border-right: 1px solid #d0d0d0;
+
+        .left .title {
+            background-color: #e0e0e0;
+            border-right: 1px solid #d0d0d0;
             border-bottom: 1px solid #d0d0d0;
-            height:45px;line-height: 45px;
+            height: 45px;
+            line-height: 45px;
             font-size: 12pt;
             font-weight: 400;
         }
-        .toolbar{
-            width:100%;height:30px;line-height: 30px;border-bottom: 1px solid #e0e0e0;border-right: 1px solid #d0d0d0;
+
+        .toolbar {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            border-bottom: 1px solid #e0e0e0;
+            border-right: 1px solid #d0d0d0;
         }
-        .bottom .toolbar{
+
+        .bottom .toolbar {
             background-color: #f0f0f0
         }
-        .left .toolbar{
+
+        .left .toolbar {
             background-color: #f0f0f0
         }
     </style>
@@ -51,9 +68,9 @@
             通讯录
         </div>
         <!--<div class="toolbar" >-->
-            <!--<i id="newReceiveMKFriends" class="material-icons" style="font-size: 12px;float:right;margin-top: 4px;margin-right: 10px;color:red;visibility: hidden">fiber_manual_record</i>-->
-            <!--<i class="material-icons" style="font-size: 20px;float: right;cursor: pointer;margin-top: 4px;margin-right: -2px;color:#000" onclick="request()">compare_arrows</i>-->
-            <!--<i class="material-icons" style="font-size: 20px;float:right;cursor: pointer;margin-top: 4px;margin-right: 10px;color:#000" onclick="addFriend()">add</i>-->
+        <!--<i id="newReceiveMKFriends" class="material-icons" style="font-size: 12px;float:right;margin-top: 4px;margin-right: 10px;color:red;visibility: hidden">fiber_manual_record</i>-->
+        <!--<i class="material-icons" style="font-size: 20px;float: right;cursor: pointer;margin-top: 4px;margin-right: -2px;color:#000" onclick="request()">compare_arrows</i>-->
+        <!--<i class="material-icons" style="font-size: 20px;float:right;cursor: pointer;margin-top: 4px;margin-right: 10px;color:#000" onclick="addFriend()">add</i>-->
         <!--</div>-->
         <div id="contact" style="width:200px;flex:1;overflow: auto;border-right: 1px solid #d0d0d0;">
         </div>
@@ -67,60 +84,68 @@
 <script>
     document.body.className = window.top.theme;
     var selected = "";
-    function hover(name){
-        if(selected!=name)
+    var selectID = ''
+
+    function hover(name) {
+        if (selected != name)
             event.target.style.backgroundColor = "#e0e0e0";
 
     }
-    function leave(name){
-        if(selected!=name)
+
+    function leave(name) {
+        if (selected != name)
             event.target.style.backgroundColor = "#f0f0f0";
 
     }
-    function select(id,name,pic){
 
-        if(selected){
+    function select(id, name, pic) {
+
+        if (selected) {
             document.getElementById(selected).style.backgroundColor = "#f0f0f0";
         }
-        selected = id;
+
         document.getElementById(id).style.backgroundColor = "#e0e0e0";
-        document.getElementById("frame").src="detail.html?"+id+"&"+name+"&false"+"&"+pic;
+        if (selected !== id) {
+            document.getElementById("frame").src = "detail.html?" + id + "&" + name + "&false" + "&" + pic;
+        }
+        selected = id;
     }
 </script>
 <script>
 
     async function refreshFriendList() {
-      const {engine} = window.top
-      const lkapp = engine.getApplication().getCurrentApp()
-      const user = lkapp.getCurrentUser()
-      const ContactManager = engine.get('ContactManager')
+        const {engine} = window.top
+        const lkapp = engine.getApplication().getCurrentApp()
+        const user = lkapp.getCurrentUser()
+        const ContactManager = engine.get('ContactManager')
         var all = await ContactManager.asyGetAllMembers(user.id)
-        var html="";
-        if(all){
-            for(var i=0;i<all.length;i++){
+        var html = "";
+        if (all) {
+            for (var i = 0; i < all.length; i++) {
                 var f = all[i];
                 if (f.id !== user.id) {
-                  html+="<div id='";
-                  html+=f.id;
-                  html+="' style=\"width:100%;height:50px;line-height: 50px;cursor: pointer;padding-left: 10px\" onmouseover=\"hover('";
-                  html+=f.id;
-                  html+="')\" onmouseout=\"leave('";
-                  html+=f.id;
-                  html+="')\" onclick=\"select('";
-                  html+=f.id;
-                  html+="','";
-                  html+=f.name;
-                    html+="','";
-                    html+=f.pic;
-                    html+="')\">";
-                  html+=f.name;
-                  html+="</div>";
+                    html += "<div id='";
+                    html += f.id;
+                    html += "' style=\"width:100%;height:50px;line-height: 50px;cursor: pointer;padding-left: 10px\" onmouseover=\"hover('";
+                    html += f.id;
+                    html += "')\" onmouseout=\"leave('";
+                    html += f.id;
+                    html += "')\" onclick=\"select('";
+                    html += f.id;
+                    html += "','";
+                    html += f.name;
+                    html += "','";
+                    html += f.pic;
+                    html += "')\">";
+                    html += f.name;
+                    html += "</div>";
                 }
             }
-            document.getElementById("contact").innerHTML=html;
+            document.getElementById("contact").innerHTML = html;
             //select("0");
         }
     }
+
     refreshFriendList();
 
 

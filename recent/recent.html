@@ -16,33 +16,53 @@
             font-family: sans-serif;
             background-color: #f0f0f0;
         }
-        .content{
-            height:100%;width:100%;display:flex;flex-direction: row;align-items: center
+
+        .content {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center
         }
 
-        .title{
-            width:100%;height:30px;line-height: 30px;text-align: center;
+        .title {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
         }
-        .left .title{
-            background-color: #e0e0e0;border-right: 1px solid #d0d0d0;
+
+        .left .title {
+            background-color: #e0e0e0;
+            border-right: 1px solid #d0d0d0;
             border-bottom: 1px solid #d0d0d0;
-            height:45px;line-height: 45px;
+            height: 45px;
+            line-height: 45px;
             font-size: 12pt;
             font-weight: 400;
         }
-        .bottom .title{
-            background-color: #636363;border-right: 1px solid #535353;
-            color:white;
+
+        .bottom .title {
+            background-color: #636363;
+            border-right: 1px solid #535353;
+            color: white;
         }
-        .title i{
-            font-size: 20px;float: right;cursor: pointer;
+
+        .title i {
+            font-size: 20px;
+            float: right;
+            cursor: pointer;
         }
-        .bottom .title i{
-            color:#f0f0f0;
-            margin-top: 6px;margin-right: 10px;
+
+        .bottom .title i {
+            color: #f0f0f0;
+            margin-top: 6px;
+            margin-right: 10px;
         }
-        .left .title i{
-            margin-top: 14px;margin-right: 10px;
+
+        .left .title i {
+            margin-top: 14px;
+            margin-right: 10px;
         }
     </style>
 
@@ -51,109 +71,123 @@
 <body>
 <div class="content">
     <div style="height:100%;width:200px;display: flex;flex-direction: column;align-items: center;overflow: hidden">
-        <div class="title" style="" >消息
+        <div class="title" style="">消息
         </div>
         <div id="recent" style="width:200px;flex:1;overflow: auto;border-right: 1px solid #d0d0d0;">
         </div>
     </div>
     <div style="flex:1;height:100%;display: flex">
-        <iframe id="frame" style="width:100%;height:100%"  src="./default.html" frameborder="0"></iframe>
+        <iframe id="frame" style="width:100%;height:100%" src="./default.html" frameborder="0"></iframe>
     </div>
 </div>
 </body>
 <script>
-  document.body.className = window.top.theme;
-  const {engine} = window.top
-  const lkapp = engine.getApplication().getCurrentApp()
-  const user = lkapp.getCurrentUser()
-  const ChatManager = engine.get('ChatManager')
-  const ContactManager = engine.get('ContactManager')
-  let selected = "";
-  let firstChatId
-  function hover(chatId,i){
-      document.getElementById(i).style.display = 'block'
-    if(selected!=chatId) {
-      event.target.style.backgroundColor = "#e0e0e0";
+    document.body.className = window.top.theme;
+    const {engine} = window.top
+    const lkapp = engine.getApplication().getCurrentApp()
+    const user = lkapp.getCurrentUser()
+    const ChatManager = engine.get('ChatManager')
+    const ContactManager = engine.get('ContactManager')
+    let selected = "";
+    let firstChatId
+    var selectID = ''
 
-    }
-  }
-  function leave(chatId,i){
-      document.getElementById(i).style.display = 'none'
-    if(selected!=chatId) {
-      event.target.style.backgroundColor = "#f0f0f0";
-    }
-  }
-  function select(chatId){
-    // console.log({chatId, selected})
-    if(selected){
-      document.getElementById(selected).style.backgroundColor = "#f0f0f0";
-    }
-    selected = chatId
-    document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
+    function hover(chatId, i) {
+        document.getElementById(i).style.display = 'block'
+        if (selected != chatId) {
+            event.target.style.backgroundColor = "#e0e0e0";
 
-  }
-  function chat(chatId,isGroupChat) {
-    // console.log({chatId, isGroupChat})
-    select(chatId)
-    showChatBox(isGroupChat,chatId);
-  }
-  function showChatBox(isGroupChat,id) {
-    document.getElementById("frame").src="chat.html?"+isGroupChat+"&"+id;
-  }
-  async function refreshRecentList() {
-    var all = await ChatManager.asyGetAll(user.id)
-      console.log(all)
-    // console.log({all})
-    let html="";
-    let i=0;
-    if(all){
-      if (all.length) {
-        firstChatId  = all[0].id
-      }
-      // console.log({all})
-      for(;i<all.length;i++){
-        let re = all[i];
-        const {id: chatId, isGroup} = re
-        const person = await ContactManager.asyGet(user.id, re.id)
-        // console.log({person})
-        //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
-        if (isGroup || person) {
-          html+=`<div id="${chatId}" `
-          html+=`style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}',${i})" `
-          html+=`onmouseout="leave('${chatId}',${i})" onclick="chat('${chatId}', ${isGroup})">  `
-          html+= isGroup?"<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;"+re.name:person.name
-          const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
-          // console.log({newMsgNum})
-          if(newMsgNum){
-            // console.log('here')
-            html+=`<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
-          }
-          html+=`<span id='${i}' style='position: absolute;left: 180px;display: none;font-weight: bold;font-family: "Abadi MT Condensed Light"'>×<span></div>`;
         }
+    }
 
-      }
+    function leave(chatId, i) {
+        document.getElementById(i).style.display = 'none'
+        if (selected != chatId) {
+            event.target.style.backgroundColor = "#f0f0f0";
+        }
+    }
+
+    function select(chatId) {
+        // console.log({chatId, selected})
+        if (selected) {
+            document.getElementById(selected).style.backgroundColor = "#f0f0f0";
+        }
+        selected = chatId
+        document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
+    }
+
+
+
+    function chat(chatId, isGroupChat) {
+        select(chatId)
+        if (selectID !==chatId ) {
+            showChatBox(isGroupChat, chatId);
+        }
+        selectID = chatId
+
 
     }
-    // console.log({html})
 
-    document.getElementById("recent").innerHTML=html;
-    if(selected){
-      select(selected);
-    } else {
-      if (firstChatId) {
-        select(firstChatId)
-        document.getElementById(firstChatId).click()
-      }
+    function showChatBox(isGroupChat, id) {
+        document.getElementById("frame").src = "chat.html?" + isGroupChat + "&" + id;
+
+
     }
-  }
 
-  refreshRecentList();
-  ChatManager.on("msgChanged",refreshRecentList);
-  ChatManager.on("msgRead",refreshRecentList);
+    async function refreshRecentList() {
+        var all = await ChatManager.asyGetAll(user.id)
+        console.log(all)
+        // console.log({all})
+        let html = "";
+        let i = 0;
+        if (all) {
+            if (all.length) {
+                firstChatId = all[0].id
+            }
+            // console.log({all})
+            for (; i < all.length; i++) {
+                let re = all[i];
+                const {id: chatId, isGroup} = re
+                const person = await ContactManager.asyGet(user.id, re.id)
+                // console.log({person})
+                //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
+                if (isGroup || person) {
+                    html += `<div id="${chatId}" `
+                    html += `style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}',${i})" `
+                    html += `onmouseout="leave('${chatId}',${i})" onclick="chat('${chatId}', ${isGroup})">  `
+                    html += isGroup ? "<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;" + re.name : person.name
+                    const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
+                    // console.log({newMsgNum})
+                    if (newMsgNum) {
+                        // console.log('here')
+                        html += `<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: 5px;margin-bottom: 15px'>${newMsgNum}</div>`;
+                    }
+                    html += `<span id='${i}' style='position: absolute;left: 180px;display: none;font-weight: bold;font-family: "Abadi MT Condensed Light"'>×<span></div>`;
+                }
 
-  window.addEventListener("beforeunload", function (event) {
-    ChatManager.un("msgChanged",refreshRecentList);
-    ChatManager.un("msgRead",refreshRecentList);
-  });
+            }
+
+        }
+        // console.log({html})
+
+        document.getElementById("recent").innerHTML = html;
+        if (selected) {
+            select(selected);
+        } else {
+            if (firstChatId) {
+                select(firstChatId)
+                document.getElementById(firstChatId).click()
+            }
+        }
+    }
+
+    refreshRecentList();
+    ChatManager.on("msgChanged", refreshRecentList);
+    ChatManager.on("msgRead", refreshRecentList);
+
+    window.addEventListener("beforeunload", function (event) {
+        ChatManager.un("msgChanged", refreshRecentList);
+        ChatManager.un("msgRead", refreshRecentList);
+    });
 </script>
 </html>
