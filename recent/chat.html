@@ -89,12 +89,43 @@
             }
             document.getElementById("face-content").innerHTML=html;
         }
+        function drop_handler(ev) {
+          ev.currentTarget.style.background = '#f0f0f0'
 
+          ev.preventDefault();
+          const {dataTransfer} = ev
+          const {items} = dataTransfer
+
+          if (items) {
+            for (var i = 0; i < items.length; i++) {
+              // If dropped items aren't files, reject them
+              if (ev.dataTransfer.items[i].kind === 'file') {
+                var file = ev.dataTransfer.items[i].getAsFile();
+                console.log(file.path)
+              }
+            }
+          } else {
+            for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+              console.log('... 2 file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+            }
+          }
+        }
+
+        function dragover_handler(ev) {
+          ev.currentTarget.style.background = '#e0e0e0'
+          ev.preventDefault();
+        }
+
+        function dragLeave(evt) {
+          evt.currentTarget.style.background = '#f0f0f0'
+        }
 
     </script>
 </head>
-<body onkeydown="copy()">
-<div style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: flex-end;align-items: center">
+<body onkeydown="copy()" >
+<div  ondrop="drop_handler(event);" ondragover="dragover_handler(event);"
+      ondragleave="dragLeave(event)"
+        style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: flex-end;align-items: center">
     <div class="title" >
         <span id="title" ></span>
         <i class="material-icons" style="" onclick="showDetail()">more_horiz</i>
