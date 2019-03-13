@@ -69,21 +69,26 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  checkUpdate(function (hasNew) {
-    if (hasNew) {
-      mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, pageDir + '/index/update.html'),
-        protocol: 'file:',
-        slashes: true
-      }))
-    } else {
-      mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, pageDir + '/index/index.html'),
-        protocol: 'file:',
-        slashes: true
-      }))
-    }
-  })
+  // checkUpdate(function (hasNew) {
+  //   if (hasNew) {
+  //     mainWindow.loadURL(url.format({
+  //       pathname: path.join(__dirname, pageDir + '/index/update.html'),
+  //       protocol: 'file:',
+  //       slashes: true
+  //     }))
+  //   } else {
+  //     mainWindow.loadURL(url.format({
+  //       pathname: path.join(__dirname, pageDir + '/index/index.html'),
+  //       protocol: 'file:',
+  //       slashes: true
+  //     }))
+  //   }
+  // })
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, pageDir + '/index/index.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
