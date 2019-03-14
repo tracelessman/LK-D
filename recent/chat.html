@@ -184,8 +184,8 @@
     const channel = lkapp.getLKWSChannel()
     initFaces();
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
-    var params = ps.split("&")
 
+    var params = ps.split("&")
     var isGroupChat = params[0] == '1' || params[0] === 'true'
     var otherId = params[1]
     let name
@@ -202,7 +202,8 @@
         title = member.name
       }
       name = title
-      document.getElementById("title").innerText = title
+        var all = await ChatManager.asyGetGroupMembers(params[1])
+      document.getElementById("title").innerText =all.length===0? title : title+` (${all.length})`
       document.addEventListener("mousedown",hideDetaiBox);
       refreshRecordList();
     }

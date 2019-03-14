@@ -52,7 +52,7 @@
         </div>
 
     </div>
-    <div id="members" style="margin-top: 40px"></div>
+    <div id="members" style="margin-top: 170px;margin-left: -235px"></div>
     <div  style="width:150px;height:40px;border-radius: 5px;text-align: center;border: 0px solid #535353;line-height: 40px;margin-top: 150px;cursor: pointer;background-color:#a0a0a0"
          onclick="sendMessage()">
         <span style="color: white;font-weight: bold">发消息</span>
@@ -65,14 +65,12 @@
     const ChatManager = engine.get('ChatManager')
     var ps = document.location.href.substring(document.location.href.indexOf("?") + 1);
     var params = ps.split("&");
-     console.log({params})
     var id = document.getElementById("id").innerHTML = params[0];
     var name = document.getElementById("title").innerHTML = document.getElementById("name").innerHTML = decodeURI(params[1]);
     var isGroup = params[2] == "true";
     // console.log({isGroup})
-    console.log(decodeURI(params[1]))
        //
-    document.getElementById("pic").src = params[3]!=='null'?params[3] :'../images/traceless.png'
+    document.getElementById("pic").src = params[3]==='null'||params[3]===undefined?'../images/traceless.png' : params[3]
     start()
 
     async function start() {
@@ -85,7 +83,7 @@
                 html += "<div style=\"width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">";
                 html += "<div >";
                 html += m.name;
-                html += "</div><div style=\"width:300px\">";
+                html += "</div><div style=\"width:300px;padding-left: 30px\">";
                 html += m.id;
                 html += "</div>";
                 html += "</div>";
