@@ -1,0 +1,4 @@
+[submodule "submodule/LK-C"]
+	path = submodule/LK-C
+	url = https://github.com/tracelessman/LK-C.git
+	branch = publish

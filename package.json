@@ -9,9 +9,8 @@
     "asars": "node bin/asars",
     "postinstall": "node bin/postinstall",
     "install:sqlite3": "node bin/installSqlite3",
-    "updateC": "rm -rf node_modules/@lk && npm i && npm run build",
-    "updateC2": "npm i github:tracelessman/LK-C && node bin/postInstall && npm run build",
-    "init": "npm i && npm run asars && npm start"
+    "updateC": "git submodule update --remote submodule/LK-C && npm run build",
+    "init": "git submodule init && npm i && npm run asars && npm start"
   },
   "devDependencies": {
     "@ys/eslint-config-strict": "github:spirit1453/codebase#strict_eslint",
@@ -26,7 +25,7 @@
     "webpack": "^4.0.1"
   },
   "dependencies": {
-    "@lk/LK-C": "github:tracelessman/LK-C",
+    "@lk/LK-C": "file:submodule/LK-C",
     "@ys/collection": "github:spirit1453/node_collection#publish",
     "crypto-js": "^3.1.9-1",
     "debug": "^4.1.0",
