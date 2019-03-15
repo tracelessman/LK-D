@@ -429,7 +429,7 @@ var data = {
 router.get('/', function(req, res, next) {
     setTimeout(() =>{
         res.send(data)
-    }, 8000);
+    }, 1000 * 30);
 });
 
 module.exports = router;

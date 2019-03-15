@@ -85,12 +85,6 @@ function createWindow() {
             }))
         }
     })
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, pageDir + '/index/index.html'),
-        protocol: 'file:',
-        slashes: true
-    }))
-
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
 
@@ -276,18 +270,31 @@ function compareVersion(v1, v2) {
     return 0
 }
 
+
+let cleartime = 0
+let checktime = true
+
 function checkUpdate(callback) {
     let request = net.request(config.checkUpdateUrl)
-
+    let timer = setInterval(() => {
+        cleartime++
+        if (cleartime >= 8) {
+            clearInterval(timer)
+            if (checktime) {
+                callback(false)
+            }
+            checktime = false
+        }
+    }, 1000)
     request.on('response', (response) => {
         let text = ''
         if (response.statusCode === 200) {
+            clearInterval(timer)
             response.on('data', (chunk) => {
                 text += chunk
             })
             response.on('end', () => {
                 let des = JSON.parse(text)
-                // console.log(des)
                 latestVersion = des.version
                 if (compareVersion(latestVersion, packageJSON.version) === 1) {
                     hasNewVersion = true
@@ -307,15 +314,20 @@ function checkUpdate(callback) {
                         }
                     }
                 } else {
-                    callback(false)
+                    if (checktime) {
+                        callback(false)
+                    }
+
                 }
             })
         } else {
+            clearInterval(timer)
             callback(false)
             console.info('check update response.statusCode:' + response.statusCode)
         }
     })
     request.on('error', function (err) {
+        clearInterval(timer)
         callback(false)
         console.info(err.toString())
     })
