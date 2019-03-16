@@ -271,25 +271,29 @@ function compareVersion(v1, v2) {
 }
 
 
-let cleartime = 0
 let checktime = true
 
 function checkUpdate(callback) {
     let request = net.request(config.checkUpdateUrl)
-    let timer = setInterval(() => {
-        cleartime++
-        if (cleartime >= 8) {
-            clearInterval(timer)
-            if (checktime) {
-                callback(false)
+    let cleartime = 0
+    if (checktime) {
+        let timer = setInterval(() => {
+            cleartime++
+            if (cleartime >= 8) {
+                clearInterval(timer)
+                if (checktime) {
+                    callback(false)
+                }
+                checktime = false
             }
-            checktime = false
-        }
-    }, 1000)
+        }, 1000)
+    }else {
+        callback(false)
+    }
+
     request.on('response', (response) => {
         let text = ''
         if (response.statusCode === 200) {
-            clearInterval(timer)
             response.on('data', (chunk) => {
                 text += chunk
             })
@@ -315,23 +319,24 @@ function checkUpdate(callback) {
                     }
                 } else {
                     if (checktime) {
+                        checktime = false
                         callback(false)
                     }
-
                 }
             })
         } else {
-            clearInterval(timer)
+            checktime = false
             callback(false)
             console.info('check update response.statusCode:' + response.statusCode)
         }
     })
     request.on('error', function (err) {
-        clearInterval(timer)
-        callback(false)
+        if (checktime) {
+            checktime = false
+            callback(false)
+        }
         console.info(err.toString())
     })
-
     request.end()
 
 }
