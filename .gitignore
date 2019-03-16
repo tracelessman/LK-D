@@ -27,6 +27,7 @@ _tmp2
 
 #custom
 local
+unversioned*
 
 #mac
 ._.*

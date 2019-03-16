@@ -1,4 +1,6 @@
 const electron = require('electron')
+const contextMenu = require('electron-context-menu')
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -15,11 +17,13 @@ const originalFs = require('original-fs')
 const globalShortcut = electron.globalShortcut
 const pageDir = ''
 const packageJSON = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
-const debug = require('debug')('debug')
 
-const contextMenu = require('electron-context-menu')
 const isProduction = __dirname.includes('Resources/app/')
 const config = require('./config/index')
+const {getGoldenHeight} = require('./util/Independent')
+
+const {minWidth, minHeight} = config
+
 contextMenu({
     labels: {
         cut: '剪切',
@@ -43,13 +47,7 @@ function isDev() {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
-function getGoldenHeight(width) {
-    return Math.round(width * 0.618)
-}
-
 function createWindow() {
-    const minWidth = 780
-    const minHeight = getGoldenHeight(minWidth)
     const initialWidth = 1000
     mainWindow = new BrowserWindow({
         width: initialWidth,
