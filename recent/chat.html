@@ -127,7 +127,7 @@
       ondragleave="dragLeave(event)"
         style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: flex-end;align-items: center">
     <div class="title" >
-        <span id="title" ></span>
+        <span id="title" ></span><span style="color: #c0c0c0;margin: 0 10px;font-weight: 550;font-size: 0.9em" id='count'></span>
         <i class="material-icons" style="" onclick="showDetail()">more_horiz</i>
     </div>
     <div style="width: 100%;flex:1;display:flex;flex-direction: row;justify-content: flex-end;align-items: center;">
@@ -203,7 +203,8 @@
       }
       name = title
         var all = await ChatManager.asyGetGroupMembers(params[1])
-      document.getElementById("title").innerText =all.length===0? title : title+` (${all.length})`
+      document.getElementById("title").innerText =  title
+      document.getElementById("count").innerText = isGroupChat? `(${all.length + 1})`: ''
       document.addEventListener("mousedown",hideDetaiBox);
       refreshRecordList();
     }
