@@ -30,7 +30,13 @@
             background-color: #636363;border-bottom: 1px solid #434343;
         }
     </style>
-    <script src="./index.bundle.js"></script>
+    <script>
+        const {isDev} = require('../config')
+        const indexEntry = isDev? './index.js' :'./index.bundle.js'
+
+        document.write(`<script src="${indexEntry}" />`)
+    </script>
+
     <script src="./custom.js"></script>
     <script src="./dev.js"></script>
     <script>

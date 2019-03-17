@@ -9,7 +9,8 @@ const minHeight = getGoldenHeight(this.minWidth)
 const config = {
   checkUpdateUrl: 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json',
   minWidth,
-  minHeight
+  minHeight,
+  isDev: false
 }
 
 const unversionedPath = path.resolve(__dirname, 'unversioned.js')
