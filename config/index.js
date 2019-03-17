@@ -10,7 +10,8 @@ const config = {
   checkUpdateUrl: 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json',
   minWidth,
   minHeight,
-  isDev: false
+  isDev: false,
+  checkUpdateTimeout: 1000 * 5
 }
 
 const unversionedPath = path.resolve(__dirname, 'unversioned.js')

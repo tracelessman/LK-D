@@ -23,7 +23,7 @@ const isProduction = __dirname.includes('Resources/app/')
 const config = require('./config/index')
 const {getGoldenHeight} = require('./util/Independent')
 
-const {minWidth, minHeight} = config
+const {minWidth, minHeight, checkUpdateTimeout} = config
 
 contextMenu({
   labels: {
@@ -273,51 +273,55 @@ function compareVersion (v1, v2) {
 
 function checkUpdate (callback) {
   let request = net.request(config.checkUpdateUrl)
-  let checkup = true
-  let checkTime = setTimeout(() => {
-    checkup = false
-    callback(false)
-  }, 8000)
+  let isResolved = false
+  setTimeout(() => {
+    if (!isResolved) {
+      isResolved = true
+      callback(false)
+    }
+  }, checkUpdateTimeout)
 
   request.on('response', (response) => {
-    clearTimeout(checkTime)
     let text = ''
     if (response.statusCode === 200) {
       response.on('data', (chunk) => {
         text += chunk
       })
       response.on('end', () => {
-        let des = JSON.parse(text)
-        latestVersion = des.version
-        if (compareVersion(latestVersion, packageJSON.version) === 1) {
-          callback(true)
-          let changeList = des.changeList
-          files = ['package.json']
-          for (let i = 0; i < changeList.length; i++) {
-            let change = changeList[i]
-            // var vChange = parseInt(change.version.replace(/\./ig,""))
-            if (compareVersion(change.version, packageJSON.version) === 1) {
-              let _cfs = change.files
-              _cfs.forEach((f) => {
-                if (files.indexOf(f) === -1) {
-                  files.push(f)
-                }
-              })
+        if (!isResolved) {
+          isResolved = true
+          let des = JSON.parse(text)
+          latestVersion = des.version
+          if (compareVersion(latestVersion, packageJSON.version) === 1) {
+            callback(true)
+            let changeList = des.changeList
+            files = ['package.json']
+            for (let i = 0; i < changeList.length; i++) {
+              let change = changeList[i]
+              // var vChange = parseInt(change.version.replace(/\./ig,""))
+              if (compareVersion(change.version, packageJSON.version) === 1) {
+                let _cfs = change.files
+                _cfs.forEach((f) => {
+                  if (files.indexOf(f) === -1) {
+                    files.push(f)
+                  }
+                })
+              }
             }
-          }
-        } else {
-          if (checkup) {
+          } else {
             callback(false)
           }
         }
       })
     } else {
-      callback(false)
-      console.info('check update response.statusCode:' + response.statusCode)
+      if (!isResolved) {
+        isResolved = true
+        callback(false)
+        console.info('check update response.statusCode:' + response.statusCode)
+      }
     }
   })
   request.on('error', function (err) {
-    clearTimeout(checkTime)
     callback(false)
     console.info(err.toString())
   })
