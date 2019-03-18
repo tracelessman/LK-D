@@ -72,7 +72,7 @@
     <div style="height:100%;width:200px;display: flex;flex-direction: column;align-items: center;overflow: hidden">
         <div class="title" style="">消息
         </div>
-        <div style=" width: 200px; height: 40px; cursor: pointer; padding-left: 30px; display: flex; flex-direction: row; justify-content: flex-start; align-items: center;background-color: rgb(246,216,178) ">
+        <div id="offlineWarning" style=" width: 200px; height: 35px; cursor: pointer; padding-left: 30px; display: none; flex-direction: row; justify-content: flex-start; align-items: center;background-color: rgb(246,216,178) ">
             <img height="20" src="../images/Wifi-Error 1 (5).png" width="20"/>&nbsp;&nbsp;<span
                 style="color: #966D3F;font-weight: bold;"> 网络连接已断开</span>
         </div>
@@ -88,6 +88,9 @@
     document.body.className = window.top.theme;
     const {engine} = window.top
     const lkapp = engine.getApplication().getCurrentApp()
+    lkapp.on('netStateChanged', online => {
+      document.getElementById('offlineWarning').style.display = online? 'none': 'flex'
+    })
     const user = lkapp.getCurrentUser()
     const ChatManager = engine.get('ChatManager')
     const ContactManager = engine.get('ContactManager')
