@@ -322,7 +322,10 @@ function checkUpdate (callback) {
     }
   })
   request.on('error', function (err) {
-    callback(false)
+    if (!isResolved) {
+      isResolved = true
+      callback(false)
+    }
     console.info(err.toString())
   })
   request.end()
