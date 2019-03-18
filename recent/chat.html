@@ -436,14 +436,30 @@
         }
     }
 
-    function onReceiveMessage(fromId) {
-      const {chatId} = fromId
-      if (isFocused) {
-        if(chatId===otherId){
-          readAndRefresh()
-        } else if (chatId === userId){
-          refreshRecordList()
+    function onReceiveMessage(ary) {
+      let shouldRead = false
+      let shouldRefresh = false
+      for(let ele of ary) {
+        const {chatId, fromUid, toUid, isFromSelf} = ele
+        if (isFromSelf) {
+          if (toUid === otherId) {
+            shouldRefresh = true
+          }
+        } else {
+          if (fromUid === otherId) {
+            shouldRefresh = true
+            if (isFocused) {
+              shouldRead = true
+            }
+          }
         }
+      }
+
+      if (shouldRead) {
+        readUnread()
+      }
+      if (shouldRefresh) {
+        refreshRecordList()
       }
     }
 
