@@ -221,7 +221,7 @@
       "version":"0.0.46",
       "files":["recent/chat.html", "config/index.js", "contact/contact.html", "main.bundle.js",
         "index/index.bundle.js", "contact/contact.html", "contact/detail.html",
-        "recent/chatBox.html", "recent/recent.html", "mine/mine.html", "images/Wifi-Error 1 (5).png",
+        "recent/chatBox.html", "recent/recent.html", "mine/mine.html", "images/Wifi-Error.png",
         "util/Independent.js"
       ],
       "detail":["test"]
