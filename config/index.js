@@ -10,7 +10,7 @@ const config = {
   checkUpdateUrl: 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json',
   minWidth,
   minHeight,
-  isDev: false,
+  isDev: false, // 是否开发模式
   checkUpdateTimeout: 1000 * 5
 }
 
