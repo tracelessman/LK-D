@@ -70,9 +70,12 @@
 <body>
 <div class="content">
     <div style="height:100%;width:200px;display: flex;flex-direction: column;align-items: center;overflow: hidden">
+
         <div class="title" style="">消息
+
         </div>
-        <div id="offlineWarning" style=" width: 200px; height: 35px; cursor: pointer; padding-left: 30px; display: none; flex-direction: row; justify-content: flex-start; align-items: center;background-color: rgb(246,216,178) ">
+        <div id="offlineWarning"
+             style=" width: 200px; height: 35px; cursor: pointer; padding-left: 30px; display: none; flex-direction: row; justify-content: flex-start; align-items: center;background-color: rgb(246,216,178) ">
             <img height="20" src="../images/Wifi-Error.png" width="20"/>&nbsp;&nbsp;<span
                 style="color: #966D3F;font-weight: bold;"> 网络连接已断开</span>
         </div>
@@ -89,7 +92,7 @@
     const {engine} = window.top
     const lkapp = engine.getApplication().getCurrentApp()
     lkapp.on('netStateChanged', online => {
-      document.getElementById('offlineWarning').style.display = online? 'none': 'flex'
+        document.getElementById('offlineWarning').style.display = online ? 'none' : 'flex'
     })
     const user = lkapp.getCurrentUser()
     const ChatManager = engine.get('ChatManager')
@@ -99,17 +102,22 @@
     var selectID = ''
 
     function hover(chatId, i) {
-        // document.getElementById(i).style.display = 'block'
-        if (selected != chatId) {
-            event.target.style.backgroundColor = "#e0e0e0";
+        document.getElementById(i).style.visibility = "visible"
 
+        if (selected != chatId) {
+            //event.target.style.backgroundColor = "#e0e0e0";
+            document.getElementById(i).style.backgroundColor = "#e0e0e0";
+            document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
         }
     }
 
     function leave(chatId, i) {
-        document.getElementById(i).style.display = 'none'
+
+        document.getElementById(i).style.visibility = "hidden"
         if (selected != chatId) {
-            event.target.style.backgroundColor = "#f0f0f0";
+            //event.target.style.backgroundColor = "#f0f0f0";
+            document.getElementById(i).style.backgroundColor = "#f0f0f0";
+            document.getElementById(chatId).style.backgroundColor = "#f0f0f0";
         }
     }
 
@@ -153,13 +161,33 @@
                 let re = all[i];
                 const {id: chatId, isGroup} = re
                 const person = await ContactManager.asyGet(user.id, re.id)
-                // console.log({person})
+                console.log(person)
+
                 //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
                 if (isGroup || person) {
+
                     html += `<div id="${chatId}" `
-                    html += `style="width:100%;height:50px;cursor: pointer;padding-left: 10px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}',${i})" `
+                    html += `style="width:100%;height:50px;cursor: pointer;padding-left: 5px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center" onmouseover="hover('${chatId}',${i})" `
                     html += `onmouseout="leave('${chatId}',${i})" onclick="chat('${chatId}', ${isGroup})">  `
-                    html += isGroup ? "<img src=\"../images/mulChat.png\" width=\"16\" height=\"16\"/>&nbsp;&nbsp;" + re.name : person.name
+                    html += `<div id='${i}'  style="width:10%;text-align: center; visibility: hidden; font-weight: bold;font-family: "Abadi MT Condensed Light"" >×&nbsp;</div>`
+                    html += isGroup ?
+                        `<div style="width:40px;height: 40px;border: solid 0.5px #e0e0e0; border-radius:120px; overflow:hidden">
+                            <ul style="margin:0;padding:0;">
+                                <li style="margin-left:3px;padding:0;list-style-type:none;float:left;width:14px;">
+                                    <img src="../images/1024x1024.png"  style="width:15px;height:15px;border-radius:100px;"/>
+                                </li>
+                                <li style="margin-left:3px;padding:0;list-style-type:none;float:left;width:14px;">
+                                    <img src="../images/Wifi-Error 1 (4).png"  style="width:15px;height:15px;border-radius:100px;"/>
+                                </li>
+                                <li style="margin-left:3px;padding:0;list-style-type:none;float:left;width:14px;">
+                                    <img src="../images/Wifi-Error 1 (2).png"  style="width:15px;height:15px;border-radius:100px;"/>
+                                </li>
+                                <li style="margin-left:3px;padding:0;list-style-type:none;float:left;width:14px;">
+                                    <img src="../images/Wifi-Error.png"  style="width:15px;height:15px;border-radius:100px;"/>
+                                </li>
+                            </ul>
+                        </div>&nbsp;&nbsp;` + re.name : person.pic ? `<img src="${person.pic}"  style="width:40px;height:40px;border-radius:100px;"/>&nbsp;&nbsp;` + person.name
+                            : `<img src="../images/traceless.png"  style="width:40px;height:40px;border-radius:100px;"/>&nbsp;&nbsp;` + person.name
                     const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
                     // console.log({newMsgNum})
                     if (newMsgNum) {
