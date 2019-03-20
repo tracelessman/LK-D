@@ -1,5 +1,5 @@
 {
-  "version":"0.0.49",
+  "version":"0.0.50",
   "changeList":[
     {
       "version":"0.0.2",
@@ -228,6 +228,15 @@
     },
     {
       "version":"0.0.49",
+      "files":["recent/chat.html", "config/index.js", "contact/contact.html", "main.bundle.js",
+        "index/index.bundle.js", "contact/contact.html", "contact/detail.html",
+        "recent/chatBox.html", "recent/recent.html", "mine/mine.html", "images/Wifi-Error.png",
+        "util/Independent.js"
+      ],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.50",
       "files":["recent/chat.html", "config/index.js", "contact/contact.html", "main.bundle.js",
         "index/index.bundle.js", "contact/contact.html", "contact/detail.html",
         "recent/chatBox.html", "recent/recent.html", "mine/mine.html", "images/Wifi-Error.png",

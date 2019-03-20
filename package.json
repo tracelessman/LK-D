@@ -1,6 +1,6 @@
 {
   "name": "LK-D",
-  "version": "0.0.49",
+  "version": "0.0.50",
   "main": "./main.bundle.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron --inspect=5858 --remote-debugging-port=9222 ./main.js",
