@@ -247,7 +247,7 @@
     {
       "version":"0.0.51",
       "files":[
-        "recent/recent.html"
+        "recent/recent.html", "index/index.bundle.js"
       ],
       "detail":["test"]
     }
