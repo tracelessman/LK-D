@@ -1,5 +1,5 @@
 {
-  "version":"0.0.50",
+  "version":"0.0.51",
   "changeList":[
     {
       "version":"0.0.2",
@@ -241,6 +241,13 @@
         "index/index.bundle.js", "contact/contact.html", "contact/detail.html",
         "recent/chatBox.html", "recent/recent.html", "mine/mine.html", "images/Wifi-Error.png",
         "util/Independent.js"
+      ],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.51",
+      "files":[
+        "recent/recent.html"
       ],
       "detail":["test"]
     }
