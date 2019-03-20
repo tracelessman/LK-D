@@ -43,6 +43,8 @@
         let LKApplication = engine.getApplication();
         let db = require('../store/ElecSqlite');
         LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON);
+        // const Uploader = require('./upload/Uploader')
+        // LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON, Uploader);
     </script>
 </head>
 <body style="overflow: hidden">
@@ -65,10 +67,12 @@
         alert(err)
     })
 
-    var notifyNewMsg = function ({chatId, isFromSelf}) {
+    var notifyNewMsg = function (ary) {
       // filter sync message by other devices
-      // console.log({chatId, isFromSelf})
-      if (!isFromSelf) {
+        const isFromOther = ary.some(ele => {
+          return !ele.isFromSelf
+        })
+      if (isFromOther) {
         engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
           // console.log({num})
           ipc.send("messageReceive",{total:num});

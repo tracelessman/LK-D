@@ -204,7 +204,7 @@
       name = title
         var all = await ChatManager.asyGetGroupMembers(params[1])
       document.getElementById("title").innerText =  title
-      document.getElementById("count").innerText = isGroupChat? `(${all.length + 1})`: ''
+      document.getElementById("count").innerText = isGroupChat? `(${all.length})`: ''
       document.addEventListener("mousedown",hideDetaiBox);
       refreshRecordList();
     }
