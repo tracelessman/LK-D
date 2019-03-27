@@ -243,6 +243,13 @@
         "util/Independent.js"
       ],
       "detail":["test"]
+    },
+    {
+      "version":"0.0.51",
+      "files":[
+        "recent/recent.html", "index/index.bundle.js", "recent/chat.html"
+      ],
+      "detail":["test"]
     }
   ]
 

@@ -442,7 +442,7 @@
       for(let ele of ary) {
         const {chatId, fromUid, toUid, isFromSelf} = ele
         if (isFromSelf) {
-          if (toUid === otherId) {
+          if (chatId === otherId) {
             shouldRefresh = true
           }
         } else {
