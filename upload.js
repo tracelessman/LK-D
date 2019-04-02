@@ -18,7 +18,6 @@ function upload() {
         .then(function () {
             ssh.exec(cmd, [], {
                 onStdout(chunk) {
-                    console.log('测试')
                     console.log('stdoutChunk', chunk.toString('utf8'))
                 },
                 onStderr(chunk) {

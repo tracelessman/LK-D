@@ -374,7 +374,8 @@ function getUpgradeMessages () {
 }
 
 function download (fileAry) {
-  let baseURI = 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/'
+  //let baseURI = 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/'
+  let baseURI = 'http://193.112.250.147:3000/public/LK-D/'
   let index = baseURI.length
 
   let count = 0

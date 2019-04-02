@@ -7,7 +7,8 @@ const {getGoldenHeight} = require('../util/Independent')
 const minWidth = 780
 const minHeight = getGoldenHeight(this.minWidth)
 const config = {
-  checkUpdateUrl: 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json',
+  //checkUpdateUrl: 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/upgrade.json',
+  checkUpdateUrl:'http://193.112.250.147:3000/public/LK-D/upgrade.json',
   minWidth,
   minHeight,
   isDev: true, // 是否开发模式
