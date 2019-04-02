@@ -6,7 +6,7 @@ const password = 'abc@147258369'
 const username = 'root'
 const host = '193.112.250.147'
 
-const cmd = 'cd /root/Test/LK-S;git pull;cd static/public/LK-D;git pull'
+const cmd = 'cd /root/Test/LK-S;git pull;cd static/public/LK-D;git pull;cd ../../../;npm run dev:web'
 
 function upload() {
     ssh.connect({
@@ -18,6 +18,7 @@ function upload() {
         .then(function () {
             ssh.exec(cmd, [], {
                 onStdout(chunk) {
+                    console.log('test')
                     console.log('stdoutChunk', chunk.toString('utf8'))
                 },
                 onStderr(chunk) {
