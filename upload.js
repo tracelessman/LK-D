@@ -27,7 +27,7 @@ function upload() {
         })
 }
 
-module.exports = upload()
+module.exports = upload
 
 
 
