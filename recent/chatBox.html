@@ -113,10 +113,13 @@
                // window.parent.send();
             }
         }
+        window.onload = function() {
+            document.body.focus();
+        };
         window.top.ipc.on("capture-complete",pasteImg);
         window.addEventListener("beforeunload", function (event) {
             window.top.ipc.removeListener("capture-complete",pasteImg);
         });
     </script>
 </head>
-<body contenteditable="true" onclick="cont()" onkeydown="paste()"></body></html>
+<body contenteditable="true"  onclick="cont()" onkeydown="paste()"></body></html>
