@@ -3,7 +3,7 @@ class TopUtil {
   static dropExtraTable () {
     const tableAry = [
       'contact', 'device', 'group_record_state',
-      'magicCode', 'mfapply', 'org',
+      'magicCode', 'mfapply', 'org', 'groupMemeber',
       'record']
     for (let ele of tableAry) {
       const sql = `
