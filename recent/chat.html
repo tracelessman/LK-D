@@ -436,21 +436,19 @@
         }
     }
 
-    function onReceiveMessage(ary) {
+    function onReceiveMessage(param) {
       let shouldRead = false
       let shouldRefresh = false
-      for(let ele of ary) {
-        const {chatId, fromUid, toUid, isFromSelf} = ele
-        if (isFromSelf) {
-          if (chatId === otherId) {
-            shouldRefresh = true
-          }
-        } else {
-          if (fromUid === otherId) {
-            shouldRefresh = true
-            if (isFocused) {
-              shouldRead = true
-            }
+      const {chatId, fromUid, toUid, isFromSelf} = param
+      if (isFromSelf) {
+        if (chatId === otherId) {
+          shouldRefresh = true
+        }
+      } else {
+        if ( chatId === otherId) {
+          shouldRefresh = true
+          if (isFocused) {
+            shouldRead = true
           }
         }
       }

@@ -67,12 +67,9 @@
         alert(err)
       })
 
-      var notifyNewMsg = function (ary) {
-        // filter sync message by other devices
-        const isFromOther = ary.some(ele => {
-          return !ele.isFromSelf
-        })
-        if (isFromOther) {
+      var notifyNewMsg = function (param) {
+        // filter sync message by other devices of oneself
+        if (!param.isFromSelf) {
           engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
             // console.log({num})
             ipc.send("messageReceive",{total:num});
