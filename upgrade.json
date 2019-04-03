@@ -265,7 +265,13 @@
         "recent/recent.html", "recent/chatBox.html", "recent/chat.html"
       ],
       "detail":["test"]
-
+    },
+    {
+      "version":"0.0.54",
+      "files":[
+        "recent/recent.html"
+      ],
+      "detail":["test"]
     }
   ]
 
