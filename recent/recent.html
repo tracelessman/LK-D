@@ -185,7 +185,6 @@
                 let re = all[i];
                 const {id: chatId, isGroup} = re
                 const person = await ContactManager.asyGet(user.id, re.id)
-                console.log(person)
                 var MsgsOneData = await ChatManager.asyGetLastMsg(user.id, chatId)
                 var data = ''
                 try {
