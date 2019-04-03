@@ -53,11 +53,11 @@
       await LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON);
 
       let userId
-      engine.getUserManager().asyGetAll().then(function (users) {
+      engine.getUserManager().asyGetAll().then(async (users) => {
         if(users&&users.length>0){
           let cur = users[0];
           userId = cur.id
-          LKApplication.getCurrentApp().setCurrentUser(cur);
+          await LKApplication.getCurrentApp().setCurrentUser(cur);
           window.theme = document.body.className = "left";
           document.getElementById("frame").src="main.html";
         }else{
