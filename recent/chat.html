@@ -24,7 +24,7 @@
         }
         .left .title{
             background-color: #e0e0e0;;
-            border-bottom: 1px solid #d0d0d0;
+            border-bottom: 1px solid rgb(226,226,226);
             height:45px;line-height: 45px;
             font-size: 12pt;
             font-weight: 400;
@@ -126,7 +126,7 @@
 <div  ondrop="drop_handler(event);" ondragover="dragover_handler(event);"
       ondragleave="dragLeave(event)"
         style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: flex-end;align-items: center">
-    <div class="title" >
+    <div class="title" style="background-color: rgb(242,242,242);">
         <span id="title" ></span><span style="color: #c0c0c0;margin: 0 10px;font-weight: 550;font-size: 0.9em" id='count'></span>
         <i class="material-icons" style="" onclick="showDetail()">more_horiz</i>
     </div>
@@ -146,7 +146,7 @@
                     <div style="background-image: url(../images/bottom-arrow.png);width:27px;height:12px"></div>
                 </div>
             </div>
-            <div style="width:100%;height:24px;border-top: 1px solid #d0d0d0;padding-left: 10px;line-height: 24px">
+            <div style="width:100%;height:24px;border-top: 1px solid rgb(226,226,226);padding-left: 10px;line-height: 24px">
                 <i class="material-icons" style="color: #a0a0a0;font-size: 24px;cursor: pointer;margin-right: 5px;" onclick="showFaceBox()">
                     tag_faces
                 </i>
@@ -366,7 +366,7 @@
                 html += "</div>";
                 html += "</div>";
             }else{
-                html+="<div style=\"display: flex;flex-direction: row;justify-content: flex-end;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
+                html+="<div style=\"display: flex;background-color: rgb(243,243,243);flex-direction: row;justify-content: flex-end;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
                 html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].id+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
                 html+=getIconNameByState(records[i].state);
                 html+="</i>";
