@@ -113,6 +113,9 @@
                // window.parent.send();
             }
         }
+        window.onload = function() {
+            document.body.focus();
+        };
         window.top.ipc.on("capture-complete",pasteImg);
         window.addEventListener("beforeunload", function (event) {
             window.top.ipc.removeListener("capture-complete",pasteImg);
