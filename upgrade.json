@@ -1,5 +1,5 @@
 {
-  "version":"0.0.51",
+  "version":"0.0.52",
   "changeList":[
     {
       "version":"0.0.2",
@@ -248,6 +248,14 @@
       "version":"0.0.51",
       "files":[
         "recent/recent.html", "index/index.bundle.js", "recent/chat.html"
+      ],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.52",
+      "files":[
+        "recent/recent.html", "index/index.bundle.js", "recent/chat.html","images/2.jpeg","images/imooc.jpg","images/per.jpeg","images/product_hunt.png","images/th.jpeg","images/user.png","images/user1.png","images/user2.png",
+        "contact/contact.html","images/top.jpeg","recent/chatBox.html","main.bundle.js"
       ],
       "detail":["test"]
     }
