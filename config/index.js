@@ -11,7 +11,7 @@ const config = {
   checkUpdateUrl:'http://193.112.250.147:3000/public/LK-D/upgrade.json',
   minWidth,
   minHeight,
-  isDev: false, // 是否开发模式
+  isDev: true, // 是否开发模式
   checkUpdateTimeout: 1000 * 5
 }
 
