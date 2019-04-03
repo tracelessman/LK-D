@@ -70,7 +70,7 @@
 <body>
 <div class="content">
     <div style="height:100%;width:200px;display: flex;flex-direction: column;align-items: center;overflow: hidden">
-        <div class="title" style="">消息
+        <div class="title" style="background-color: rgb(251,251,251);">消息
         </div>
         <div id="offlineWarning"
              style=" width: 200px; height: 35px; cursor: pointer; padding-left: 30px; display: none; flex-direction: row; justify-content: flex-start; align-items: center;background-color: rgb(246,216,178) ">
@@ -139,15 +139,15 @@
 
         if (selected != chatId) {
             //event.target.style.backgroundColor = "#f0f0f0";
-            document.getElementById(i).style.backgroundColor = "#f0f0f0";
-            document.getElementById(chatId).style.backgroundColor = "#f0f0f0";
+            document.getElementById(i).style.backgroundColor = "rgb(251,251,251)";
+            document.getElementById(chatId).style.backgroundColor = "rgb(251,251,251)";
         }
     }
 
     function select(chatId) {
         // console.log({chatId, selected})
         if (selected) {
-            document.getElementById(selected).style.backgroundColor = "#f0f0f0";
+            document.getElementById(selected).style.backgroundColor = "rgb(251,251,251)";
         }
         selected = chatId
         document.getElementById(chatId).style.backgroundColor = "#e0e0e0";
@@ -203,61 +203,61 @@
                 }
                 //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
                 if (isGroup || person) {
-                    // let imghtml = ``
-                    // if (isGroup) {
-                    //     var Imgdata = await ContactManager.asyGetgroupMemberImg(chatId)
-                    //     for (var j = 0; j < Imgdata.length; j++) {
-                    //         if (Imgdata.length === 3) {
-                    //             imghtml += Imgdata[j].pic === null ? Imgdata[j] === Imgdata[0] ?
-                    //                 `<div style="margin-left:10px;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                    //                          </div>` :
-                    //                 `<div style="margin:0px;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                    //                          </div>` : Imgdata[j] === Imgdata[0] ?
-                    //                 `<div style="margin-left:10px;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                    //                          </div>` :
-                    //                 `<div style="margin:0px;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                    //                          </div>`
-                    //         } else if (Imgdata.length === 2) {
-                    //             imghtml += Imgdata[j].pic === null ?
-                    //                 `<div style="margin-top:10px;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                    //                          </div>` :
-                    //                 `<div style="margin-top:10px;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                    //                          </div>`
-                    //         } else {
-                    //             imghtml += Imgdata[j].pic === null ?
-                    //                 `<div style="margin:0;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                    //                          </div>` :
-                    //                 `<div style="margin:0;padding:0;float:left;width:20px;height: 20px;">
-                    //                          <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                    //                          </div>`
-                    //         }
-                    //
-                    //     }
-                    // }
+                    let imghtml = ``
+                    if (isGroup) {
+                        var Imgdata = await ContactManager.asyGetgroupMemberImg(chatId)
+                        for (var j = 0; j < Imgdata.length; j++) {
+                            if (Imgdata.length === 3) {
+                                imghtml += Imgdata[j].pic === null ? Imgdata[j] === Imgdata[0] ?
+                                    `<div style="margin-left:10px;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
+                                             </div>` :
+                                    `<div style="margin:0px;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
+                                             </div>` : Imgdata[j] === Imgdata[0] ?
+                                    `<div style="margin-left:10px;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
+                                             </div>` :
+                                    `<div style="margin:0px;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
+                                             </div>`
+                            } else if (Imgdata.length === 2) {
+                                imghtml += Imgdata[j].pic === null ?
+                                    `<div style="margin-top:10px;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
+                                             </div>` :
+                                    `<div style="margin-top:10px;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
+                                             </div>`
+                            } else {
+                                imghtml += Imgdata[j].pic === null ?
+                                    `<div style="margin:0;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
+                                             </div>` :
+                                    `<div style="margin:0;padding:0;float:left;width:20px;height: 20px;">
+                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
+                                             </div>`
+                            }
+
+                        }
+                    }
 
                     html += `<div id="${chatId}" `
-                    html += `style="width:100%;height:50px;cursor: pointer;padding-left: 5px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center;" onmouseover="hover('${chatId}',${i},${isGroup})" `
+                    html += `style="background-color: rgb(251,251,251);width:100%;height:70px;cursor: pointer;padding-left: 5px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center;" onmouseover="hover('${chatId}',${i},${isGroup})" `
                     html += `onmouseout="leave('${chatId}',${i},${isGroup})" onclick="chat('${chatId}', ${isGroup})">  `
                     html += `<div id='${i}'onmouseover="hovers('${chatId}',${i})" onmouseout="leaves('${chatId}',${i})" onclick="DeleteChat('${chatId}','${isGroup}')"  style="color:rgb(188,188,188);width:10%;text-align: center; visibility: hidden; font-weight: bold;font-family: "Abadi MT Condensed Light"" >×&nbsp;</div>`
-                    //<div style="width:40px;height: 40px;border: solid 0px rgb(218,223,225);background-color: rgb(231,241,247);border-radius:50px; overflow:hidden"> </div>
+                    //
 
 
-                    html += isGroup ? `<img src="../images/mulChat.png" width="16" height="16"/>&nbsp;&nbsp;
+                    html += isGroup ? `<div style="width:40px;height: 40px;border: solid 0px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:1px; overflow:hidden">
+                                             ${imghtml}
+                                      </div>&nbsp;&nbsp;
 
                         <div id="One${chatId}" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 40px;margin-left: 0px;margin-top: 0px" >
                                <div style="width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${re.name}</div>
                                <div style="color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${data}</div>
-                         </div>` :`<img src="" width="16" height="16"/>&nbsp;&nbsp;<div id="One${chatId}" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 40px;margin-left: 0px;margin-top: 0px" >
-                               <div style="width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${person.name}</div>
-                               <div style="color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${data}</div>
-                         </div>`
+                         </div>` :  person.pic ? `<img src="${person.pic}"  style="width:40px;height:40px;border-radius:50px;"/>&nbsp;&nbsp;<span style="font-weight: bold;margin-top: -20px">${person.name}</span>`
+                     : `<img src="../images/1024x1024.png"  style="width:40px;height:40px;border-radius:50px;"/>&nbsp;&nbsp;<span style="font-weight: bold;margin-top: -20px">${person.name}</span><div id="One${chatId}" style="font-size:12px;color:rgb(128,128,128);overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 20px;margin-left: -40px;margin-top: 20px" >${data}</div>`
                         // person.pic ? `<img src="${person.pic}"  style="width:40px;height:40px;border-radius:50px;"/>&nbsp;&nbsp;<span style="font-weight: bold;margin-top: -20px">${person.name}</span>`
                         // : `<img src="../images/1024x1024.png"  style="width:40px;height:40px;border-radius:50px;"/>&nbsp;&nbsp;<span style="font-weight: bold;margin-top: -20px">${person.name}</span><div id="One${chatId}" style="font-size:12px;color:rgb(128,128,128);overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 20px;margin-left: -40px;margin-top: 20px" >${data}</div>`
                     const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
