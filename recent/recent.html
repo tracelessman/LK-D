@@ -108,7 +108,7 @@
 
     async function MsgsOne(chatId) {
 
-        var MsgsOneData = await ChatManager.asyGetMsgsOne(user.id, chatId)
+        var MsgsOneData = await ChatManager.asyGetLastMsg(user.id, chatId)
         return await MsgsOneData[0].content
 
     }
@@ -186,7 +186,7 @@
                 const {id: chatId, isGroup} = re
                 const person = await ContactManager.asyGet(user.id, re.id)
                 console.log(person)
-                var MsgsOneData = await ChatManager.asyGetMsgsOne(user.id, chatId)
+                var MsgsOneData = await ChatManager.asyGetLastMsg(user.id, chatId)
                 var data = ''
                 try {
                     if (MsgsOneData.length!==0) {
