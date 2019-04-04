@@ -25,6 +25,7 @@
       function _clear() {
 
         window.top.engine.getChatManager().clear().then(function () {
+          // fixme: restart should await resetTable
           resetTable()
           restart()
           // window.top.document.location.reload();

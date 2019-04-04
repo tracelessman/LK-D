@@ -244,10 +244,20 @@
       ],
       "detail":["test"]
     },
+//    {
+//      "version":"0.0.51",
+//      "files":[
+//        "recent/recent.html", "index/index.bundle.js", "recent/chat.html"
+//      ],
+//      "detail":["test"]
+//    },
     {
       "version":"0.0.51",
       "files":[
-        "recent/recent.html", "index/index.bundle.js", "recent/chat.html"
+        "recent/recent.html", "index/index.bundle.js", "recent/chat.html","main.bundle.js",
+        "index/index.html","recent/chat.html","config/index.js", "mine/mine.html",
+        "index/TopUtil.js", "recent/chatBox.html", "contact/contact.html"
+
       ],
       "detail":["test"]
     }
