@@ -187,8 +187,25 @@
                 const person = await ContactManager.asyGet(user.id, re.id)
                 var MsgsOneData = await ChatManager.asyGetLastMsg(user.id, chatId)
                 var data = ''
+                var MsgsOneDataName = ''
+                var lastSpTime;
+                var timeStr='';
+                var now = new Date();
                 try {
                     if (MsgsOneData.length!==0) {
+                        MsgsOneDataName = MsgsOneData[0].name+': '
+                        lastSpTime=MsgsOneData[0].sendTime
+                        if(lastSpTime){
+                            var date = new Date();
+                            date.setTime(lastSpTime);
+                            if(now.getFullYear()==date.getFullYear()&&now.getMonth()==date.getMonth()&&now.getDate()==date.getDate()){
+                                timeStr+="";
+                                timeStr+=date.getHours()+":"+(date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes());
+                            }else if(now.getFullYear()==date.getFullYear()){
+                                timeStr+=date.getFullYear()+'/'+(date.getMonth()+1)+"/"+date.getDate()+"";
+                            }
+
+                        }
                         if (typeof JSON.parse(MsgsOneData[0].content) === "object") {
                             data = '[图片]'
                         } else {
@@ -244,26 +261,30 @@
                     html += `<div id="${chatId}" `
                     html += `style="border-bottom: 1px solid rgb(238,238,238);background-color: rgb(251,251,251);width:100%;height:70px;cursor: pointer;padding-left: 5px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center;" onmouseover="hover('${chatId}',${i},${isGroup})" `
                     html += `onmouseout="leave('${chatId}',${i},${isGroup})" onclick="chat('${chatId}', ${isGroup})">  `
-                    html += `<div id='${i}'onmouseover="hovers('${chatId}',${i})" onmouseout="leaves('${chatId}',${i})" onclick="DeleteChat('${chatId}','${isGroup}')"  style="color:rgb(188,188,188);width:10%;text-align: center; visibility: hidden; font-weight: bold;font-family: "Abadi MT Condensed Light"" >×&nbsp;</div>`
+
+                    html += `<div id='${i}'onmouseover="hovers('${chatId}',${i})" onmouseout="leaves('${chatId}',${i})" onclick="DeleteChat('${chatId}','${isGroup}')"  style="margin-left: -5px;visibility: hidden;color:rgb(188,188,188);width:6%;text-align: center;  font-weight: bold;font-family: "Abadi MT Condensed Light"" >×&nbsp;</div>`
                     //
 
 
-                    html += isGroup ? `<div style="width:40px;height: 40px;border: solid 0px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:1px; overflow:hidden">
+                    html += isGroup ? `<div style="width:42px;height: 42px;border: solid 1px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:3px; overflow:hidden">
                                              ${imghtml}
                                       </div>&nbsp;&nbsp;
 
-                        <div id="One${chatId}" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 40px;margin-left: 0px;margin-top: 0px" >
-                               <div style="width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${re.name}</div>
-                               <div style="color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${data}</div>
+                        <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:126px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
+                               <div style="border:red solid 0px;width: 65px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${re.name}</div>
+                               <div style="border:red solid 0px;width: 60px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
+                               <div style="line-height:25px; color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${MsgsOneDataName}${data}</div>
                          </div>` :  person.pic ? `<img src="${person.pic}"  style="width:40px;height:40px;border-radius:0px;"/>&nbsp;&nbsp;
-                        <div id="One${chatId}" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 40px;margin-left: 0px;margin-top: 0px" >
-                               <div style="width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${person.name}</div>
-                               <div style="color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${data}</div>
+                        <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:126px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
+                               <div style="width: 65px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${person.name}</div>
+                               <div style="width: 60px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
+                               <div style="line-height:25px;color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
                         : `<img src="../images/1024x1024.png"  style="width:40px;height:40px;border-radius:0px;"/>&nbsp;&nbsp;
-                         <div id="One${chatId}" style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 40px;margin-left: 0px;margin-top: 0px" >
-                               <div style="width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${person.name}</div>
-                               <div style="color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${data}</div>
+                         <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:126px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
+                               <div style="width: 65px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${person.name}</div>
+                               <div style="width: 60px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
+                               <div style="line-height:25px;color:rgb(128,128,128);width: 110px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
                     // person.pic ? `<img src="${person.pic}"  style="width:40px;height:40px;border-radius:50px;"/>&nbsp;&nbsp;<span style="font-weight: bold;margin-top: -20px">${person.name}</span>`
                     // : `<img src="../images/1024x1024.png"  style="width:40px;height:40px;border-radius:50px;"/>&nbsp;&nbsp;<span style="font-weight: bold;margin-top: -20px">${person.name}</span><div id="One${chatId}" style="font-size:12px;color:rgb(128,128,128);overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:120px;height: 20px;margin-left: -40px;margin-top: 20px" >${data}</div>`
@@ -272,7 +293,7 @@
                     // console.log({newMsgNum})
                     if (newMsgNum) {
                         // console.log('here')
-                        html += `<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: -15px;margin-bottom: 15px'>${newMsgNum}</div>`;
+                        html += `<div style='color:white;font-size: 9pt;border:1px solid red;min-width:15px;height:15px;text-align: center;line-height: 15px;border-radius: 15px;background-color: red;margin-left: -140px;margin-bottom: 35px'>${newMsgNum}</div>`;
                     }
                     html += `</div>`;
                 }
