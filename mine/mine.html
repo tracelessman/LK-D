@@ -22,16 +22,13 @@
       function restart() {
         window.top.ipc.send("restart");
       }
-      function _clear() {
+      async function _clear() {
 
-        window.top.engine.getChatManager().clear().then(function () {
-          // fixme: restart should await resetTable
-          resetTable()
-          restart()
-          // window.top.document.location.reload();
-
-            });
-        }
+        await window.top.engine.getChatManager().clear()
+        await resetTable()
+        restart()
+        // window.top.document.location.reload();
+      }
 
         function _reset() {
           window.top.engine.getApplication().getCurrentApp().asyUnRegister().then(function () {
@@ -40,7 +37,7 @@
         }
 
         function resetTable() {
-          window.top.TopUtil.dropExtraTable()
+         return window.top.TopUtil.dropExtraTable()
 
         }
 
