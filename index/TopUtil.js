@@ -4,7 +4,8 @@ class TopUtil {
     const tableAry = [
       'contact', 'device', 'group_record_state',
       'magicCode', 'mfapply', 'org', 'groupMemeber',
-      'record']
+      'record', 'chat', 'flowCursor', 'mfapply'
+    ]
     for (let ele of tableAry) {
       const sql = `
       drop table ${ele}
