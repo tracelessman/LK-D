@@ -265,8 +265,8 @@
       "version":"0.0.53",
       "files":[
          "mine/mine.html",
-        "index/TopUtil.js"
-
+        "index/TopUtil.js",
+        "index/index.bundle.js"
       ],
       "detail":["test"]
     }
