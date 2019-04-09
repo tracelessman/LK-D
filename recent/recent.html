@@ -220,37 +220,16 @@
                     if (isGroup) {
                         var Imgdata = await ContactManager.asyGetgroupMemberImg(chatId)
                         for (var j = 0; j < Imgdata.length; j++) {
-                            if (Imgdata.length === 3) {
-                                imghtml += Imgdata[j].pic === null || Imgdata[j].pic === ""  ? Imgdata[j] === Imgdata[0] ?
-                                    `<div style="margin-left:10px;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                                             </div>` :
-                                    `<div style="margin:0px;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                                             </div>` : Imgdata[j] === Imgdata[0] ?
-                                    `<div style="margin-left:10px;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                                             </div>` :
-                                    `<div style="margin:0px;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                                             </div>`
-                            } else if (Imgdata.length === 2) {
-                                imghtml += Imgdata[j].pic === null|| Imgdata[j].pic === "" ?
-                                    `<div style="margin-top:10px;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                                             </div>` :
-                                    `<div style="margin-top:10px;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                                             </div>`
-                            } else {
-                                imghtml += Imgdata[j].pic === null|| Imgdata[j].pic === "" ?
-                                    `<div style="margin:0;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="../images/1024x1024.png" style="width:20px;height:20px;">
-                                             </div>` :
-                                    `<div style="margin:0;padding:0;float:left;width:20px;height: 20px;">
-                                             <img src="${Imgdata[j].pic}" style="width:20px;height:20px;">
-                                             </div>`
-                            }
+                             if (Imgdata.length === 3) {
+                             imghtml += `<div style="${Imgdata[j] === Imgdata[0] ?'width:40px;text-align:center':'width:20px'};margin:0;padding:0;float:left;;height: 20px;border:red 0px solid">
+                                          <img src="${Imgdata[j].pic === null|| Imgdata[j].pic === "" ? '../images/1024x1024.png':Imgdata[j].pic}" style="width:20px;height:20px;">
+                                         </div>`
+                             }else {
+                             imghtml +=`<div style="${Imgdata.length === 2?'margin-top:10px':'margin:0'};padding:0;float:left;width:20px;height: 20px;border:0px solid red">
+                                         <img src="${Imgdata[j].pic === null|| Imgdata[j].pic === "" ? '../images/1024x1024.png':Imgdata[j].pic}" style="width:20px;height:20px;">
+                                        </div>`
+                             }
+
 
                         }
                     }

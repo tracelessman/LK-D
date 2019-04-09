@@ -371,22 +371,22 @@
             const record = records[i]
             const {senderUid} = record
             if (senderUid !== userId) {
-                html += "<div style=\"display: flex;flex-direction: row;justify-content: flex-start;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
+                html += "<div style=\"border:0px solid red;display: flex;flex-direction: row;justify-content: flex-start;align-items: flex-start;width: 100%;margin-top: 10px;margin-bottom: 10px\">";
                 let p
 
               p = await ContactManager.asyGet(userId, senderUid)
 
 
               if(p.pic){
-                    html += "<img src='"+p.pic+"' style='margin-left:10px;margin-right:5px;width:40px;height:40px;border-radius: 20px;'>";
+                    html += "<img src='"+p.pic+"' style='margin-left:10px;margin-right:5px;width:40px;height:40px;border-radius: 4px;'>";
                 }else{
-                    html += "<div style=\"text-align:center;margin-left:10px;margin-right:5px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:palevioletred;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
+                    html += "<div style=\"text-align:center;margin-left:10px;margin-right:5px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:palevioletred;border-radius: 4px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
                     html += p.name;
                     html += "</div></div>";
                 }
-
-                html += "<div style='width:11px;height:18px;background-image: url(../images/chat-y-l.png);margin-top: 11px'></div>";
-                html += "<div style=\"max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
+                html += `<div style='border: 0px solid red;color:rgb(128,128,128);overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:80px;height:18px;margin-left: 15px;margin-top: 0px;float:left'>${p.name}</div>`;
+                html += "<div style='border: 0px solid red;width:11px;height:18px;background-image: url(../images/chat-y-l.png);margin-top: 31px;margin-left: -95px'></div>";
+                html += "<div style=\"border: 0px solid red;margin-top: 20px;max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #f9e160\">";
                 const {element} = _getMessage(records[i])
                 html += element;
                 html += "</div>";
@@ -396,7 +396,7 @@
                 html+="<i id='msgState' onclick=\"onMsgStateTouch('"+records[i].id+"')\"  class=\"material-icons\" style='font-size: 16px;line-height: 40px;color:#737373;margin-right: 5px;"+((isGroupChat||records[i].state==ChatManager.MESSAGE_STATE_SERVER_NOT_RECEIVE)?"cursor: pointer":"")+"'>";
                 html+=getIconNameByState(records[i].state);
                 html+="</i>";
-                html += "<div style=\"max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
+                html += "<div style=\"border: 0px solid red;max-width:300px;min-height:40px;border-radius: 5px;overflow-wrap: break-word;overflow: hidden;padding: 12px 10px;background-color: #ffffff\">";
 
               const {element} = _getMessage(records[i])
               html += element;
@@ -404,9 +404,9 @@
                 html+="</div>";
                 html += "<div style='width:11px;height:18px;background-image: url(../images/chat-w-r.png);margin-top: 11px'></div>";
                 if(user.pic){
-                    html += "<img src='"+user.pic+"' style='margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 20px;'>";
+                    html += "<img src='"+user.pic+"' style='border: 0px solid red;margin-left:5px;margin-right:10px;width:40px;height:40px;border-radius: 0px;'>";
                 }else{
-                    html += "<div style=\"text-align:center;margin-left:5px;margin-right:10px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:dodgerblue;border-radius: 20px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
+                    html += "<div style=\"text-align:center;margin-left:5px;margin-right:10px;width:40px;height:40px;padding:0px 5px; line-height:40px;background-color:dodgerblue;border-radius: 0px;color: white;white-space: nowrap;font-size: 10px\"><div style='width:30px;overflow: hidden;text-overflow: ellipsis'>";
                     html += user.name;
                     html += "</div></div>";
                 }
