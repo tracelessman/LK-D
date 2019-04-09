@@ -182,6 +182,7 @@
     const ChatManager = engine.get('ChatManager')
     const ContactManager = engine.get('ContactManager')
     const channel = lkapp.getLKWSChannel()
+    const config = window.top.config
     initFaces();
     var ps = document.location.href.substring(document.location.href.indexOf("?")+1);
 
@@ -396,7 +397,7 @@
       document.getElementById("records").style.visibility = 'visible'
     }
     async function refreshRecordList() {
-      const recordAry = await ChatManager.asyGetMsgs(userId, otherId, 1000)
+      const recordAry = await ChatManager.asyGetMsgs(userId, otherId, config.recordNumber)
       relativeMsgId = null
       const msgOtherSideAry = recordAry.filter(msg => {
         return msg.senderUid !== userId

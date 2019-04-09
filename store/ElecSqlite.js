@@ -3,9 +3,11 @@ const path = require("path");
 const fs = require('fs');
 const sqlite3 = require("../asars/sqlite3.asar");
 
+const {dbFilePath} = require('../config')
+
 let dbName = engine.getApplication().getCurrentApp().getName()||"default";
 
-let db = new sqlite3.cached.Database(path.join(__dirname, dbName+".db"));
+let db = new sqlite3.cached.Database(dbFilePath)
 
 let ensureDirs = function (rootPath,dir) {
     let dirs = dir.split('/');
