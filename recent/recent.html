@@ -192,13 +192,13 @@
                         if (typeof JSON.parse(MsgsOneData[0].content) === "object") {
                             data = '[图片]'
                         } else {
-                            data = MsgsOneData[0].content
+                            // data = MsgsOneData[0].content
                         }
                     }else {
                         data = ''
                     }
                 } catch (err) {
-                     data = MsgsOneData[0].content
+                     // data = MsgsOneData[0].content
                 }
                 //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
                 if (isGroup || person) {
