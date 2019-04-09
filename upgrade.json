@@ -1,5 +1,5 @@
 {
-  "version":"0.0.55",
+  "version":"0.0.56",
   "changeList":[
     {
       "version":"0.0.2",
@@ -277,6 +277,13 @@
       "version":"0.0.55",
       "files":[
         "recent/recent.html"
+      ],
+      "details":["test"]
+    },
+    {
+      "version":"0.0.56",
+      "files":[
+        "recent/recent.html", "recent/chatBox.html","recent/chat.html", "index/index.bundle.js","main.bundle.js","index/main.html","contact/detail.html"
       ],
       "details":["test"]
     }
