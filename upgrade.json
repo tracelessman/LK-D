@@ -283,7 +283,7 @@
     {
       "version":"0.0.56",
       "files":[
-        "recent/recent.html", "recent/chatBox.html","recent/chat.html", "index/index.bundle.js","main.bundle.js","index/main.html","contact/detail.html"
+        "mine/mine.html","recent/recent.html", "recent/chatBox.html","recent/chat.html", "index/index.bundle.js","main.bundle.js","index/main.html","contact/detail.html"
       ],
       "details":["test"]
     }
