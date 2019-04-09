@@ -189,9 +189,9 @@
                 var timeStr='';
                 var now = new Date();
                 try {
-                    if (MsgsOneData.length!==0) {
-                        MsgsOneDataName = MsgsOneData[0].name+': '
-                        lastSpTime=MsgsOneData[0].sendTime
+                    if (MsgsOneData!==null) {
+                        MsgsOneDataName = MsgsOneData.name+': '
+                        lastSpTime=MsgsOneData.sendTime
                         if(lastSpTime){
                             var date = new Date();
                             date.setTime(lastSpTime);
@@ -203,16 +203,16 @@
                             }
 
                         }
-                        if (typeof JSON.parse(MsgsOneData[0].content) === "object") {
+                        if (typeof JSON.parse(MsgsOneData.content) === "object") {
                             data = '[图片]'
                         } else {
-                            data = MsgsOneData[0].content
+                            data = MsgsOneData.content
                         }
                     }else {
                         data = ''
                     }
                 } catch (err) {
-                    data = MsgsOneData[0].content
+                    data = MsgsOneData.content
                 }
                 //存在清空消息记录后contact表没同步过来,但是消息已收到的情况
                 if (isGroup || person) {
