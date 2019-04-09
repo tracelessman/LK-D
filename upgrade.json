@@ -1,5 +1,5 @@
 {
-  "version":"0.0.53",
+  "version":"0.0.54",
   "changeList":[
     {
       "version":"0.0.2",
@@ -265,7 +265,13 @@
       "version":"0.0.53",
       "files":[
          "mine/mine.html",
-        "index/TopUtil.js",
+        "index/TopUtil.js"
+      ],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.54",
+      "files":[
         "index/index.bundle.js"
       ],
       "detail":["test"]
