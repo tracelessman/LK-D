@@ -57,8 +57,7 @@
 </head>
 <body style="padding:10px">
 <div style="width:100%;height:100%;display: flex;flex-direction: column;justify-content: center;align-items: center">
-    <div style="position: absolute;right:90px;top:80px;"><img style="width:70px;height:70px;border-radius:100px;" id="pic"
-   src="../images/traceless.png" />
+    <div style="position: absolute;right:90px;top:80px;"><img style="width:70px;height:70px;border-radius:4px;" id="pic"/>
     </div>
     <div style="position: absolute;left:90px;top:100px;font-family: 'Times New Roman'; font-size: 20px;font-weight:bold;width: 230px;height: 70px" id="name"></div>
     <div style="position: absolute;left:90px;top:180px;right:90px;">
@@ -91,6 +90,11 @@
 </body>
 <script>
     let user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
+    if (user.pic === null){
+        document.getElementById("pic").src = '../images/1024x1024.png'
+    }else {
+        document.getElementById("pic").src = user.pic
+    }
     if(user){
         document.getElementById("id").innerText = user.id;
         document.getElementById("deviceId").innerText = user.deviceId;
