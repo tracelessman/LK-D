@@ -11,13 +11,14 @@ const config = {
   checkUpdateUrl:'http://193.112.250.147:3000/public/LK-D/upgrade.json',
   minWidth,
   minHeight,
-  isDev: true, // 是否开发模式
+  isDev: false, // 是否开发模式
   checkUpdateTimeout: 1000 * 5
 }
 
-// const unversionedPath = path.resolve(__dirname, 'unversioned.js')
-// if (fs.existsSync(unversionedPath)) {
-//   _.merge(config, require(unversionedPath))
-// }
+const unversionedPath = path.resolve(__dirname, 'unversioned.js')
+if (fs.existsSync(unversionedPath)) {
+  Object.assign(config, require(unversionedPath))
+}
+
 Object.freeze(config)
 module.exports = config

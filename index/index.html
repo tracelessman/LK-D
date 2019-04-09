@@ -39,67 +39,66 @@
 
     <script src="./custom.js"></script>
     <script src="./dev.js"></script>
-    <script>
-        let LKApplication = engine.getApplication();
-        let db = require('../store/ElecSqlite');
-        LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON);
-        // const Uploader = require('./upload/Uploader')
-        // LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON, Uploader);
-    </script>
 </head>
 <body style="overflow: hidden">
 <div class="titlebar" style=""><div class="tools-area"></div></div>
 <iframe id="frame" style="width:100%;height:100%;" frameborder="0"></iframe>
 </body>
 <script>
-  let userId
-  engine.getUserManager().asyGetAll().then(function (users) {
+    start()
+    async function start () {
+      let LKApplication = engine.getApplication();
+      let db = require('../store/ElecSqlite');
+      // 等待数据库初始化完毕
+      await LKApplication.getCurrentApp().start(db,LKApplication.PLATFORM_ELECTRON);
+
+      let userId
+      engine.getUserManager().asyGetAll().then(async (users) => {
         if(users&&users.length>0){
-            let cur = users[0];
+          let cur = users[0];
           userId = cur.id
-            LKApplication.getCurrentApp().setCurrentUser(cur);
-            window.theme = document.body.className = "left";
-            document.getElementById("frame").src="main.html";
+          await LKApplication.getCurrentApp().setCurrentUser(cur);
+          window.theme = document.body.className = "left";
+          document.getElementById("frame").src="main.html";
         }else{
-            document.getElementById("frame").src="register.html";
+          document.getElementById("frame").src="register.html";
         }
-    }).catch(function (err) {
+      }).catch(function (err) {
         alert(err)
-    })
+      })
 
-    var notifyNewMsg = function (ary) {
-      // filter sync message by other devices
-        const isFromOther = ary.some(ele => {
-          return !ele.isFromSelf
-        })
-      if (isFromOther) {
+      var notifyNewMsg = function (param) {
+        // filter sync message by other devices of oneself
+        if (!param.isFromSelf) {
+          engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
+            // console.log({num})
+            ipc.send("messageReceive",{total:num});
+
+            const notification = {
+              title: "新消息",
+              body: "您有新的LK消息，请注意查收"
+            }
+            if (process.env.NODE_ENV === 'development') {
+              notification.icon = '../images/test.png'
+            }
+            new window.Notification(notification.title, notification);
+          })
+        }
+      }
+
+      var notifyReadMsg = function () {
         engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
-          // console.log({num})
-          ipc.send("messageReceive",{total:num});
-
-          const notification = {
-            title: "新消息",
-            body: "您有新的LK消息，请注意查收"
-          }
-          if (process.env.NODE_ENV === 'development') {
-            notification.icon = '../images/test.png'
-          }
-          new window.Notification(notification.title, notification);
+          ipc.send("messageRead", {total: num});
         })
       }
-    }
+      engine.getChatManager().on("msgReceived",notifyNewMsg);
+      engine.getChatManager().on("msgRead",notifyReadMsg);
 
-    var notifyReadMsg = function () {
-        engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
-            ipc.send("messageRead", {total: num});
-        })
-    }
-    engine.getChatManager().on("msgReceived",notifyNewMsg);
-    engine.getChatManager().on("msgRead",notifyReadMsg);
-
-    var checkVersion = function () {
+      var checkVersion = function () {
         window.top.ipc.send("upgrade-request",{toIndexIFNot:false});
+      }
+      LKApplication.getCurrentApp().on("currentUserChanged",checkVersion)
     }
-    LKApplication.getCurrentApp().on("currentUserChanged",checkVersion);
+
 </script>
 </html>

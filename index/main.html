@@ -80,7 +80,6 @@
 
         }
         function selectNavigator(name){
-
             if(selected){
                 document.getElementById(selected).style.color="#d0d0d0";
             }
@@ -100,7 +99,11 @@
       </div>
 
       <div class="navigator">
-          <div style="flex:1;"></div>
+          <!--<div style="flex:1;"></div>-->
+          <div style="width:40px;height:80px;text-align: center;line-height: 80px;margin-top: 56px">
+              <div  style='display:none;position:absolute;left:30px;top:0px;font-size: 9pt;border:1px solid red;width:10px;height:10px;border-radius: 10px;background-color: red;'></div>
+              <img id ='userimg'  style="width:40px;height:40px;border-radius:2px;"/>&nbsp;
+          </div>
           <div style="width:40px;height:80px;text-align: center;line-height: 80px;position: relative">
               <div id="notify-msg-num" style='display:none;position:absolute;left:30px;color:white;font-size: 9pt;border:1px solid red;min-width:20px;height:20px;text-align: center;line-height: 17px;border-radius: 10px;background-color: red;'>1</div>
               <i id="recent" class="material-icons" style="color: #f9e160;font-size: 32px;cursor: pointer;position: relative;" onmouseover="hoverNavigator('recent')" onmouseout="leaveNavigator('recent')" onclick="selectNavigator('recent')">
@@ -130,6 +133,12 @@
   </body>
 <script>
     document.body.className = window.top.theme;
+    let user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
+    if (user.pic === null){
+        document.getElementById("userimg").src = '../images/1024x1024.png'
+    }else {
+        document.getElementById("userimg").src = user.pic
+    }
     const {engine} = window.top
     const ChatManager = engine.getChatManager();
 

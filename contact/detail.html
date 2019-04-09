@@ -78,7 +78,7 @@
             var all = await ChatManager.asyGetGroupMembers(id)
             for (var i = 0; i < all.length; i++) {
                 var m = all[i];
-                html += "<div style=\"width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">";
+                html += `<div style="width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">`;
                 html += "<div >";
                 html += m.name;
                 html += "</div><div style=\"width:300px;padding-left: 30px\">";
