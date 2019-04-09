@@ -36,7 +36,9 @@
 
         document.write(`<script src="${indexEntry}" />`)
     </script>
-
+    <script>
+        //fixme: next script is ignored after document.write
+    </script>
     <script src="./custom.js"></script>
     <script src="./dev.js"></script>
 </head>
@@ -57,7 +59,12 @@
         if(users&&users.length>0){
           let cur = users[0];
           userId = cur.id
-          await LKApplication.getCurrentApp().setCurrentUser(cur);
+          try {
+            await LKApplication.getCurrentApp().setCurrentUser(cur);
+
+          }catch(err){
+            console.log({err})
+          }
           window.theme = document.body.className = "left";
           document.getElementById("frame").src="main.html";
         }else{
