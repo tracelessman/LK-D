@@ -219,6 +219,7 @@
                     let imghtml = ``
                     if (isGroup) {
                         var Imgdata = await ContactManager.asyGetgroupMemberImg(chatId)
+                      Imgdata = Imgdata.slice(0,4)
                         for (var j = 0; j < Imgdata.length; j++) {
                              if (Imgdata.length === 3) {
                              imghtml += `<div style="${Imgdata[j] === Imgdata[0] ?'width:40px;text-align:center':'width:20px'};margin:0;padding:0;float:left;;height: 20px;border:red 0px solid">
@@ -243,17 +244,20 @@
 
 
                     html += isGroup ?
-                        `<div style="width:42px;height: 42px;border: solid 1px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:3px; overflow:hidden">
+                        `<div style="width:43px;height: 43px;border: solid 1px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:3px; overflow:hidden">
                                ${imghtml}
                          </div>&nbsp;&nbsp;
                         <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:171px;height: 40px;margin-left: 4px;margin-top: 0px;float: left" >
-                               <div style="border:red solid 0px;width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${re.name}</div>
-                               <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
+
+                                <div style="border:red solid 0px;width: 95px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${re.name}</div>
+                               <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold;">${timeStr}</div>
+
+
                                <div style="border:red solid 0px;line-height:25px; color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${MsgsOneDataName}${data}</div>
                          </div>` :
                         `<img src="${person.pic?person.pic:'../images/1024x1024.png'}"  style="width:40px;height:40px;border-radius:0px;"/>&nbsp;&nbsp;
                         <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:171px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
-                               <div style="border:red solid 0px;width: 100px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${person.name}</div>
+                               <div style="border:red solid 0px;width: 95px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${person.name}</div>
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
                                <div style="border:red solid 0px;line-height:25px;color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
