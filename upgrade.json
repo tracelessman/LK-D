@@ -287,7 +287,16 @@
       "version":"0.0.56",
       "files":[
         "index/index.bundle.js",
-        "recent/recent.html"
+        "recent/recent.html",
+
+        "config/index.js",
+        "recent/chat.html",
+        "index/index.js",
+        "store/ElecSqlite.js",
+        "main.bundle.js",
+        "contact/contact.html",
+        "index/main.html",
+        "mine/mine.html"
       ],
       "detail":["test"]
     }
