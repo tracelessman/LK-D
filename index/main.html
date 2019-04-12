@@ -161,18 +161,10 @@
         window.top.ipc.removeListener("remoteVersion-response",doVersionResponse);
     });
 
-    var notifyMsg = function () {
-        ChatManager.asyGetAllMsgNotReadNum().then(function (num) {
-            if(num>0){
-                document.getElementById("notify-msg-num").innerText = num;
-                document.getElementById("notify-msg-num").style.display="";
-            }else{
-                document.getElementById("notify-msg-num").style.display="none";
-                document.getElementById("notify-msg-num").innerText = "";
-            }
-        })
-
+    function notifyMsg() {
+       refreshMsgNotReadNum()
     }
+    refreshMsgNotReadNum()
     ChatManager.on("msgReceived",notifyMsg);
     ChatManager.on("msgRead",notifyMsg);
 
@@ -180,6 +172,18 @@
        ChatManager.un("msgReceived",notifyMsg);
        ChatManager.un("msgRead",notifyMsg);
     });
+
+    function refreshMsgNotReadNum() {
+      ChatManager.asyGetAllMsgNotReadNum().then(function (num) {
+        if(num>0){
+          document.getElementById("notify-msg-num").innerText = num;
+          document.getElementById("notify-msg-num").style.display="";
+        }else{
+          document.getElementById("notify-msg-num").style.display="none";
+          document.getElementById("notify-msg-num").innerText = "";
+        }
+      })
+    }
 
 </script>
 </html>
