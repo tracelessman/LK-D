@@ -44,12 +44,11 @@
         function _upgrade() {
             window.top.ipc.send("upgrade-request");
         }
-let i  = 0
+
         function test() {
-        console.log('test')
-i++
+         console.log('test')
           new window.Notification('title', {
-            body: 'content ' + i,
+            body: 'content',
             icon: '../images/traceless.png'
           })
         }
@@ -83,9 +82,9 @@ i++
     <Button id="upgrade-btn" disabled="true" style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="_upgrade()">
         升级到最新 <span style="color:red" id="upgrade-tip"></span>
     </Button>
-    <Button style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="test()">
-      test
-    </Button>
+    <!--<Button style="width:300px;height:40px;border-radius: 5px;text-align: center;border: 1px solid #d0d0d0;line-height: 40px;margin-top: 20px;cursor: pointer;background-color: #f0f0f0" onclick="test()">-->
+      <!--test-->
+    <!--</Button>-->
 </div>
 </body>
 <script>

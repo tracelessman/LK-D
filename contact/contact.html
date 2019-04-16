@@ -116,14 +116,14 @@
 </script>
 <script>
 
-    async function refreshFriendList() {
+    async function refreshFriendList({shouldSelect = true} = {}) {
         const {engine} = window.top
         const lkapp = engine.getApplication().getCurrentApp()
         const user = lkapp.getCurrentUser()
         const ContactManager = engine.get('ContactManager')
         var all = await ContactManager.asyGetAllMembers(user.id)
         var html = "";
-        if (all) {
+        if (all && all.length) {
             for (var i = 0; i < all.length; i++) {
                 var f = all[i];
                 if (f.id !== user.id) {
@@ -147,7 +147,10 @@
                 }
             }
             document.getElementById("contact").innerHTML = html;
-            //select("0");
+            if (shouldSelect) {
+              const first = all[0]
+              select(first.id, first.name, first.pic)
+            }
         }
     }
 
