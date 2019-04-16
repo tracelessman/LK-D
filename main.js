@@ -345,7 +345,7 @@ ipc.on('upgrade-request', function (event, arg) {
         protocol: 'file:',
         slashes: true
       }))
-    } else if (arg.toIndexIFNot !== false) {
+    } else if (arg && arg.toIndexIFNot) {
       mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, pageDir + '/index/index.html'),
         protocol: 'file:',

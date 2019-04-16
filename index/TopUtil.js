@@ -4,7 +4,7 @@ class TopUtil {
     const tableAry = [
       'contact', 'device', 'group_record_state',
       'magicCode', 'mfapply', 'org', 'groupMember',
-      'record', 'chat', 'flowCursor'
+      'record', 'chat', 'flowCursor', 'db_version'
     ]
     const psAry = []
     for (let ele of tableAry) {
