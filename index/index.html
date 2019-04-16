@@ -80,10 +80,27 @@
           engine.getChatManager().asyGetAllMsgNotReadNum().then(function (num) {
             // console.log({num})
             ipc.send("messageReceive",{total:num});
-
+             var content = ''
+            try {
+                 if (param.content) {
+                     if (typeof JSON.parse(param.content) === "object") {
+                         if (JSON.parse(param.content).width!==undefined && JSON.parse(param.content).height!==undefined) {
+                             content = `${param.name}: [图片]`
+                         }else {
+                             content = `${param.name}: [语音消息]`
+                         }
+                     } else {
+                         content = `${param.name}: ${param.content}`
+                     }
+                 }else {
+                     content = ''
+                 }
+            }catch (e) {
+                content = `${param.name}: ${param.content}`
+            }
             const notification = {
               title: "新消息",
-              body: "您有新的LK消息，请注意查收"
+              body: content
             }
             if (process.env.NODE_ENV === 'development') {
               notification.icon = '../images/test.png'
