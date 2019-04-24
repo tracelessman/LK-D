@@ -55,7 +55,6 @@
                 }
             }else if(event.altKey&&event.keyCode==13){
                 event.preventDefault();
-
                 var selection = window.getSelection();
                 //selection.deleteFromDocument();
                 var range =  selection.getRangeAt(0);
@@ -116,6 +115,9 @@
         }
         window.onload = function() {
             document.body.focus();
+            var range = window.getSelection();//创建range
+            range.selectAllChildren(document.body);//range 选择obj下所有子内容
+            range.collapseToEnd();//光标移至最后
         };
         window.top.ipc.on("capture-complete",pasteImg);
         window.addEventListener("beforeunload", function (event) {
@@ -123,4 +125,4 @@
         });
     </script>
 </head>
-<body contenteditable="true"  onclick="cont()" onkeydown="paste()" style="background-color: rgb(243,243,243)"></body></html>
+<body contenteditable="true"  onclick="cont()" onkeydown="paste()" style="background-color: rgb(243,243,243)">&nbsp;&nbsp;&nbsp;</body></html>
