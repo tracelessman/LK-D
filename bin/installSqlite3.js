@@ -1,25 +1,30 @@
-const {CliUtil} = require('@ys/collection')
-const {execSync} = CliUtil
+//const { CliUtil } = require('@ys/collection')
+
+//const { execSync } = CliUtil
 const fse = require('fs-extra')
 const path = require('path')
+
 const rootDir = path.resolve(__dirname, '../')
 const nodeModules = path.resolve(rootDir, 'node_modules')
 const electronFolder = path.resolve(nodeModules, 'electron')
 const childProcess = require('child_process')
+
 const packageJSON = require(path.resolve(rootDir, 'package.json'))
 const debug = require('debug')('debug')
+
 const constant = require(path.resolve(rootDir, 'constant'))
 const _ = require('lodash')
+
 const resource = path.resolve(rootDir, 'resource')
-const {sqliteFileName, electronDistUrl, platform} = constant
+const { sqliteFileName, electronDistUrl, platform } = constant
 const semver = require('semver')
 const chalk = require('chalk')
 
 const electronVersion = getElectronVersion()
-debug({electronVersion})
+debug({ electronVersion })
 // npm i sqlite3 --runtime=electron --target=3.0 --dist-url=https://atom.io/download/electron
 const cmd = `npm i sqlite3 --runtime=electron --target=${electronVersion} --dist-url=${electronDistUrl}`
-debug({cmd})
+debug({ cmd })
 childProcess.execSync(cmd)
 
 console.log(chalk.green(`sqlite3 installed successfully`))
@@ -27,11 +32,9 @@ console.log(chalk.green(`sqlite3 installed successfully`))
 moveToResource()
 
 function moveToResource () {
-  const folderName = _.findKey(platform, v => {
-    return v === process.platform
-  })
+  const folderName = _.findKey(platform, v => v === process.platform)
   const dest = path.resolve(resource, folderName, sqliteFileName)
-  const sqliteNodeFolderName = getSqliteNodeFolderName({electronVersion})
+  const sqliteNodeFolderName = getSqliteNodeFolderName({ electronVersion })
   const sqilteNodeFolder = path.resolve(nodeModules, 'sqlite3/lib/binding', sqliteNodeFolderName)
   fse.ensureDirSync(sqilteNodeFolder)
   const src = path.resolve(sqilteNodeFolder, sqliteFileName)
@@ -39,7 +42,7 @@ function moveToResource () {
   console.log(chalk.blue(`move builded file to ${dest}, it should be committed`))
 }
 
-function getSqliteNodeFolderName ({electronVersion}) {
+function getSqliteNodeFolderName ({ electronVersion }) {
   const major = semver.major(electronVersion)
   const minor = semver.minor(electronVersion)
   const infrastructure = getInfrastructure()
@@ -60,7 +63,7 @@ function getElectronVersion () {
     ).toString()
     result = str.split('electron@')[1].trim()
   } else {
-    const {electron} = packageJSON.devDependencies
+    const { electron } = packageJSON.devDependencies
     if (electron) {
       result = electron
     } else {

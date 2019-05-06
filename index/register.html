@@ -20,110 +20,110 @@
 <div style="flex:2;padding-top: 30px" id="msg">扫描授权</div>
 </body>
 <script>
-    var min=2000;
-    var max=9999;
-    var port = 0;
-    function randomPort(){
-        return Math.floor(Math.random()*(max-min+1)+min);
+    const min = 2000;
+    const max = 9999;
+    let port = 0;
+    function randomPort() {
+      return Math.floor(Math.random() * (max - min + 1) + min);
     }
-    function newServer(){
-        try{
-            port = randomPort();
-            var ws = new window.top.ws.Server({port:port});
-            return ws;
-        }catch(e){
-            console.info(e);
-            return newServer();
-        }
+    function newServer() {
+      try {
+        port = randomPort();
+        const ws = new window.top.ws.Server({ port });
+        return ws;
+      } catch (e) {
+        console.info(e);
+        return newServer();
+      }
     }
 
-    var server = newServer();
+    const server = newServer();
 
     server.on('connection', (ws, req) => {
-        ws.on('message', (message) => {
-            document.getElementById("msg").innerText="授权中...";
-            var msg = JSON.parse(message);
-            var cid = window.top.UUID();
-            // console.log({msg})
-          const {deviceId, id, serverPort, serverIP, name} = msg
-          const {engine, RSAKey} = window.top
-          const lkapp = engine.getApplication().getCurrentApp()
+      ws.on('message', (message) => {
+        document.getElementById("msg").innerText = "授权中...";
+        const msg = JSON.parse(message);
+        const cid = window.top.UUID();
+        // console.log({msg})
+        const {
+          deviceId, id, serverPort, serverIP, name
+    } = msg
+        const { engine, RSAKey } = window.top
+        const lkapp = engine.getApplication().getCurrentApp()
 
-          const bits = 1024
-          const exponent = '10001'
-          let rsa = new RSAKey()
-          rsa.generate(bits, exponent)
-          const publicKey = rsa.getPublicString()
-          const privateKey = rsa.getPrivateString()
-          const user = {
-            id,
-            name,
-            serverPort,
-            serverIP,
-            deviceId: cid,
-            publicKey,
-            privateKey
-          }
-          // console.log({user})
-          lkapp.asyAuthorize(user,deviceId,'').then(() => {
-            var data={};
-            data.state=1;
-            data.msg = "授权成功";
-            ws.send(JSON.stringify(data));
-            document.getElementById("msg").innerText="授权成功";
-            setTimeout(function () {
-              server.close();
-              window.top.location.reload();
-            },2000)
-
-          }).catch(err => {
-            console.log({err})
-            const {error} = err
-
-            var data={};
-            if (error) {
-              data.msg = error.toString();
-            } else {
-              data.msg = "服务器错误，请联系管理员:"+err;
-            }
-            data.state=0;
-            ws.send(JSON.stringify(data));
-            document.getElementById("msg").innerText=data.msg;
-          })
-
-        })
-        ws.on('close',function (msg) {
-        })
-    });
-    server.on('error',function (err) {
-        console.info("ws server error:"+err);
-    });
-
-    window.addEventListener("beforeunload", function (event) {
-        server.close();
-    });
-
-    function getIPAdress(){
-        var ips=[];
-        var interfaces = window.top.os.networkInterfaces();
-        for(var devName in interfaces){
-            var iface = interfaces[devName];
-            for(var i=0;i<iface.length;i++){
-                var alias = iface[i];
-                if(alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal){
-                    ips.push(alias.address);
-                }
-            }
+        const bits = 1024
+        const exponent = '10001'
+        const rsa = new RSAKey()
+        rsa.generate(bits, exponent)
+        const publicKey = rsa.getPublicString()
+        const privateKey = rsa.getPrivateString()
+        const user = {
+          id,
+          name,
+          serverPort,
+          serverIP,
+          deviceId: cid,
+          publicKey,
+          privateKey
         }
-        return ips;
+        // console.log({user})
+        lkapp.asyAuthorize(user, deviceId, '').then(() => {
+          const data = {};
+          data.state = 1;
+          data.msg = "授权成功";
+          ws.send(JSON.stringify(data));
+          document.getElementById("msg").innerText = "授权成功";
+          setTimeout(() => {
+            server.close();
+            window.top.location.reload();
+          }, 2000)
+        }).catch((err) => {
+          console.log({ err })
+          const { error } = err
+
+          const data = {};
+          if (error) {
+            data.msg = error.toString();
+          } else {
+            data.msg = "服务器错误，请联系管理员:" + err;
+          }
+          data.state = 0;
+          ws.send(JSON.stringify(data));
+          document.getElementById("msg").innerText = data.msg;
+        })
+      })
+      ws.on('close', (msg) => {
+  })
+    });
+    server.on('error', (err) => {
+  console.info("ws server error:" + err);
+});
+
+    window.addEventListener("beforeunload", (event) => {
+    server.close();
+});
+
+    function getIPAdress() {
+      const ips = [];
+      const interfaces = window.top.os.networkInterfaces();
+      for (const devName in interfaces) {
+        const iface = interfaces[devName];
+        for (let i = 0; i < iface.length; i++) {
+          const alias = iface[i];
+          if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+            ips.push(alias.address);
+          }
+        }
+      }
+      return ips;
     }
-    //var code = window.top.qr.image("test",{type:"png"});
-    var data = {};
-    data.code="LK";
-    data.action="authorize";
-    data.addresses=getIPAdress();
+    // var code = window.top.qr.image("test",{type:"png"});
+    const data = {};
+    data.code = "LK";
+    data.action = "authorize";
+    data.addresses = getIPAdress();
     data.port = port;
-    var svg_string = window.top.qr.imageSync(JSON.stringify(data), { type: 'svg',size:5});
+    const svg_string = window.top.qr.imageSync(JSON.stringify(data), { type: 'svg', size: 5 });
     document.getElementById("content").innerHTML = svg_string;
 </script>
 </html>

@@ -2,28 +2,30 @@ const electron = require('electron')
 const contextMenu = require('electron-context-menu')
 
 // Module to control application life.
-const app = electron.app
+const { app } = electron
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const { BrowserWindow } = electron
 const ipc = require('electron').ipcMain
 const fse = require('fs-extra')
 
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
-const nativeImage = require('electron').nativeImage
-const net = electron.net
-const dialog = electron.dialog
+const { nativeImage } = require('electron')
+
+const { net } = electron
+const { dialog } = electron
 const originalFs = require('original-fs')
-const globalShortcut = electron.globalShortcut
+
+const { globalShortcut } = electron
 const pageDir = ''
 const packageJSON = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf8'))
 
 const isProduction = __dirname.includes('Resources/app/')
 const config = require('./config/index')
-const {getGoldenHeight} = require('./util/Independent')
+const { getGoldenHeight } = require('./util/Independent')
 
-const {minWidth, minHeight, checkUpdateTimeout} = config
+const { minWidth, minHeight, checkUpdateTimeout } = config
 
 contextMenu({
   labels: {
@@ -33,7 +35,7 @@ contextMenu({
     save: '保存',
     copyLink: '复制链接',
     copyImageAddress: '复制图片地址',
-    inspect: 'Inspect'
+    inspect: 'inspect'
   },
   showInspectElement: !isProduction
 })
@@ -41,7 +43,7 @@ contextMenu({
 function isDev () {
   const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV) === 1
   const isEnvSet = 'ELECTRON_IS_DEV' in process.env
-  return isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath))
+  return isEnvSet ? getFromEnv : process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath)
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -69,7 +71,7 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  checkUpdate(function (hasNew) {
+  checkUpdate((hasNew) => {
     if (hasNew) {
       mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, pageDir + '/index/update.html'),
@@ -88,17 +90,17 @@ function createWindow () {
   // mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
   })
 
-  mainWindow.on('focus', function () {
+  mainWindow.on('focus', () => {
     mainWindow.webContents.send('mainWindow-focus')
   })
-  mainWindow.on('blur', function () {
+  mainWindow.on('blur', () => {
     mainWindow.webContents.send('mainWindow-blur')
   })
 }
@@ -124,7 +126,7 @@ app.on('will-quit', () => {
 })
 
 // Quit when all windows are closed.
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -132,7 +134,7 @@ app.on('window-all-closed', function () {
   }
 })
 
-app.on('activate', function () {
+app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
@@ -140,30 +142,30 @@ app.on('activate', function () {
   }
 })
 
-ipc.on('openFileDialog', function (event) {
-  let result = dialog.showOpenDialog({properties: ['openFile']})
+ipc.on('openFileDialog', (event) => {
+  const result = dialog.showOpenDialog({ properties: ['openFile'] })
   if (result && result.length > 0) {
-    fs.readFile(result[0], function (err, buf) {
+    fs.readFile(result[0], (err, buf) => {
       if (err) {
         console.error(err)
       }
       if (buf) {
-        let data = buf.toJSON().data
-        let tmp = result[0].split(/[\\|\/]/ig)
+        const { data } = buf.toJSON()
+        const tmp = result[0].split(/[\\|\/]/ig)
 
-        event.sender.send('openFileDialog-response', {data, name: tmp[tmp.length - 1]})
+        event.sender.send('openFileDialog-response', { data, name: tmp[tmp.length - 1] })
       }
     })
   }
 })
 
 let imageBrowser
-ipc.on('openImageBrowser', function (event, arg) {
+ipc.on('openImageBrowser', (event, arg) => {
   global.imageHtml = arg.html
   if (!imageBrowser) {
     imageBrowser = new BrowserWindow()
 
-    imageBrowser.on('closed', function () {
+    imageBrowser.on('closed', () => {
       // Dereference the window object, usually you would store windows
       // in an array if your app supports multi windows, this is the time
       // when you should delete the corresponding element.
@@ -194,7 +196,7 @@ function openCaptureBrowser () {
       height: 0,
       alwaysOnTop: true
     })
-    captureBrowser.on('closed', function () {
+    captureBrowser.on('closed', () => {
       captureBrowser = null
     })
   }
@@ -206,15 +208,15 @@ function openCaptureBrowser () {
   // captureBrowser.setFullScreen(true)
 }
 
-ipc.on('openCaptureBrowser', function () {
+ipc.on('openCaptureBrowser', () => {
   openCaptureBrowser()
 })
 
-ipc.on('showCaptureBrowser', function () {
+ipc.on('showCaptureBrowser', () => {
   captureBrowser.setFullScreen(true)
   captureBrowser.show()
 })
-ipc.on('closeCaptureBrowser', function (event, arg) {
+ipc.on('closeCaptureBrowser', (event, arg) => {
   if (captureBrowser) {
     captureBrowser.minimize()
     captureBrowser.close()
@@ -231,18 +233,18 @@ if (app.dock) {
   } else {
     imagePath = path.join(__dirname, '/images/traceless.png')
   }
-  let image = nativeImage.createFromPath(imagePath)
+  const image = nativeImage.createFromPath(imagePath)
   app.dock.setIcon(image)
 }
 
-ipc.on('messageReceive', function (event, arg) {
+ipc.on('messageReceive', (event, arg) => {
   if (app.dock) {
     if (arg.total) {
       app.dock.setBadge(arg.total + '')
     }
   }
 })
-ipc.on('messageRead', function (event, arg) {
+ipc.on('messageRead', (event, arg) => {
   if (app.dock) {
     if (arg.total) {
       app.dock.setBadge(arg.total + '')
@@ -255,14 +257,14 @@ let latestVersion
 let files = []
 
 function compareVersion (v1, v2) {
-  let v1s = v1.split('.')
-  let v2s = v2.split('.')
+  const v1s = v1.split('.')
+  const v2s = v2.split('.')
   for (let i = 0; i < 3; i++) {
-    let n1 = parseInt(v1s[i])
-    let n2 = parseInt(v2s[i])
+    const n1 = parseInt(v1s[i])
+    const n2 = parseInt(v2s[i])
     if (n1 > n2) {
       return 1
-    } else if (n1 === n2) {
+    } if (n1 === n2) {
 
     } else {
       return -1
@@ -272,7 +274,7 @@ function compareVersion (v1, v2) {
 }
 
 function checkUpdate (callback) {
-  let request = net.request(config.checkUpdateUrl)
+  const request = net.request(config.checkUpdateUrl)
   let isResolved = false
   setTimeout(() => {
     if (!isResolved) {
@@ -290,17 +292,17 @@ function checkUpdate (callback) {
       response.on('end', () => {
         if (!isResolved) {
           isResolved = true
-          let des = JSON.parse(text)
+          const des = JSON.parse(text)
           latestVersion = des.version
           if (compareVersion(latestVersion, packageJSON.version) === 1) {
             callback(true)
-            let changeList = des.changeList
+            const { changeList } = des
             files = ['package.json']
             for (let i = 0; i < changeList.length; i++) {
-              let change = changeList[i]
+              const change = changeList[i]
               // var vChange = parseInt(change.version.replace(/\./ig,""))
               if (compareVersion(change.version, packageJSON.version) === 1) {
-                let _cfs = change.files
+                const _cfs = change.files
                 _cfs.forEach((f) => {
                   if (files.indexOf(f) === -1) {
                     files.push(f)
@@ -313,15 +315,13 @@ function checkUpdate (callback) {
           }
         }
       })
-    } else {
-      if (!isResolved) {
-        isResolved = true
-        callback(false)
-        console.info('check update response.statusCode:' + response.statusCode)
-      }
+    } else if (!isResolved) {
+      isResolved = true
+      callback(false)
+      console.info('check update response.statusCode:' + response.statusCode)
     }
   })
-  request.on('error', function (err) {
+  request.on('error', (err) => {
     if (!isResolved) {
       isResolved = true
       callback(false)
@@ -331,21 +331,21 @@ function checkUpdate (callback) {
   request.end()
 }
 
-ipc.on('remoteVersion-request', function (event) {
-  checkUpdate(function () {
+ipc.on('remoteVersion-request', (event) => {
+  checkUpdate(() => {
     event.sender.send('remoteVersion-response', latestVersion || packageJSON.version)
   })
 })
 
-ipc.on('upgrade-request', function (event, arg) {
-  checkUpdate(function (hasNew) {
+ipc.on('upgrade-request', (event, arg) => {
+  checkUpdate((hasNew) => {
     if (hasNew) {
       mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, pageDir + '/index/update.html'),
         protocol: 'file:',
         slashes: true
       }))
-    } else if (arg && arg.toIndexIFNot) {
+    } else if (arg.toIndexIFNot !== false) {
       mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, pageDir + '/index/index.html'),
         protocol: 'file:',
@@ -354,28 +354,28 @@ ipc.on('upgrade-request', function (event, arg) {
     }
   })
 })
-let upgradeMessages = new Map()
+const upgradeMessages = new Map()
 
-ipc.on('start-download', function () {
+ipc.on('start-download', () => {
   download(files)
 })
 
-ipc.on('restart', function () {
+ipc.on('restart', () => {
   app.relaunch()
   app.exit(0)
 })
 
 function getUpgradeMessages () {
   let html = ''
-  upgradeMessages.forEach(function (v, k) {
+  upgradeMessages.forEach((v, k) => {
     html += k + '---------------------' + v + '<br>'
   })
   return html
 }
 
 function download (fileAry) {
-  let baseURI = 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/'
-  let index = baseURI.length
+  const baseURI = 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/'
+  const index = baseURI.length
 
   let count = 0
   let count2 = 0
@@ -386,13 +386,13 @@ function download (fileAry) {
     mainWindow.webContents.executeJavaScript('update()')
   }
   //
-  let tmpDir = path.join(__dirname, '_tmp')
+  const tmpDir = path.join(__dirname, '_tmp')
   //
   deleteFolder(tmpDir)
 
   mainWindow.webContents.session.on('will-download', (event, item) => {
     // 设置文件存放位置
-    let f = item.getURL().substring(index)
+    const f = item.getURL().substring(index)
     item.setSavePath(path.join(tmpDir, f))
     item.on('updated', (event2, state) => {
       if (state === 'interrupted') {
@@ -436,7 +436,7 @@ function download (fileAry) {
     })
   })
 
-  fileAry.forEach(function (f) {
+  fileAry.forEach((f) => {
     changeMsg(f, 'downloading')
     mainWindow.webContents.downloadURL(baseURI + f)
   })
@@ -450,10 +450,10 @@ function deleteFolder (p) {
 }
 
 function copyFiles (srcDir, targetDir) {
-  let fileAry = fs.readdirSync(srcDir)
-  fileAry.forEach(function (file) {
-    let curPath = path.join(srcDir, file)
-    let targetPath = path.join(targetDir, file)
+  const fileAry = fs.readdirSync(srcDir)
+  fileAry.forEach((file) => {
+    const curPath = path.join(srcDir, file)
+    const targetPath = path.join(targetDir, file)
 
     if (fs.statSync(curPath).isDirectory()) { // recurse
       if (curPath.endsWith('.asar')) {

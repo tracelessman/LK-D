@@ -11,6 +11,7 @@ window.RSAKey = require('react-native-rsa')
 window.UUID = require('uuid/v4')
 window.shell = require('electron').shell
 window.fs = require('fs')
+
 window.Buffer = Buffer
 window.desktopCapturer = require('electron').desktopCapturer
 window.electronScreen = require('electron').screen

@@ -63,32 +63,26 @@
       </style>
     <link href="../css/index.css" rel="stylesheet"></link>
     <script>
-        //63B8FF f9e160
-        var selected = "recent";
-        function hoverNavigator(name){
-            if(selected!=name){
-                event.target.style.color="#f9e160";
-
-            }
-
+        // 63B8FF f9e160
+        let selected = "recent";
+        function hoverNavigator(name) {
+          if (selected != name) {
+            event.target.style.color = "#f9e160";
+          }
         }
-        function leaveNavigator(name){
-            if(selected!=name){
-                event.target.style.color="#d0d0d0";
-
-            }
-
+        function leaveNavigator(name) {
+          if (selected != name) {
+            event.target.style.color = "#d0d0d0";
+          }
         }
-        function selectNavigator(name){
-            if(selected){
-                document.getElementById(selected).style.color="#d0d0d0";
-            }
-            selected = name;
-            document.getElementById(name).style.color="#f9e160";
-            document.getElementById("frame").src="../"+name+"/"+name+".html";
+        function selectNavigator(name) {
+          if (selected) {
+            document.getElementById(selected).style.color = "#d0d0d0";
+          }
+          selected = name;
+          document.getElementById(name).style.color = "#f9e160";
+          document.getElementById("frame").src = "../" + name + "/" + name + ".html";
         }
-
-
     </script>
 
   </head>
@@ -133,57 +127,56 @@
   </body>
 <script>
     document.body.className = window.top.theme;
-    let user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
-    if (user.pic === null){
-        document.getElementById("userimg").src = '../images/1024x1024.png'
-    }else {
-        document.getElementById("userimg").src = user.pic
+    const user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
+    if (user.pic === null) {
+      document.getElementById("userimg").src = '../images/1024x1024.png'
+    } else {
+      document.getElementById("userimg").src = user.pic
     }
-    const {engine} = window.top
+    const { engine } = window.top
     const ChatManager = engine.getChatManager();
 
-    function doVersionResponse (event,arg) {
-        var curV = parseInt(window.top.remote.getGlobal("appVersion").replace(/\./ig,""));
-        var remoteV = parseInt(arg.replace(/\./ig,""));
-        if( curV<remoteV){
-            document.getElementById("newVersionTip").style.display="";
-        }else{
-            document.getElementById("newVersionTip").style.display="none";
-        }
+    function doVersionResponse (event, arg) {
+      const curV = parseInt(window.top.remote.getGlobal("appVersion").replace(/\./ig, ""));
+      const remoteV = parseInt(arg.replace(/\./ig, ""));
+      if (curV < remoteV) {
+        document.getElementById("newVersionTip").style.display = "";
+      } else {
+        document.getElementById("newVersionTip").style.display = "none";
+      }
     }
-    window.top.ipc.on("remoteVersion-response",doVersionResponse);
+    window.top.ipc.on("remoteVersion-response", doVersionResponse);
     function doVersionRequest() {
-        window.top.ipc.send("remoteVersion-request");
-        setTimeout(doVersionRequest,60*60*1000);
+      window.top.ipc.send("remoteVersion-request");
+      setTimeout(doVersionRequest, 60 * 60 * 1000);
     }
-    setTimeout(doVersionRequest,60*1000);
-    window.addEventListener("beforeunload", function (event) {
-        window.top.ipc.removeListener("remoteVersion-response",doVersionResponse);
-    });
+    setTimeout(doVersionRequest, 60 * 1000);
+    window.addEventListener("beforeunload", (event) => {
+    window.top.ipc.removeListener("remoteVersion-response", doVersionResponse);
+});
 
     function notifyMsg() {
-       refreshMsgNotReadNum()
+      refreshMsgNotReadNum()
     }
     refreshMsgNotReadNum()
-    ChatManager.on("msgReceived",notifyMsg);
-    ChatManager.on("msgRead",notifyMsg);
+    ChatManager.on("msgReceived", notifyMsg);
+    ChatManager.on("msgRead", notifyMsg);
 
-    window.addEventListener("beforeunload", function (event) {
-       ChatManager.un("msgReceived",notifyMsg);
-       ChatManager.un("msgRead",notifyMsg);
-    });
+    window.addEventListener("beforeunload", (event) => {
+  ChatManager.un("msgReceived", notifyMsg);
+  ChatManager.un("msgRead", notifyMsg);
+});
 
     function refreshMsgNotReadNum() {
-      ChatManager.asyGetAllMsgNotReadNum().then(function (num) {
-        if(num>0){
+      ChatManager.asyGetAllMsgNotReadNum().then((num) => {
+    if (num > 0) {
           document.getElementById("notify-msg-num").innerText = num;
-          document.getElementById("notify-msg-num").style.display="";
-        }else{
-          document.getElementById("notify-msg-num").style.display="none";
+          document.getElementById("notify-msg-num").style.display = "";
+    } else {
+          document.getElementById("notify-msg-num").style.display = "none";
           document.getElementById("notify-msg-num").innerText = "";
-        }
-      })
     }
-
+  })
+    }
 </script>
 </html>

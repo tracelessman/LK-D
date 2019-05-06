@@ -2,7 +2,8 @@ const path = require('path')
 const fs = require('fs')
 // const _ = require('lodash')
 
-const {getGoldenHeight} = require('../util/Independent')
+const { getGoldenHeight } = require('../util/Independent')
+
 const rootDir = path.resolve(__dirname, '../')
 
 const minWidth = 780

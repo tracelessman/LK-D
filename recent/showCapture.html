@@ -37,78 +37,76 @@
 </body>
 <script>
 //    const size2 = electronScreen.getPrimaryDisplay().workAreaSize
-    var size = {width:window.screen.width,height:window.screen.height};
-    let options = { types: ['screen'], thumbnailSize: size }
-    var sourceImage;
-    desktopCapturer.getSources(options, function (error, sources) {
-        if (error) return console.log(error)
+const size = { width: window.screen.width, height: window.screen.height };
+const options = { types: ['screen'], thumbnailSize: size }
+let sourceImage;
+desktopCapturer.getSources(options, (error, sources) => {
+  if (error) { return console.log(error) }
 
-        sources.forEach(function (source) {
-            //(source.thumbnail.toDataURL());
-            if (source.name === 'Entire screen' || source.name === 'Screen 1') {
-                document.getElementById("content").innerHTML="<img src='"+source.thumbnail.toDataURL()+"' ondragstart='event.preventDefault();'>";
-                ipc.send("showCaptureBrowser",size);
-                sourceImage = source.thumbnail;
-            }
-        })
-    })
+  sources.forEach((source) => {
+    // (source.thumbnail.toDataURL());
+    if (source.name === 'Entire screen' || source.name === 'Screen 1') {
+      document.getElementById("content").innerHTML = "<img src='" + source.thumbnail.toDataURL() + "' ondragstart='event.preventDefault();'>";
+      ipc.send("showCaptureBrowser", size);
+      sourceImage = source.thumbnail;
+    }
+  })
+})
 
-    function dokeydown() {
-        if(event.keyCode==27){
-            ipc.send("closeCaptureBrowser");
-        }else if(event.keyCode==13){
-            acceptCrop();
-        }
-    }
-    var startPos;
-    var rec;
-    function dragStart() {
-        if(!rec)
-            startPos  = {x:event.pageX,y:event.pageY};
-    }
-    function dragMove() {
-        if(startPos){
-            var pos  = {x:event.pageX,y:event.pageY};
-            rec = {x:Math.min(pos.x,startPos.x),y:Math.min(pos.y,startPos.y),width:Math.abs(pos.x-startPos.x),height:Math.abs(pos.y-startPos.y)};
-            document.getElementById("mask5").style["width"]=rec.width+"px";
-            document.getElementById("mask5").style["height"]=rec.height+"px";
-            document.getElementById("mask5").style["left"]=rec.x+"px";
-            document.getElementById("mask5").style["top"]=rec.y+"px";
+function dokeydown() {
+  if (event.keyCode == 27) {
+    ipc.send("closeCaptureBrowser");
+  } else if (event.keyCode == 13) {
+    acceptCrop();
+  }
+}
+let startPos;
+let rec;
+function dragStart() {
+  if (!rec) { startPos = { x: event.pageX, y: event.pageY }; }
+}
+function dragMove() {
+  if (startPos) {
+    const pos = { x: event.pageX, y: event.pageY };
+    rec = {
+      x: Math.min(pos.x, startPos.x), y: Math.min(pos.y, startPos.y), width: Math.abs(pos.x - startPos.x), height: Math.abs(pos.y - startPos.y)
+    };
+    document.getElementById("mask5").style.width = rec.width + "px";
+    document.getElementById("mask5").style.height = rec.height + "px";
+    document.getElementById("mask5").style.left = rec.x + "px";
+    document.getElementById("mask5").style.top = rec.y + "px";
 
-            document.getElementById("mask1").style["width"]=rec.x+"px";
-            document.getElementById("mask2").style["left"]=rec.x+"px";
-            document.getElementById("mask2").style["width"]=rec.width+"px";
-            document.getElementById("mask2").style["height"]=rec.y+"px";
-            document.getElementById("mask3").style["left"]=(rec.x+rec.width)+"px";
-            document.getElementById("mask3").style["width"]=(size.width-rec.x-rec.width)+"px";
-            document.getElementById("mask4").style["left"]=rec.x+"px";
-            document.getElementById("mask4").style["width"]=rec.width+"px";
-            document.getElementById("mask4").style["height"]=(size.height-rec.height-rec.y)+"px";
-
-        }
+    document.getElementById("mask1").style.width = rec.x + "px";
+    document.getElementById("mask2").style.left = rec.x + "px";
+    document.getElementById("mask2").style.width = rec.width + "px";
+    document.getElementById("mask2").style.height = rec.y + "px";
+    document.getElementById("mask3").style.left = (rec.x + rec.width) + "px";
+    document.getElementById("mask3").style.width = (size.width - rec.x - rec.width) + "px";
+    document.getElementById("mask4").style.left = rec.x + "px";
+    document.getElementById("mask4").style.width = rec.width + "px";
+    document.getElementById("mask4").style.height = (size.height - rec.height - rec.y) + "px";
+  }
+}
+function dragEnd() {
+  if (startPos && rec) {
+    document.getElementById("tools").style.right = (size.width - rec.x - rec.width) + "px";
+    if (rec.y + rec.height + 35 > size.height) {
+      document.getElementById("tools").style.bottom = "0px";
+    } else {
+      document.getElementById("tools").style.top = (rec.y + rec.height) + "px";
     }
-    function dragEnd() {
-        if(startPos&&rec){
-            document.getElementById("tools").style["right"]=(size.width-rec.x-rec.width)+"px";
-            if(rec.y+rec.height+35>size.height){
-                document.getElementById("tools").style["bottom"]="0px";
-            }else{
-                document.getElementById("tools").style["top"]=(rec.y+rec.height)+"px";
-            }
-            document.getElementById("tools").style["display"]="";
-        }
-        startPos=null;
-
-    }
-    function acceptCrop() {
-        if(rec){
-            clipboard.writeImage(sourceImage.crop(rec).resize({width:rec.width*2,height:rec.height*2}));
-            ipc.send("closeCaptureBrowser",true);
-        }
-    }
-    function reset() {
-        ipc.send("closeCaptureBrowser");
-    }
-    
+    document.getElementById("tools").style.display = "";
+  }
+  startPos = null;
+}
+function acceptCrop() {
+  if (rec) {
+    clipboard.writeImage(sourceImage.crop(rec).resize({ width: rec.width * 2, height: rec.height * 2 }));
+    ipc.send("closeCaptureBrowser", true);
+  }
+}
+function reset() {
+  ipc.send("closeCaptureBrowser");
+}
 </script>
 </html>

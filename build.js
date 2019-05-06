@@ -1,4 +1,4 @@
-'use strict'
+
 
 process.env.NODE_ENV = 'production'
 
@@ -13,19 +13,19 @@ build()
 function build () {
   del.sync(['./*.bundle.js', 'index/*.bundle.js'])
 
-  let results = ''
+  //let results = ''
 
-  pack(mainConfig).then(result => {
-    results += result + '\n\n'
-  }).catch(err => {
+  pack(mainConfig).then(() => {
+    //results += result + '\n\n'
+  }).catch((err) => {
     console.log(`\n  ${err} failed to build main process`)
     console.error(`\n${err}\n`)
     process.exit(1)
   })
 
-  pack(rendererConfig).then(result => {
-    results += result + '\n\n'
-  }).catch(err => {
+  pack(rendererConfig).then(() => {
+    // results += result + '\n\n'
+  }).catch((err) => {
     console.log(`\n  ${err}failed to build renderer process`)
     console.error(`\n${err}\n`)
     process.exit(1)
@@ -43,7 +43,7 @@ function pack (config) {
           colors: true
         })
           .split(/\r?\n/)
-          .forEach(line => {
+          .forEach((line) => {
             err += `    ${line}\n`
           })
 

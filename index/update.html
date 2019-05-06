@@ -14,20 +14,20 @@
 </div>
 </body>
 <script>
-    var remote = require('electron').remote;
-    var ipc = require('electron').ipcRenderer;
+    const { remote } = require('electron');
+    const ipc = require('electron').ipcRenderer;
+
     ipc.send("start-download");
     function restart() {
-        ipc.send("restart");
+      ipc.send("restart");
     }
     function complete() {
-        document.getElementById("restartBtn").style.display="";
-        document.getElementById("title").innerText="更新完成，请重启";
+      document.getElementById("restartBtn").style.display = "";
+      document.getElementById("title").innerText = "更新完成，请重启";
     }
-    function update(){
-        var upgradeMessages = remote.getGlobal("upgradeMessage");
-        document.getElementById("msg").innerHTML =upgradeMessages;
+    function update() {
+      const upgradeMessages = remote.getGlobal("upgradeMessage");
+      document.getElementById("msg").innerHTML = upgradeMessages;
     }
-
 </script>
 </html>

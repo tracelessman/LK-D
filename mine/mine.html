@@ -23,35 +23,33 @@
         window.top.ipc.send("restart");
       }
       async function _clear() {
-
         await window.top.engine.getChatManager().clear()
         await resetTable()
         restart()
         // window.top.document.location.reload();
       }
 
-        function _reset() {
-          window.top.engine.getApplication().getCurrentApp().asyUnRegister().then(function () {
-                window.top.document.location.reload();
-            })
-        }
+      function _reset() {
+        window.top.engine.getApplication().getCurrentApp().asyUnRegister().then(() => {
+          window.top.document.location.reload();
+      })
+      }
 
-        function resetTable() {
-         return window.top.TopUtil.dropExtraTable()
+      function resetTable() {
+        return window.top.TopUtil.dropExtraTable()
+      }
 
-        }
+      function _upgrade() {
+        window.top.ipc.send("upgrade-request");
+      }
 
-        function _upgrade() {
-            window.top.ipc.send("upgrade-request");
-        }
-
-        function test() {
-         console.log('test')
-          new window.Notification('title', {
-            body: 'content',
-            icon: '../images/traceless.png'
-          })
-        }
+      function test() {
+        console.log('test')
+        new window.Notification('title', {
+          body: 'content',
+          icon: '../images/traceless.png'
+        })
+      }
     </script>
 </head>
 <body style="padding:10px">
@@ -88,41 +86,40 @@
 </div>
 </body>
 <script>
-    let user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
-    if (user.pic === null){
-        document.getElementById("pic").src = '../images/1024x1024.png'
-    }else {
-        document.getElementById("pic").src = user.pic
+    const user = window.top.engine.getApplication().getCurrentApp().getCurrentUser();
+    if (user.pic === null) {
+      document.getElementById("pic").src = '../images/1024x1024.png'
+    } else {
+      document.getElementById("pic").src = user.pic
     }
-    if(user){
-        document.getElementById("id").innerText = user.id;
-        document.getElementById("deviceId").innerText = user.deviceId;
-        // if(user.pic){
-        //     document.getElementById("name").innerHTML = "<img src='"+user.pic+"' style='width:96px;height:96px;'>";
-        // }else{
-        //     document.getElementById("name").innerText = user.name;
-        // }
-        document.getElementById("name").innerText = user.name;
-
+    if (user) {
+      document.getElementById("id").innerText = user.id;
+      document.getElementById("deviceId").innerText = user.deviceId;
+      // if(user.pic){
+      //     document.getElementById("name").innerHTML = "<img src='"+user.pic+"' style='width:96px;height:96px;'>";
+      // }else{
+      //     document.getElementById("name").innerText = user.name;
+      // }
+      document.getElementById("name").innerText = user.name;
     }
 
     document.getElementById("version").innerText = window.top.remote.getGlobal("appVersion");
     document.getElementById("versionCore").innerText = window.top.versionCore
 
-    function doVersionResponse (event,arg) {
-        var curV = parseInt(window.top.remote.getGlobal("appVersion").replace(/\./ig,""));
-        var remoteV = parseInt(arg.replace(/\./ig,""));
-        if( curV<remoteV){
-            document.getElementById("upgrade-btn").disabled=false;
-            document.getElementById("upgrade-tip").innerText = arg;
-        }
+    function doVersionResponse (event, arg) {
+      const curV = parseInt(window.top.remote.getGlobal("appVersion").replace(/\./ig, ""));
+      const remoteV = parseInt(arg.replace(/\./ig, ""));
+      if (curV < remoteV) {
+        document.getElementById("upgrade-btn").disabled = false;
+        document.getElementById("upgrade-tip").innerText = arg;
+      }
     }
-    window.top.ipc.on("remoteVersion-response",doVersionResponse);
+    window.top.ipc.on("remoteVersion-response", doVersionResponse);
 
     window.top.ipc.send("remoteVersion-request");
 
-    window.addEventListener("beforeunload", function (event) {
-        window.top.ipc.removeListener("remoteVersion-response",doVersionResponse);
-    });
+    window.addEventListener("beforeunload", (event) => {
+    window.top.ipc.removeListener("remoteVersion-response", doVersionResponse);
+});
 </script>
 </html>

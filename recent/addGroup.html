@@ -51,56 +51,54 @@
 <script>
     document.body.className = window.top.theme;
 
-    function addFriend(checked,id,name) {
-        if(checked){
-            selected.push({id});
-        }else{
-            this.AddGroupView._selected.splice(this.AddGroupView._selected.indexOf(this.friend),1);
-        }
+    function addFriend(checked, id, name) {
+      if (checked) {
+        selected.push({ id });
+      } else {
+        this.AddGroupView._selected.splice(this.AddGroupView._selected.indexOf(this.friend), 1);
+      }
     }
 
-    var all = window.top.Store.getAllFriends();
-    var html="";
-    for(var i=0;i<all.length;i++) {
-        var f = all[i];
-        html += "<div style=\"width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">";
-        html+="<div style=\"width:150px;overflow: hidden\">";
-        html+=f.name;
-        html+="</div><div style=\"width:300px\">";
-        html+=f.id;
-        html+="</div><div><input type='checkbox' name='box' id='"+f.id+"' title='"+f.name+"'></div>";
-        html+="</div>";
+    const all = window.top.Store.getAllFriends();
+    let html = "";
+    for (let i = 0; i < all.length; i++) {
+      const f = all[i];
+      html += "<div style=\"width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">";
+      html += "<div style=\"width:150px;overflow: hidden\">";
+      html += f.name;
+      html += "</div><div style=\"width:300px\">";
+      html += f.id;
+      html += "</div><div><input type='checkbox' name='box' id='" + f.id + "' title='" + f.name + "'></div>";
+      html += "</div>";
     }
     document.getElementById("contact").innerHTML = html;
 
     function addGroup() {
-        if(!document.getElementById("name").value){
-            alert("请填写群名称");
-            return;
+      if (!document.getElementById("name").value) {
+        alert("请填写群名称");
+        return;
+      }
+      const selected = [];
+      const boxes = document.getElementsByName("box");
+      if (boxes) {
+        for (let i = 0; i < boxes.length; i++) {
+          if (boxes[i].checked) {
+            selected.push({ id: boxes[i].id, name: boxes[i].title });
+          }
         }
-        var selected = [];
-        var boxes = document.getElementsByName("box");
-        if(boxes){
-            for(var i=0;i<boxes.length;i++){
-                if(boxes[i].checked){
-                    selected.push({id:boxes[i].id,name:boxes[i].title});
-                }
-            }
-        }
-        if(selected.length==0){
-            alert("请选择群成员");
-            return;
-        }
-        var id = window.top.Store.generateGroupId();
-        var members = [{uid:window.top.Store.getCurrentUid(),name:window.top.Store.getCurrentName()}];
-        selected.forEach(function (p) {
-            members.push({uid:p.id,name:p.name});
-        })
-        window.top.WSChannel.addGroup(id,document.getElementById("name").value,members,()=>{
-            window.top.Store.addGroup(id,document.getElementById("name").value,members);
-        });
-
-
+      }
+      if (selected.length == 0) {
+        alert("请选择群成员");
+        return;
+      }
+      const id = window.top.Store.generateGroupId();
+      const members = [{ uid: window.top.Store.getCurrentUid(), name: window.top.Store.getCurrentName() }];
+      selected.forEach((p) => {
+        members.push({ uid: p.id, name: p.name });
+    })
+      window.top.WSChannel.addGroup(id, document.getElementById("name").value, members, () => {
+        window.top.Store.addGroup(id, document.getElementById("name").value, members);
+      });
     }
 </script>
 </html>

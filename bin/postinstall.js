@@ -1,6 +1,8 @@
-const {CliUtil} = require('@ys/collection')
-const {execSync} = CliUtil
+const { CliUtil } = require('@ys/collection')
+
+const { execSync } = CliUtil
 const path = require('path')
+
 const rootDir = path.resolve(__dirname, '../')
 const resource = path.resolve(rootDir, 'resource')
 const sqliteNodeFileName = 'node_sqlite3.node'
@@ -8,10 +10,9 @@ const sqliteElectronFolder = path.resolve(rootDir, `node_modules/sqlite3/lib/bin
 const sqliteNode = path.resolve(sqliteElectronFolder, sqliteNodeFileName)
 const fse = require('fs-extra')
 const _ = require('lodash')
+
 const constant = require(path.resolve(rootDir, 'constant'))
-const folderName = _.findKey(constant.platform, v => {
-  return v === process.platform
-})
+const folderName = _.findKey(constant.platform, v => v === process.platform)
 
 const option = {
   cwd: rootDir

@@ -18,7 +18,8 @@
 <body style="display: flex;flex-direction: row;align-items: center;justify-content: center;background-color: #000000;">
 </body>
 <script>
-    var remote = require('electron').remote;
+    const { remote } = require('electron');
+
     document.body.innerHTML = remote.getGlobal("imageHtml");
 </script>
 </html>

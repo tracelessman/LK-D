@@ -84,73 +84,72 @@
     <script src="./faces.js"></script>
     <script>
         function copy() {
-            if ((event.metaKey || event.ctrlKey) && event.keyCode == 67) {//copy
-                event.preventDefault();
-                document.execCommand("copy");
-            }
+          if ((event.metaKey || event.ctrlKey) && event.keyCode == 67) { // copy
+            event.preventDefault();
+            document.execCommand("copy");
+          }
         }
 
         function showFaceBox() {
-            document.getElementById("face").style["display"] = document.getElementById("face").style["display"] ? "" : "none";
+          document.getElementById("face").style.display = document.getElementById("face").style.display ? "" : "none";
         }
 
         function selectFace() {
-            if (event.target.tagName == "SPAN") {
-                document.getElementById("chatBox").contentWindow.document.body.focus();
-                document.getElementById("chatBox").contentWindow.document.execCommand("insertText", false, event.target.innerText);
-            }
-            showFaceBox();
+          if (event.target.tagName == "SPAN") {
+            document.getElementById("chatBox").contentWindow.document.body.focus();
+            document.getElementById("chatBox").contentWindow.document.execCommand("insertText", false, event.target.innerText);
+          }
+          showFaceBox();
         }
 
         function initFaces() {
-            //let count = 9
-            var html = "";
-            for (var i = 0; i < 90; i++) {
-                //var start = false;
-                // if(i%count===0){
-                //     html+="<div>";
-                //     start=true;
-                // }
-                var char = faces[i].char;
-                html += "<span>" + char + "</span>";
-                // if(start===false&&i%count===0){
-                //     html+="</div>";
-                // }
-            }
-            document.getElementById("face-content").innerHTML = html;
+          // let count = 9
+          let html = "";
+          for (let i = 0; i < 90; i++) {
+            // var start = false;
+            // if(i%count===0){
+            //     html+="<div>";
+            //     start=true;
+            // }
+            const { char } = faces[i];
+            html += "<span>" + char + "</span>";
+            // if(start===false&&i%count===0){
+            //     html+="</div>";
+            // }
+          }
+          document.getElementById("face-content").innerHTML = html;
         }
 
         function drop_handler(ev) {
-            ev.currentTarget.style.background = '#f0f0f0'
+          ev.currentTarget.style.background = '#f0f0f0'
 
-            ev.preventDefault();
-            const {dataTransfer} = ev
-            const {items} = dataTransfer
+          ev.preventDefault();
+          const { dataTransfer } = ev
+          const { items } = dataTransfer
 
-            if (items) {
-                for (var i = 0; i < items.length; i++) {
-                    // If dropped items aren't files, reject them
-                    if (ev.dataTransfer.items[i].kind === 'file') {
-                        var file = ev.dataTransfer.items[i].getAsFile();
-                        console.log(file.path)
-                    }
-                }
-            } else {
-                for (var i = 0; i < ev.dataTransfer.files.length; i++) {
-                    console.log('... 2 file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
-                }
+          if (items) {
+            for (var i = 0; i < items.length; i++) {
+              // If dropped items aren't files, reject them
+              if (ev.dataTransfer.items[i].kind === 'file') {
+                const file = ev.dataTransfer.items[i].getAsFile();
+                console.log(file.path)
+              }
             }
+          } else {
+            for (var i = 0; i < ev.dataTransfer.files.length; i++) {
+              console.log('... 2 file[' + i + '].name = ' + ev.dataTransfer.files[i].name);
+            }
+          }
         }
 
         function dragover_handler(ev) {
-            ev.currentTarget.style.background = '#e0e0e0'
-            ev.preventDefault();
+          ev.currentTarget.style.background = '#e0e0e0'
+          ev.preventDefault();
         }
 
         function dragLeave(evt) {
-            evt.currentTarget.style.background = '#f0f0f0'
+          evt.currentTarget.style.background = '#f0f0f0'
         }
-
     </script>
 </head>
 <body onkeydown="copy()">

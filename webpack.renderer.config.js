@@ -1,7 +1,7 @@
 /**
  * Created by mac on 18/2/26.
  */
-'use strict'
+
 
 const path = require('path')
 const webpack = require('webpack')

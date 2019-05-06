@@ -1,7 +1,7 @@
 /**
  * Created by mac on 18/2/26.
  */
-'use strict'
+
 
 process.env.BABEL_ENV = 'main'
 
@@ -11,7 +11,7 @@ const webpack = require('webpack')
 // 生产环境模式下压缩js文件
 const BabiliWebpackPlugin = require('babili-webpack-plugin')
 
-let mainConfig = {
+const mainConfig = {
   mode: 'production',
   entry: {
     main: path.join(__dirname, './main.js')

@@ -61,38 +61,38 @@
 </div>
 <script>
     document.body.className = window.top.theme;
-    const {engine} = window.top
+    const { engine } = window.top
     const ChatManager = engine.get('ChatManager')
-    var ps = document.location.href.substring(document.location.href.indexOf("?") + 1);
-    var params = ps.split("&");
-    var id = document.getElementById("id").innerHTML = params[0];
-    var name = document.getElementById("title").innerHTML = document.getElementById("name").innerHTML = decodeURI(params[1]);
-    var isGroup = params[2] == "true";
+    const ps = document.location.href.substring(document.location.href.indexOf("?") + 1);
+    const params = ps.split("&");
+    const id = document.getElementById("id").innerHTML = params[0];
+    const name = document.getElementById("title").innerHTML = document.getElementById("name").innerHTML = decodeURI(params[1]);
+    const isGroup = params[2] == "true";
 
-    document.getElementById("pic").src = params[3]==='null'||params[3]===undefined?'../images/traceless.png' : params[3]
+    document.getElementById("pic").src = params[3] === 'null' || params[3] === undefined ? '../images/traceless.png' : params[3]
     start()
 
     async function start() {
-        if (isGroup) {
-            var html = "";
-            var all = await ChatManager.asyGetGroupMembers(id)
-            for (var i = 0; i < all.length; i++) {
-                var m = all[i];
-                html += `<div style="width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">`;
-                html += "<div >";
-                html += m.name;
-                html += "</div><div style=\"width:300px;padding-left: 30px\">";
-                html += m.id;
-                html += "</div>";
-                html += "</div>";
-            }
-            document.getElementById("members").innerHTML = html;
+      if (isGroup) {
+        let html = "";
+        const all = await ChatManager.asyGetGroupMembers(id)
+        for (let i = 0; i < all.length; i++) {
+          const m = all[i];
+          html += `<div style="width:100%;display:flex;flex-direction: row;justify-content: flex-start;align-items: center;margin-top: 10px\">`;
+          html += "<div >";
+          html += m.name;
+          html += "</div><div style=\"width:300px;padding-left: 30px\">";
+          html += m.id;
+          html += "</div>";
+          html += "</div>";
         }
+        document.getElementById("members").innerHTML = html;
+      }
     }
 
     async function sendMessage() {
-        await ChatManager.asyEnsureSingleChat(id)
-        document.location.href = "../recent/chat.html?" + isGroup + "&" + id;//isGroupChat&id
+      await ChatManager.asyEnsureSingleChat(id)
+      document.location.href = "../recent/chat.html?" + isGroup + "&" + id;// isGroupChat&id
     }
 </script>
 </body>

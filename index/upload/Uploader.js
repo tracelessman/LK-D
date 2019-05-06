@@ -9,6 +9,7 @@ class Uploader {
     this._port = port
     this._completedSize = 0
   }
+
   start () {
     let socket = net.createConnection(this._port, this._ip, () => {
       console.log('connected to UploadChannel!')
@@ -20,7 +21,7 @@ class Uploader {
       })
       // 读取文件开始传输
       const readable = fs.createReadStream(this._filePath)
-      readable.on('close', function () {
+      readable.on('close', () => {
         console.info('readable close')
       })
       // 发送流量大小变化事件
@@ -43,7 +44,7 @@ class Uploader {
           this._onError(err)
         }
       })
-      readable.on('readable', function () {
+      readable.on('readable', () => {
         console.info('readable readable')
       })
 
@@ -69,12 +70,15 @@ class Uploader {
       socket.end()
     })
   }
+
   onScheduleChanged (fun) {
     this._onScheduleChanged = fun
   }
+
   onError (fun) {
     this._onError = fun
   }
+
   onCompleted (fun) {
     this._onCompleted = fun
   }
