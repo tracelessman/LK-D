@@ -89,26 +89,21 @@
         // filter sync message by other devices of oneself
         if (!param.isFromSelf) {
           engine.getChatManager().asyGetAllMsgNotReadNum().then((num) => {
-            // console.log({num})
             ipc.send("messageReceive", { total: num });
             let content = ''
-            try {
-              if (param.content) {
-                content = `${param.name}: ${ChatManager.asyMessageType(param.type, param.content)}`
-              } else {
-                content = ''
-              }
-            } catch (e) {
-              content = `${param.name}: ${param.content}`
+            if (param.content) {
+              content = `${param.name}: ${ChatManager.asyMessageType(param.type, param.content)}`
             }
             const notification = {
               title: "新消息",
               body: content
             }
-            if (process.env.NODE_ENV === 'development') {
-              notification.icon = '../images/test.png'
+            try {
+              new window.Notification(notification.title, notification);
+
+            } catch(e) {
+              console.log(e)
             }
-            new window.Notification(notification.title, notification);
           })
         }
       }
