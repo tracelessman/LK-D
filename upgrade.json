@@ -294,17 +294,52 @@
     {
       "version":"0.0.57",
       "files":[
-        "index/index.bundle.js",
-        "recent/recent.html",
+        "main.js",
+        ".eslintignore",
+        ".eslintrc.js",
+        "build.js",
+        "package.json",
+        "upload.js",
+        "webpack.main.config.js",
+        "webpack.renderer.config.js",
+
+        "bin/asars.js",
+        "bin/installSqlite3.js",
+        "bin/openDb.js",
+        "bin/postinstall.js",
 
         "config/index.js",
-        "recent/chat.html",
-        "index/index.js",
-        "store/ElecSqlite.js",
-        "main.bundle.js",
-        "contact/contact.html",
+
         "index/main.html",
-        "mine/mine.html"
+        "index/TopUtil.js",
+        "index/index.html",
+        "index/index.js",
+        "index/index.bundle.js",
+        "index/register.html",
+        "index/update.html",
+        "index/upload/Uploader.js",
+
+        "mine/mine.html",
+        "store/ElecSqlite.js",
+        "test/data/bin/www",
+        "test/data/routes/index.js",
+        "test/data/routes/user.js",
+        "test/data/app.js",
+        "util/Common.js",
+
+
+        "recent/chat.html",
+        "recent/chatBox.html",
+        "recent/recent.html",
+        "recent/addGroup.html",
+        "recent/faces.js",
+        "recent/showCapture.html",
+        "recent/showImage.html",
+
+        "contact/addFriend.html",
+        "contact/detail.html",
+        "contact/contact.html",
+        "images/ajax-loader.gif"
       ],
       "detail":["test"]
     }
