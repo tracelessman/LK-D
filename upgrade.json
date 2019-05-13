@@ -311,10 +311,6 @@
 
         "mine/mine.html",
         "store/ElecSqlite.js",
-        "test/data/bin/www",
-        "test/data/routes/index.js",
-        "test/data/routes/user.js",
-        "test/data/app.js",
         "util/Common.js",
 
         "recent/chat.html",
