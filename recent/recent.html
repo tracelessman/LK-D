@@ -166,7 +166,6 @@
       }
       selected = chatId
       document.getElementById(chatId).style.backgroundColor = "rgb(214,214,214)";
-      document.getElementById(`@${chatId}`) ? document.getElementById(`@${chatId}`).innerHTML = '' : ''
     }
 
 
@@ -253,7 +252,7 @@
 
             html += `<div id='${i}'onmouseover="hovers('${chatId}',${i})" onmouseout="leaves('${chatId}',${i})" onclick="DeleteChat('${chatId}','${isGroup}')"  style="border:red 0px solid;margin-left: -5px;visibility: hidden;color:rgb(188,188,188);width:6%;text-align: center;font-weight: bold;font-family: "Abadi MT Condensed Light"" ></div>`
             //
-
+            const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
             const remind = `<span id = '@${chatId}' style="color: red">[有人@我]</span>`
             html += isGroup
               ? `<div style="width:43px;height: 43px;border: solid 1px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:3px; overflow:hidden">
@@ -265,7 +264,7 @@
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold;">${timeStr}</div>
 
 
-                               <div style="border:red solid 0px;line-height:25px; color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data.indexOf('@' + user.name) !== -1 ? remind : ''}${MsgsOneDataName}${data}</div>
+                               <div style="border:red solid 0px;line-height:25px; color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data.indexOf('@' + user.name) !== -1 && newMsgNum>0? remind : ''}${MsgsOneDataName}${data}</div>
                          </div>`
               : `<img src="${person.pic ? person.pic : '../images/1024x1024.png'}"  style="width:43px;height:43px;border-radius:0px;"/>&nbsp;&nbsp;
                         <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:171px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
@@ -273,11 +272,10 @@
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
                                <div style="border:red solid 0px;line-height:25px;color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
-            const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
-
             // console.log({newMsgNum})
             if (newMsgNum) {
               // console.log('here')
+              //document.getElementById(`@${chatId}`).innerHTML =  ''
               html += `<div style='color:rgb(255,254,254);font-size: 9pt;border:1px solid red;min-width:16px;height:16px;text-align: center;align-items: center;border-radius: 100px;background-color: rgb(241,56,56);margin-left: -190px;margin-bottom: 37px;font-weight: bold'>${newMsgNum >= 99 ? '99+' : newMsgNum}</div>`;
             }
             html += `</div>`;
