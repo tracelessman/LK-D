@@ -1,5 +1,5 @@
 {
-  "version":"0.0.59",
+  "version":"0.0.60",
   "changeList":[
     {
       "version":"0.0.2",
@@ -352,7 +352,20 @@
         "recent/faces.js",
         "recent/recent.html",
         "index/index.html",
-        "index/main.html"
+        "index/main.html",
+        "index/index.bundle.js"
+      ],
+      "detail":["test"]
+    },
+    {
+      "version":"0.0.60",
+      "files":[
+        "recent/chat.html",
+        "recent/faces.js",
+        "recent/recent.html",
+        "index/index.html",
+        "index/main.html",
+        "index/index.bundle.js"
       ],
       "detail":["test"]
     }
