@@ -295,18 +295,8 @@
       "version":"0.0.57",
       "files":[
         "main.js",
-        ".eslintignore",
-        ".eslintrc.js",
         "build.js",
-        "package.json",
         "upload.js",
-        "webpack.main.config.js",
-        "webpack.renderer.config.js",
-
-        "bin/asars.js",
-        "bin/installSqlite3.js",
-        "bin/openDb.js",
-        "bin/postinstall.js",
 
         "config/index.js",
 
@@ -326,7 +316,6 @@
         "test/data/routes/user.js",
         "test/data/app.js",
         "util/Common.js",
-
 
         "recent/chat.html",
         "recent/chatBox.html",
