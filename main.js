@@ -374,7 +374,7 @@ function getUpgradeMessages () {
 }
 
 function download (fileAry) {
-  const baseURI = 'https://raw.githubusercontent.com/tracelessman/LK-D/publish/'
+  const baseURI = 'https://raw.githubusercontent.com/TracelessLK/LK-D/publish/'
   const index = baseURI.length
 
   let count = 0
