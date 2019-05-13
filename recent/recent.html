@@ -221,16 +221,6 @@
                   }
                 }
               }
-              // if (typeof JSON.parse(MsgsOneData.content) === "object") {
-              //     if (JSON.parse(MsgsOneData.content).width!==undefined && JSON.parse(MsgsOneData.content).height!==undefined) {
-              //         data = '[图片]'
-              //     }else {
-              //         data = '[语音消息]'
-              //     }
-              //
-              // } else {
-              //     data = MsgsOneData.content
-              // }
               data = await ChatManager.asyMessageType(MsgsOneData.type, MsgsOneData.content)
             } else {
               data = ''
@@ -294,7 +284,6 @@
           }
         }
       }
-      // console.log({html})
 
       document.getElementById("recent").innerHTML = html;
       if (selected) {
@@ -306,12 +295,17 @@
     }
 
     refreshRecentList();
-    ChatManager.on("msgChanged", refreshRecentList);
+    ChatManager.on("msgChanged", () =>{
+      // console.log('msgChanged')
+      refreshRecentList()
+    })
     ChatManager.on("msgRead", refreshRecentList);
+    ChatManager.on("msgReceived", refreshRecentList);
 
     window.addEventListener("beforeunload", (event) => {
-    ChatManager.un("msgChanged", refreshRecentList);
-    ChatManager.un("msgRead", refreshRecentList);
-});
+        ChatManager.un("msgChanged", refreshRecentList);
+        ChatManager.un("msgRead", refreshRecentList);
+        ChatManager.un("msgReceived", refreshRecentList);
+    });
 </script>
 </html>

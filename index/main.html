@@ -155,12 +155,17 @@
     window.top.ipc.removeListener("remoteVersion-response", doVersionResponse);
 });
 
-    function notifyMsg() {
+    function notifyMsg(event) {
+      // console.log({event})
       refreshMsgNotReadNum()
     }
     refreshMsgNotReadNum()
-    ChatManager.on("msgReceived", notifyMsg);
-    ChatManager.on("msgRead", notifyMsg);
+    ChatManager.on("msgReceived", () => {
+      notifyMsg("msgReceived")
+    })
+    ChatManager.on("msgRead", () => {
+      notifyMsg("msgRead")
+    })
 
     window.addEventListener("beforeunload", (event) => {
   ChatManager.un("msgReceived", notifyMsg);
