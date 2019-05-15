@@ -372,15 +372,6 @@
     {
       "version":"0.0.61",
       "files":[
-        "index/index.html",
-        "index/main.html",
-        "index/index.bundle.js"
-      ],
-      "detail":["test"]
-    },
-    {
-      "version":"0.0.62",
-      "files":[
         "images/ai.png",
         "images/sjx.png",
         "recent/chat.html",
