@@ -274,7 +274,7 @@
             //
             const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
             const remind = `<span id = '@${chatId}' style="color: red">${data.indexOf('@' + user.name) !== -1 && newMsgNum>0? '[有人@我]' : '[有全体消息]'}</span>`
-            //html += `<img  src="../images/直角三角形.png" style="width:10px;height:10px;margin-top: -23%;margin-left: -6.5%;transform:rotate(90deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
+            //html += `<img  src="../images/sjx.png" style="width:10px;height:10px;margin-top: -23%;margin-left: -6.5%;transform:rotate(90deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
             html += isGroup
               ? `<div style="width:43px;height: 43px;border: solid 1px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:3px; overflow:hidden">
                                ${imghtml}
@@ -293,7 +293,7 @@
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
                                <div style="border:red solid 0px;line-height:25px;color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
-           html += `<img  src="../images/直角三角形.png" style="width:10px;height:10px;margin-top: -24%;margin-left: -1%;transform:rotate(180deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
+           html += `<img  src="../images/sjx.png" style="width:10px;height:10px;margin-top: -24%;margin-left: -1%;transform:rotate(180deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
             // console.log({newMsgNum})
             if (newMsgNum) {
               // console.log('here')
