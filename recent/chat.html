@@ -101,7 +101,13 @@
           }
           showFaceBox();
         }
-
+        function selectFaces() {
+         if (event.target.id === "remind"||event.target.tagName === "IMG") {
+          document.getElementById("chatBox").contentWindow.document.body.focus();
+          document.getElementById("chatBox").contentWindow.document.execCommand("insertText", false, event.target.id==="remind"?event.target.innerText:event.target.name);
+         }
+         document.getElementById("rem").style.display ="none";
+        }
         function initFaces() {
           // let count = 9
           let html = "";
@@ -152,7 +158,7 @@
         }
     </script>
 </head>
-<body onkeydown="copy()">
+<body onkeydown="copy()" style="border:0px solid red">
 <div ondrop="drop_handler(event);" ondragover="dragover_handler(event);"
      ondragleave="dragLeave(event)"
      style="width: 100%;height: 100%;display: flex;flex-direction: column;justify-content: flex-end;align-items: center">
@@ -173,7 +179,18 @@
                     ondblclick="showBiggerImage() ">
 
             </div>
-            <div id="face" class="face" style="display: none" onclick="selectFace()">
+            <div  id = "rem" style="width: 110px;
+            height: 150px;
+            text-align: center;
+            line-height: 30px;
+            position: absolute;
+            bottom: 190px;
+            left: 5px;
+             border:0px red solid;display: none;overflow: auto;border-radius: 5px;background-color:#ffffff;cursor: pointer; " onclick="selectFaces()">
+                <div id="remind" >
+                </div>
+            </div>
+            <div id="face" class="face" style=" border:0px red solid;display: none" onclick="selectFace()">
                 <div id="face-content" class="face-content">
 
                 </div>
@@ -194,9 +211,10 @@
                 <!--</i>-->
             </div>
 
-            <div style="width: 100%;height:150px;display: flex">
+            <div style=" border:0px solid black;width: 100%;height:150px;display: flex">
                 <iframe id="chatBox" style="flex:1" src="chatBox.html" frameborder="0"></iframe>
             </div>
+           <!--<div style="border: 1px solid red;width:100px;height:40px;border-radius: 5px;background-color: #ffffff;position: absolute;left: 20px;bottom: 100px">-->
         </div>
         <div id="msgStateDetailBox"
              style="display:flex;height:100%;width:150px;border-left: 1px solid #d0d0d0;display: none;padding: 10px;">
@@ -223,25 +241,29 @@
     const {contextMenu} = window.top
     const {remote} = window.top
     const {Menu, MenuItem} = remote;
-
     initFaces();
     var ps = document.location.href.substring(document.location.href.indexOf("?") + 1);
-
     var params = ps.split("&")
     var isGroupChat = params[0] == '1' || params[0] === 'true'
     var otherId = params[1]
     let name
     let relativeMsgId
+    document.getElementById("chatBox").src = "chatBox.html?" + isGroupChat + "&" + params[1]
     render()
-
 
     function Group() {
         alert(1)
     }
-
+    function hover(id) {
+     document.getElementById(id).style.backgroundColor='rgb(214,214,214)'
+    }
+    function leave(id) {
+     document.getElementById(id).style.backgroundColor='#ffffff'
+    }
     async function render() {
         init()
         let title
+        let html =''
         if (isGroupChat) {
             const chat = await ChatManager.asyGetChat(userId, otherId)
             title = chat.name
@@ -251,10 +273,16 @@
         }
         name = title
         var all = await ChatManager.asyGetGroupMembers(params[1])
+     html += `<div  id="${userId}"  onmouseover="hover('${userId}')" onmouseout="leave('${userId}')"style="border:0px red solid;flex:1;display: flex;width: 100%;margin-left: 0px;margin-top: 7px;align-items: center;"><img  src="../images/ai.png" style="width:30px;margin-left: 5px;height:30px;border-radius:5px;"name="所有人" /><div id="remind" style="border: 0px red solid; width: 100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">所有人&nbsp;</div></div>`;
+     for (let i of all) {
+      html += `<div id="${i.name}"  onmouseover="hover('${i.name}')" onmouseout="leave('${i.name}')" style="border:0px red solid;flex:1;display: flex;width: 100%;margin-left: 0px;margin-top: 7px;align-items: center;"><img  src=${i.pic?i.pic:"../images/1024x1024.png"} style="width:30px;margin-left: 5px;height:30px;border-radius:5px;" name="${i.name}" /><div id="remind" style="border: 0px red solid; width: 100px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;">${i.name}&nbsp;</div></div>`;
+     }
+     document.getElementById("remind").innerHTML = html
         document.getElementById("title").innerText = title
         document.getElementById("count").innerText = isGroupChat ? `(${all.length})` : ''
         document.addEventListener("mousedown", hideDetaiBox);
         refreshRecordList();
+         //document.getElementById('chatBox').contentWindow.remind(all)
     }
 
     async function init() {
@@ -702,6 +730,7 @@
     function recod() {
         document.getElementById("face").style["display"] = 'none';
         document.getElementById("GroupMembers").style.display = 'none';
+     document.getElementById("rem").style.display = 'none';
 
     }
 

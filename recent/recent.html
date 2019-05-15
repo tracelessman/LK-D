@@ -110,8 +110,21 @@
         location.reload()
       }
     }
-    function remder (chatId, isGroupChat) {
+    async function remder (chatId, isGroupChat, MessageCeiling) {
       const menu = new Menu()
+      const Message =  MessageCeiling
+     menu.append(new MenuItem({
+      label:Message!=="null"?'取消置顶':'置顶',
+      async click() {
+       if (Message!=="null") {
+        await ChatManager.asyMessageCeiling(null,user.id, chatId)
+       }else {
+        await ChatManager.asyMessageCeiling(Date.now(),user.id, chatId)
+       }
+       location.reload()
+      },
+     }))
+      menu.append(new MenuItem({type: 'separator'}))
       menu.append(new MenuItem({
         label: '删除',
         async click() {
@@ -120,6 +133,13 @@
         },
         visible: isGroupChat !== '1'
       }))
+      menu.append(new MenuItem({type: 'separator'}))
+     menu.append(new MenuItem({
+      label: '特别提醒',
+      async click() {
+          alert(1)
+      },
+     }))
       menu.popup({ window: remote.getCurrentWindow() })
     }
 
@@ -162,7 +182,7 @@
     function select(chatId) {
       // console.log({chatId, selected})
       if (selected) {
-        document.getElementById(selected).style.backgroundColor = "rgb(251,251,251)";
+        document.getElementById(selected).style.backgroundColor ="rgb(251,251,251)";
       }
       selected = chatId
       document.getElementById(chatId).style.backgroundColor = "rgb(214,214,214)";
@@ -194,7 +214,7 @@
         // console.log({all})
         for (; i < all.length; i++) {
           const re = all[i];
-          const { id: chatId, isGroup } = re
+          const { id: chatId, isGroup, MessageCeiling } = re
           const person = await ContactManager.asyGet(user.id, re.id)
           const MsgsOneData = await ChatManager.asyGetLastMsg(user.id, chatId)
           let data = ''
@@ -247,13 +267,14 @@
             }
 
             html += `<div id="${chatId}"`
-            html += `style="border-bottom: 1px solid rgb(238,238,238);background-color: rgb(251,251,251);width:100%;height:70px;cursor: pointer;padding-left: 5px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center;" onmouseover="hover('${chatId}',${i},${isGroup})" `
-            html += `onmouseout="leave('${chatId}',${i},${isGroup})" oncontextmenu="remder('${chatId}','${isGroup}')" onclick="chat('${chatId}', ${isGroup})">  `
+            html += `style="border:0px red solid;border-bottom: 1px solid rgb(238,238,238);background-color:rgb(251,251,251); width:100%;height:70px;cursor: pointer;padding-left: 5px;display:flex;flex-direction:row;justify-content: flex-start;align-items: center;" onmouseover="hover('${chatId}',${i},${isGroup})" `
+            html += `onmouseout="leave('${chatId}',${i},${isGroup})" oncontextmenu="remder('${chatId}','${isGroup}','${MessageCeiling}')" onclick="chat('${chatId}', ${isGroup})">  `
 
             html += `<div id='${i}'onmouseover="hovers('${chatId}',${i})" onmouseout="leaves('${chatId}',${i})" onclick="DeleteChat('${chatId}','${isGroup}')"  style="border:red 0px solid;margin-left: -5px;visibility: hidden;color:rgb(188,188,188);width:6%;text-align: center;font-weight: bold;font-family: "Abadi MT Condensed Light"" ></div>`
             //
             const newMsgNum = await ChatManager.asyGetNewMsgNum(chatId)
-            const remind = `<span id = '@${chatId}' style="color: red">[有人@我]</span>`
+            const remind = `<span id = '@${chatId}' style="color: red">${data.indexOf('@' + user.name) !== -1 && newMsgNum>0? '[有人@我]' : '[有全体消息]'}</span>`
+            //html += `<img  src="../images/直角三角形.png" style="width:10px;height:10px;margin-top: -23%;margin-left: -6.5%;transform:rotate(90deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
             html += isGroup
               ? `<div style="width:43px;height: 43px;border: solid 1px rgb(218,223,225);background-color: rgb(221,222,224);border-radius:3px; overflow:hidden">
                                ${imghtml}
@@ -264,7 +285,7 @@
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold;">${timeStr}</div>
 
 
-                               <div style="border:red solid 0px;line-height:25px; color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data.indexOf('@' + user.name) !== -1 && newMsgNum>0? remind : ''}${MsgsOneDataName}${data}</div>
+                               <div style="border:red solid 0px;line-height:25px; color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${(data.indexOf('@' + user.name) !== -1 && newMsgNum>0)||((data.indexOf('@所有人') !== -1 && newMsgNum>0))? remind : ''}${MsgsOneDataName}${data}</div>
                          </div>`
               : `<img src="${person.pic ? person.pic : '../images/1024x1024.png'}"  style="width:43px;height:43px;border-radius:0px;"/>&nbsp;&nbsp;
                         <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:171px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
@@ -272,6 +293,7 @@
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
                                <div style="border:red solid 0px;line-height:25px;color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
+           html += `<img  src="../images/直角三角形.png" style="width:10px;height:10px;margin-top: -21%;margin-left: -1%;transform:rotate(180deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
             // console.log({newMsgNum})
             if (newMsgNum) {
               // console.log('here')
