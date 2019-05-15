@@ -133,13 +133,13 @@
         },
         visible: isGroupChat !== '1'
       }))
-      menu.append(new MenuItem({type: 'separator'}))
-     menu.append(new MenuItem({
-      label: '特别提醒',
-      async click() {
-          alert(1)
-      },
-     }))
+     //  menu.append(new MenuItem({type: 'separator'}))
+     // menu.append(new MenuItem({
+     //  label: '特别提醒',
+     //  async click() {
+     //      alert(1)
+     //  },
+     // }))
       menu.popup({ window: remote.getCurrentWindow() })
     }
 
@@ -288,12 +288,12 @@
                                <div style="border:red solid 0px;line-height:25px; color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${(data.indexOf('@' + user.name) !== -1 && newMsgNum>0)||((data.indexOf('@所有人') !== -1 && newMsgNum>0))? remind : ''}${MsgsOneDataName}${data}</div>
                          </div>`
               : `<img src="${person.pic ? person.pic : '../images/1024x1024.png'}"  style="width:43px;height:43px;border-radius:0px;"/>&nbsp;&nbsp;
-                        <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:171px;height: 40px;margin-left: 0px;margin-top: 0px;float: left" >
+                        <div id="One${chatId}" style="border:red solid 0px;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:171px;height: 40px;margin-left: 4px;margin-top: 0px;float: left" >
                                <div style="border:red solid 0px;width: 95px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${person.name}</div>
                                <div style="border:red solid 0px;width: 69px; height: 20px;font-weight: bold;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left;text-align: right;color: rgb(155,155,155);font-weight: bold">${timeStr}</div>
                                <div style="border:red solid 0px;line-height:25px;color:rgb(128,128,128);width: 170px;height: 20px;overflow:hidden;text-overflow:ellipsis;white-space: nowrap;float: left">${data}</div>
                          </div>`
-           html += `<img  src="../images/直角三角形.png" style="width:10px;height:10px;margin-top: -21%;margin-left: -1%;transform:rotate(180deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
+           html += `<img  src="../images/直角三角形.png" style="width:10px;height:10px;margin-top: -24%;margin-left: -1%;transform:rotate(180deg);display: ${MessageCeiling!==null?"block":"none"}"/>`
             // console.log({newMsgNum})
             if (newMsgNum) {
               // console.log('here')
